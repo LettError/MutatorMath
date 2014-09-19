@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ascender</key>
+	<integer>600</integer>
+	<key>capHeight</key>
+	<integer>600</integer>
+	<key>copyright</key>
+	<string>Copyright-token-string</string>
+	<key>defaultWidth</key>
+	<integer>500</integer>
+	<key>descender</key>
+	<integer>-200</integer>
+	<key>familyName</key>
+	<string>AdobeSans</string>
+	<key>fondID</key>
+	<integer>6649</integer>
+	<key>fondName</key>
+	<string>AdobeSans</string>
+	<key>fontName</key>
+	<string>AdobeSans-LightCondensed</string>
+	<key>fontStyle</key>
+	<integer>64</integer>
+	<key>fullName</key>
+	<string>AdobeSans LightCondensed</string>
+	<key>italicAngle</key>
+	<integer>0</integer>
+	<key>menuName</key>
+	<string>AdobeSans</string>
+	<key>msCharSet</key>
+	<integer>0</integer>
+	<key>slantAngle</key>
+	<integer>0</integer>
+	<key>styleName</key>
+	<string>LightCondensed</string>
+	<key>ttVendor</key>
+	<string>ADBE</string>
+	<key>uniqueID</key>
+	<integer>44281</integer>
+	<key>unitsPerEm</key>
+	<integer>1000</integer>
+	<key>versionMajor</key>
+	<integer>1</integer>
+	<key>versionMinor</key>
+	<integer>2</integer>
+	<key>xHeight</key>
+	<integer>500</integer>
+	<key>year</key>
+	<integer>2004</integer>
+</dict>
+</plist>
