@@ -34,4 +34,5 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 __version__ = "1.8"
 
-
+from mutatorMath.objects.location import Location
+from mutatorMath.objects.mutator import Mutator

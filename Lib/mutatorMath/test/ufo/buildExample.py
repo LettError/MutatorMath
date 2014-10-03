@@ -12,3 +12,4 @@ import os
 here = os.path.join(os.getcwd(), 'data')
 build(here, outputUFOFormatVersion=2)
 print('done')
+  

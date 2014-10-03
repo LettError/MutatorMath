@@ -77,8 +77,8 @@ class DesignSpaceDocumentWriter(object):
     
     def addSource(self,
             path,
-            name=None, 
-            location=None, 
+            name, 
+            location, 
             copyLib=False, 
             copyGroups=False, 
             copyInfo=False, 
