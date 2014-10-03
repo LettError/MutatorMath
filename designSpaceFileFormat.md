@@ -93,7 +93,7 @@ The `instance` element stores all the data needed to perform a MutatorMath calcu
 	*	Stylemap familyname, corresponds with font.info.styleMapFamilyName
 *	**stylemapstylename**
 	*	String, optional
-	*	Stylemap stylename, corresponds with font.info.styleMapFamilyName
+	*	Stylemap stylename, corresponds with font.info.styleMapStyleName
 
 #### Child elements
 
