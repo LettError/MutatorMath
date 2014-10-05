@@ -628,7 +628,7 @@ class DesignSpaceDocumentReader(object):
             sourceLocation = self.locationFromElement(masterElement)
             if sourceLocation is None:
                 # if we don't read a location, use the instance location
-                sourceLocation = instanceLocation
+                sourceLocation = fontLocation
             masterGlyphName = masterElement.attrib.get('glyphname')
             if masterGlyphName is None:
                 # if we don't read a glyphname, use the one we have
