@@ -3,18 +3,18 @@ MutatorMath DesignSpace Format
 
 ![A MutatorMath Designspace Document Icon](designspaceDocumentIcon.png)
 
-The UFO support in MutatorMath introduces a useful storage format in xml for MutatorMath designspaces. This document describes the format.
+The UFO support in MutatorMath introduces a useful storage format in XML for MutatorMath designspaces. This document describes the format.
 
 ## Document structure
 
-A document can contain a single `designspace` top level element. The current format version is `3`.
+The document must contain a single **designspace** top level element. The current format version is `3`. The designspace element must contain one **sources** element and one **instances** element.
 
 *	The **sources** element contains one or more **source** elements.
 * 	The **instances** element contains one or more **instance** elements.
 
-MutatorMath makes a difference between "masters" and "sources". Source indicates the UFO file. Master indicates a particular use of a source in a MutatorMath calculation. In general: the sources bring data to the calculation, instances take data out.
+The designspace format makes a difference between "masters" and "sources". Source specifically indicates the UFO file. Master indicates a particular use of a source in a MutatorMath calculation. In general: the sources bring data to the calculation, instances take data out.
 
-The font.info contains different kinds of data. Some are strings (names, urls, copyrights), some are numerical but not geometrical (versions, PANOSE), these values can not be used in calculation. But they can be provided by one of the designated masters.
+The font.info contains different kinds of data. Some are strings (names, urls, copyrights), some are numerical but not geometrical (versions, PANOSE). The designspace offers some controls
 
 Both instance and source elements contain paths to files. These paths are expected to be relative to the path of the .designspace document. This allows the same .designspace to be deployed to multiple locations, but still reference the proper source files. It also allows sources to be stored in their own directories, and instances to be created into their own directories.
 
@@ -143,12 +143,12 @@ The **source** element stores all the data needed to locate a UFO file and indic
 #### Child elements
 
 *	```<location/>```
-	*	Required, see description below.
-*	```<lib [copy="1"]/>```:
+	*	Required.
+*	```<lib copy="1"/>```:
 	* 	If the **lib** element is present and its copy attribute is set to "1", this source will be the provider of font.lib data.
 	* 	Only one source can be the lib data provider.
 	*	Optional. If the lib element is not present this source will not be the provider of font.lib data.
-*	```<groups [copy="1"]/>```
+*	```<groups copy="1"/>```
 	*	If the **groups** element is present and its copy attribute is set to "1", this source will be the provider of font.groups data. 
 	*	Only one source can be the groups data provider.
 	* 	Optional. If the groups element is not present this source will not be the provider of font.groups data.
@@ -157,7 +157,7 @@ The **source** element stores all the data needed to locate a UFO file and indic
 	*	Only one source can be the info data provider. 
 	* 	The optional `mute` attribute when set to "1", indicates the numerical attributes of font.info should excluded from the calculation. 
 	* 	If the info element is not present this source will not be the provider of font.info data, but the numerical font.info data will be entered into the calculation.
-*	```<kerning [mute="1"]/>```
+*	```<kerning mute="1"/>```
 	*	Optional. If present, this kerning from this source is to be excluded from calculations.
 *	```<glyph name="" mute="1"/>```
 	*	Optional. If present, this glyph from this source is to be excluded from calculations.
@@ -211,26 +211,42 @@ The familyname and stylename are necessary to make UFOs. Some additional names c
 #### Child elements
 
 *	```<location/>```
-	*	Required, see description below.
+	*	Required.
 *	```<info/>```
 	*	Optional.
-	*	Add this element if the instance needs to calculate the font.info data.
+	*	Add this element if the instance needs to calculate the font.info data. If the info element contains a location element this supercedes the instance location.
 *	```<glyphs>...</glyphs>```
-	*	Optional. The glyphs element can contain one or more **glyph** elements. See description below. 
+	*	Optional. The glyphs element can contain one or more **glyph** elements. 
 *	```<kerning/>```
 	*	Optional.
-	*	Add this element if the instance needs to calculate the font.kerning data.
+	*	Add this element if the instance needs to calculate the font.kerning data. If the kerning element contains a location element this supercedes the instance location.
 	*	A kerning element may have one child **location** element. If present this location should be used in calculating the kerning.
 
 #### Example
 
 ```xml
-<instance familyname="MyFamily" filename="../instance/Medium.ufo" stylename="Medium">
+<instance familyname="MyFamily" filename="../Medium.ufo" stylename="Medium">
 	<location>
 		<dimension name="weight" xvalue="0.500000"/>
 	</location>
 	<glyphs>
-		... a number of glyph elements
+        <glyph name="N">
+            <location>
+                <dimension name="width" xvalue="0.700000"/>
+            </location>
+            <masters>
+                <master glyphname="N.alt" source="master_1">
+                    <location>
+						<dimension name="weight" xvalue="0.490000"/>
+                    </location>
+                </master>
+                <master glyphname="N.alt" source="master_2">
+                    <location>
+						<dimension name="weight" xvalue="0.490000"/>
+                    </location>
+                </master>
+            </masters>
+        </glyph>
 	</glyphs>
 </instance>
 ```
@@ -238,31 +254,33 @@ The familyname and stylename are necessary to make UFOs. Some additional names c
 
 ## The location element
 
-The location element describes a point in the designspace. Locations are used to position a source as a master, and to indicate where the instances are to be calculated. A location element usually contains one or more dimension child elements.
+The location element describes a point in the designspace. Locations are used to position a source as a master, and to indicate where the instances are to be calculated. Location elements are used in several places in a designspace. A location element has no attributes, but needs to contain at least one **dimension** child elements.
 
 ```xml
-	<!-- location with one dimension -->
 	<location>
-		... one or more dimension elements
+		<dimension name="" xvalue="" [yvalue=""]/>
+		[...]
 	</location>
 ```
 
-#### dimension element
+#### Attributes of the dimension element
 
-*	```<dimension name="" xvalue="" [yvalue=""]/>```
-	*	The required **name** attribute is the name of the dimension. For instance "width" or "weight".
-	*	The required **xvalue** attribute contains a string representation of distance in this dimension.
-	*	Use the optional **yvalue** attribute if this dimension is to be anisotropic.
+*	**name**
+	*	Required, string. Name of the dimension. For instance "width" or "weight".
+*	**xvalue**
+	*	Required, value. A string representation of distance in this dimension.
+*	**yvalue**
+	*	Optional value if this dimension is to be anisotropic.
 
-#### Example
+#### Examples
 
 ```xml
-	<!-- location with one dimension -->
+	<!-- location with a single dimension -->
 	<location>
 		<dimension name="weight" xvalue="0.500000"/>
 	</location>
 
-	<!-- location with one anisotropic dimension -->
+	<!-- location with a single anisotropic dimension -->
 	<location>
 		<dimension name="weight" xvalue="0.500000" yvalue="0.48728"/>
 	</location>
@@ -292,12 +310,26 @@ The optional **glyph** element can be used in a instance element to store inform
 
 ```xml
 	<glyphs>
-		<glyph name="a" [unicode="0x0061"]>
+		<!-- required: one or more glyph elements -->
+		<glyph
+			<!-- required: the AGL glyphname -->
+			name=""
+			<!-- optional: unicode value for this glyph -->
+			[unicode=""]
+		>
+
+			<!-- optional: alternative location for this glyph. -->
 			[<location/>]
-			[<note>A note for this glyph</note>]
+		
+			<!-- optional: a note for this glyph -->
+			[<note>
+				nice glyph!
+			</note>]
+
 			[<masters>
-				... a number of master elements
+				...a number of master elements
 			</masters>]
+
 		</glyph>
 	</glyphs>
 ```
@@ -312,11 +344,11 @@ The optional **glyph** element can be used in a instance element to store inform
 #### Child elements of the glyph element
 
 *	```<location/>```
-	*	Optional, location element. See discription above. If the location element is present it will be the location for this glyph. If it is not present, the location defined for the instance will be used.
+	*	Optional, location element. If the location element is present it will be the location for this glyph. If it is not present, the location defined for the instance will be used.
 *	```<note>...</note>```
 	*	Optional, string. Corresponds with the **defcon** glyph.note attribute. 
 *	```<masters>...</masters>```
-	* a list of master elements. See description below. 
+	* a list of master elements.
 
 ## The master element
 
@@ -338,7 +370,7 @@ Used in the masters element to specify which glyphs from which sources have to b
 
 *	**source**
 	*	Optional, string.
-	*	Name of the source, should match with the **name** attribute of one **source** element.
+	*	Name of the source, must match with the **name** attribute of exactly one **source** element.
 *	**glyphname**
 	*	Optional, string
 	*	Alternative glyphname if data is to come from a different glyph.
@@ -346,7 +378,7 @@ Used in the masters element to specify which glyphs from which sources have to b
 #### Child elements of the master element
 
 *	**location**
-	*	Optional. See discription above. 
+	*	Optional. 
 	*	If a location element is present, use this alternative location for this master. If no location is present, use the location defined for the source. 
 
 
