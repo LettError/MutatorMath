@@ -1,5 +1,5 @@
-MutatorMath DesignSpace Format
-==============================
+MutatorMath DesignSpace Format (Draft)
+======================================
 
 ![A MutatorMath Designspace Document Icon](designspaceDocumentIcon.png)
 

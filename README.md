@@ -39,7 +39,7 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 *   arithmetic support
     *   objects that offer arithmetic behavior
     *   objects that respond to `+`, `-`, `*` and `/`
-    *   objects with `__add__`, `__sub__`, `__mul__`, `__div__` methods
+    *   objects with `__add__`, `__sub__`, `__mul__`, `__rmul__`, `__div__` and `__rdiv__` methods
 *   **master**:         an arithmetic object that provides the input data.
 *   **neutral**:        a master inserted at the origin
 *   **instance**:       an object calculated at a specific location, same class as the master.
@@ -98,6 +98,8 @@ A `.designspace` file contains all data needed for setting up interpolations bet
     </instances>
 </designspace>
 ```
+
+A more detailed description of the designspace format here: [designspace file format](designSpaceFileFormat.md)
 
 
 ### Writing a designspace
