@@ -3,9 +3,11 @@
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
 
-from fontMath.mathGlyph import MathGlyph
+import warnings
+
 from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
+from fontMath.mathGlyph import MathGlyph
 
 import defcon
 
@@ -24,9 +26,11 @@ class InstanceWriter(object):
     _fontClass = defcon.objects.font.Font
     _tempFontLibGlyphMuteKey = "_mutatorMath.temp.mutedGlyphNames"
     
-    def __init__(self, path, ufoVersion=1, roundGeometry=False, verbose=False, logger=None):
+    def __init__(self, path, ufoVersion=1,
+            roundGeometry=False,
+            verbose=False,
+            logger=None):
         self.path = path
-        # do we check for overwriting?
         self.font = self._fontClass()
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
@@ -39,9 +43,9 @@ class InstanceWriter(object):
         self.unicodeValues = {}
         self.verbose=verbose
         self.logger=logger
-        self._failed = []       # list of glyphnames we could not generate
+        self._failed = []            # list of glyphnames we could not generate
         self._missingUnicodes = []   # list of glyphnames with missing unicode values
-    
+            
     def setSources(self, sources):
         """ Set a list of sources."""
         self.sources = sources
@@ -164,7 +168,11 @@ class InstanceWriter(object):
         bias, m = buildMutator(items)
         instanceObject = m.makeInstance(instanceLocation)
         if self.roundGeometry:
-            instanceObject = instanceObject.round()
+            try:
+                instanceObject = instanceObject.round()
+            except AttributeError:
+                warnings.warn("MathInfo object missing round() method.")
+
         instanceObject.extractInfo(self.font.info)
 
         # handle the copyable info fields
@@ -319,8 +327,15 @@ class InstanceWriter(object):
         bias, m = buildMutator(items)
         instanceObject = m.makeInstance(instanceLocationObject)
         if self.roundGeometry:
-            instanceObject = instanceObject.round()
-        instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
+            try:
+                instanceObject = instanceObject.round()
+            except AttributeError:
+                warnings.warn("MathGlyph object missing round() method.")
+        try:
+            instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
+        except TypeError:
+            warnings.warn("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
+            instanceObject.extractGlyph(targetGlyphObject)
         
     def save(self):
         """ Save the UFO."""
