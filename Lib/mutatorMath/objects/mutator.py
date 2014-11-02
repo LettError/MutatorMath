@@ -116,7 +116,8 @@ class Mutator(dict):
             if name is not None and name is not False:
                 if not self._axes.has_key(name):
                     self._axes[name] = []
-                self._axes[name].append(l)
+                if l not in self._axes[name]:
+                    self._axes[name].append(l)
         return self._axes
     
     def _collectOffAxisPoints(self):
@@ -217,7 +218,9 @@ class Mutator(dict):
             relative.append(1)
         elif deltaAxis:
             deltasOnSameAxis = self._axes.get(deltaAxis, None)
-            deltasOnSameAxis.append(((deltaAxis, 0),))
+            d = ((deltaAxis, 0),)
+            if d not in deltasOnSameAxis:
+                deltasOnSameAxis.append(d)
             if len(deltasOnSameAxis) == 1:
                 relative.append(aLocation[deltaAxis] * deltaLocation[deltaAxis])
             else:
