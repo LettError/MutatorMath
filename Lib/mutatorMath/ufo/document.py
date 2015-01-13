@@ -343,9 +343,7 @@ class DesignSpaceDocumentReader(object):
             
             # read the locations
             sourceLocationObject = None
-            for sourceLocationElement in sourceElement.findall('.location'):
-                sourceLocationObject = self.readLocationElement(sourceLocationElement)
-                break
+            sourceLocationObject = self.locationFromElement(sourceElement)
 
             if sourceLocationObject is None:
                raise MutatorError("No location defined for source %s"%sourceName)
