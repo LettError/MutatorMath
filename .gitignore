@@ -1,5 +1,13 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+*.idea
 *.log
+
+Lib/support/axes.py
+
+Lib/support/mutatorMath-A.py
+
+Lib/support/mutatorMath-B.py
+
+Lib/support/mutatorMath-performance.py

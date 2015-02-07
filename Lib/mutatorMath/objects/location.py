@@ -634,6 +634,19 @@ def biasFromLocations(locs):
         >>> locs = [Location(a=-10, b=300), Location(a=0, b=400), Location(a=20, b=300)]
         >>> biasFromLocations(locs)
         <Location a:-10, b:300 >
+
+        # 4 
+        >>> locs = [Location(wt=0, wd=500),
+        ...     Location(wt=1000, wd=900),
+        ...     Location(wt=1200, wd=900),
+        ...     Location(wt=-200, wd=600),
+        ...     Location(wt=0, wd=600),
+        ...     Location(wt=1000, wd=600),
+        ...     Location(wt=1200, wd=600),
+        ...     Location(wt=-200, wd=300),
+        ...     Location(wt=0, wd=300), ]
+        >>> biasFromLocations(locs)
+        <Location wd:600, wt:0 >
     """
     dims = {}
     for l in locs:
@@ -665,6 +678,8 @@ def mostCommon(L):
         >>> mostCommon([-1, -2, -3])
         -1
         >>> mostCommon([-1, -2, -3, -1])
+        -1
+        >>> mostCommon([-1, -1, -2, -2])
         -1
     """
     # get an iterable of (item, iterable) pairs
@@ -872,6 +887,35 @@ if __name__ == "__main__":
             >>> assert (a>b) == False
             >>> assert (c<b) == False
             >>> assert (c==b) == True
+
+        """
+
+    def test_sorting():
+        """ Test the sorting qualities.
+
+            >>> a = Location(pop=0)
+            >>> b = Location(pop=1)
+            >>> c = Location(pop=2)
+            >>> d = Location(pop=-1)
+            >>> l = [b, d, a, c]
+            >>> l.sort()
+            >>> l
+            [<Location pop:-1 >, <Location pop:0 >, <Location pop:1 >, <Location pop:2 >]
+            >>> e = Location(pop=1, snap=1)
+            >>> l = [a, e]
+            >>> l.sort()
+            >>> l
+            [<Location pop:0 >, <Location pop:1, snap:1 >]
+            >>> f = Location(pop=-1, snap=-1)
+            >>> l = [a, e, f]
+            >>> l.sort()
+            >>> l
+            [<Location pop:0 >, <Location pop:-1, snap:-1 >, <Location pop:1, snap:1 >]
+            >>> l = [Location(pop=-1), Location(pop=1)]
+            >>> l.sort()
+            >>> l
+            [<Location pop:-1 >, <Location pop:1 >]
+
 
         """
 

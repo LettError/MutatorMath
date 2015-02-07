@@ -24,10 +24,12 @@ from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocum
 from mutatorMath.objects.location import Location
 
 
+
 if __name__ == "__main__":
     import doctest
     def test1():
         """
+        >>> import time
         >>> testRoot = os.path.join(os.getcwd(), 'data')
         >>> documentPath = os.path.join(testRoot, 'exporttest_basic.designspace')
         >>> sourcePath = os.path.join(testRoot, 'sources')
@@ -35,7 +37,7 @@ if __name__ == "__main__":
         >>> master1Path = os.path.join(testRoot, )
         >>> logPath = os.path.join(testRoot, "tests.log")
         >>> ufoVersion=2
-        >>> roundGeometry=True
+        >>> roundGeometry=True      # this will trigger some fails if run with a pre-ufo3 fontMath.
 
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> doc.addSource(
@@ -93,6 +95,10 @@ if __name__ == "__main__":
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
         >>> instance = defcon.objects.font.Font(resultUFOPath)
+            
+            # note: the next assertion will fail if the calculations were made with the 
+            # pre-ufo3 fontMath.
+
         >>> assert instance['M'].unicode == 0xff
 
             # check the groups

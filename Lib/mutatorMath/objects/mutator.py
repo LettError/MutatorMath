@@ -170,7 +170,9 @@ class Mutator(dict):
         for f, item, name in factors:
             if total is None:
                 total = f * item
-            else:
+                continue
+            if f != 0:
+                # only add non-zero deltas.
                 total += f * item
         if total is None:
             total = 0 * self._neutral
