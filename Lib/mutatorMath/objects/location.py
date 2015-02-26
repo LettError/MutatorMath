@@ -14,7 +14,7 @@ __all__ =  ["Location", "sortLocations"]
 
 def numberToString(value):
     # return a nicely formatted string of this value
-    # return tuples as a tuple-looking stirng with formatted numbers
+    # return tuples as a tuple-looking string with formatted numbers
     # return ints as ints, no commas
     # return floats as compact rounded value
     if value is None:
