@@ -3,9 +3,11 @@
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
 
+import sys
+
 __all__ = ['Mutator', 'buildMutator']
 
-_EPSILON = 1e-15
+_EPSILON = sys.float_info.epsilon
 
 def buildMutator(items):
     """
@@ -171,7 +173,7 @@ class Mutator(dict):
             if total is None:
                 total = f * item
                 continue
-            if f != 0:
+            if not (f-_EPSILON < 0 < f+_EPSILON):
                 # only add non-zero deltas.
                 total += f * item
         if total is None:
@@ -199,7 +201,7 @@ class Mutator(dict):
         deltas = []
         aLocation.expand(self.getAxisNames())
         limits = getLimits(self._allLocations(), aLocation)
-        for deltaLocationTuple, (mathItem, deltaName) in self.items():
+        for deltaLocationTuple, (mathItem, deltaName) in sorted(self.iteritems()):
             deltaLocation = Location(deltaLocationTuple)
             deltaLocation.expand( self.getAxisNames())
             factor = self._accumulateFactors(aLocation, deltaLocation, limits, axisOnly)
@@ -429,7 +431,7 @@ if __name__ == "__main__":
         >>> test_singleAxis(1)
         100.0
         >>> test_singleAxis(0)
-        0.0
+        0
 
         a value in the middle should be in the middle
         >>> test_singleAxis(.5)
@@ -485,7 +487,7 @@ if __name__ == "__main__":
         """Test for a system with two axes. Three values, two on-axis, one off-axis.
 
         >>> test_twoAxesOffAxis(0, 0)
-        0.0
+        0
         >>> test_twoAxesOffAxis(1, 1)
         50.0
         >>> test_twoAxesOffAxis(2, 2)
@@ -508,6 +510,34 @@ if __name__ == "__main__":
         m.addDelta(Location(pop=1), value-neutral, deltaName="test1")
         m.addDelta(Location(snap=1), -1*value-neutral, deltaName="test2")
         m.addDelta(Location(pop=1, snap=1), 50, punch=True, deltaName="test2")
+        return m.getInstance(Location(pop=l, snap=n)) + neutral
+    
+    def test_twoAxesOffAxisSmall(l, n):
+        """Test for a system with two axes. Three values, two on-axis, one off-axis.
+        >>> test_twoAxesOffAxisSmall(0, 0)
+        0
+        >>> test_twoAxesOffAxisSmall(1, 1)
+        5e-16
+        >>> test_twoAxesOffAxisSmall(2, 2)
+        2e-15
+        >>> test_twoAxesOffAxisSmall(1, 0)
+        1e-15
+        >>> test_twoAxesOffAxisSmall(0, 1)
+        -1e-15
+        >>> test_twoAxesOffAxisSmall(2, 0)
+        2e-15
+        >>> test_twoAxesOffAxisSmall(0, 2)
+        -2e-15
+
+        a value in the middle should be in the middle
+        """
+        m = Mutator()
+        neutral = 0
+        value = 1e-15
+        m.setNeutral(neutral-neutral)
+        m.addDelta(Location(pop=1), value-neutral, deltaName="test1")
+        m.addDelta(Location(snap=1), -1*value-neutral, deltaName="test2")
+        m.addDelta(Location(pop=1, snap=1), 0.5*value-neutral, punch=True, deltaName="test2")
         return m.getInstance(Location(pop=l, snap=n)) + neutral
     
     def test_getLimits(a, b, t):

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from types import TupleType
-import math
+import math, sys
 import itertools, operator
 
 __version__ = "1.6"
 
-_EPSILON = 1e-15
-_ONE_EPSILON = 1 - _EPSILON
-_MINUS_ONE_EPSILON = -1 + _EPSILON
+_EPSILON = sys.float_info.epsilon
 
 __all__ =  ["Location", "sortLocations"]
 
