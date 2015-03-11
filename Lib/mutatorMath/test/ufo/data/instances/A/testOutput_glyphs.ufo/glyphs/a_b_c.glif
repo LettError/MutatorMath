@@ -6,11 +6,4 @@
     <component base="b" xOffset="216"/>
     <component base="c" xOffset="470"/>
   </outline>
-  <lib>
-    <dict>
-      <key>com.typemytype.robofont.layerData</key>
-      <dict>
-      </dict>
-    </dict>
-  </lib>
 </glyph>

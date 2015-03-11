@@ -33,6 +33,22 @@ def newLogger(proposedLogPath):
             )
     return logging.getLogger("mutatorMath")
 
+def _indent(elem, whitespace="    ", level=0):
+    # taken from http://effbot.org/zone/element-lib.htm#prettyprint
+    i = "\n" + level * whitespace
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + whitespace
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            _indent(elem, whitespace, level+1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
 
 class DesignSpaceDocumentWriter(object):
     """
@@ -41,6 +57,8 @@ class DesignSpaceDocumentWriter(object):
     *   path:   path for the document
     *   toolVersion: version of this tool
     """
+
+    _whiteSpace = "    "
         
     def __init__(self, path, toolVersion=3, verbose=False):
         self.path = path
@@ -52,9 +70,11 @@ class DesignSpaceDocumentWriter(object):
         self.root.append(ET.Element("instances"))
         self.currentInstance = None
 
-    def save(self):
-        """ Save the xml."""
+    def save(self, pretty=True):
+        """ Save the xml. Make pretty if necessary. """
         self.endInstance()
+        if pretty:
+            _indent(self.root, whitespace=self._whiteSpace)
         tree = ET.ElementTree(self.root)
         tree.write(self.path, encoding="utf-8", method='xml', xml_declaration=True)
     

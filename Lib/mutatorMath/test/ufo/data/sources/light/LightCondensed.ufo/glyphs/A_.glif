@@ -26,18 +26,4 @@
       <point x="80" y="475" type="curve" smooth="yes"/>
     </contour>
   </outline>
-  <lib>
-    <dict>
-      <key>com.typemytype.robofont.layerData</key>
-      <dict>
-      </dict>
-      <key>com.typemytype.robofont.mark</key>
-      <array>
-        <real>1.0</real>
-        <real>0.7903</real>
-        <real>0.0999</real>
-        <real>1.0</real>
-      </array>
-    </dict>
-  </lib>
 </glyph>
