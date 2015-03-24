@@ -302,7 +302,13 @@ class DesignSpaceDocumentReader(object):
     _tempFontLocationKey = "_mutatorMath.temp.fontLocation"
 
     
-    def __init__(self, documentPath, ufoVersion, roundGeometry=False, verbose=False, logPath=None):
+    def __init__(self, documentPath,
+            ufoVersion,
+            roundGeometry=False,
+            verbose=False,
+            logPath=None,
+            progressFunc=None
+            ):
         self.path = documentPath
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
@@ -313,6 +319,7 @@ class DesignSpaceDocumentReader(object):
         self.libSource = None
         self.groupsSource = None
         self.infoSource = None
+        self.progressFunc=progressFunc
         self.muted = dict(kerning=[], info=[], glyphs={})
         if logPath is None:
             logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
@@ -320,6 +327,24 @@ class DesignSpaceDocumentReader(object):
         if self.verbose:
             self.logger.info("Executing designspace document: %s", documentPath)
         self.results = {}   # dict with instancename / filepaths for post processing.
+
+    def reportProgress(self, state, action, text=None, tick=None):
+        """ If we want to keep other code updated about our progress.
+
+            state:      'prep'      reading sources
+                        'generate'  making instances
+                        'done'      wrapping up
+            
+            action:     'start'     begin generating
+                        'stop'      end generating
+                        'source'    which ufo we're reading
+
+            text:       <file.ufo>  ufoname (for instance)
+            tick:       a float between 0 and 1 indicating progress.
+
+        """
+        if self.progressFunc is not None:
+            self.progressFunc(state=state, action=action, text=text, tick=tick)
 
     def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Process the input file and generate the instances. """
@@ -330,6 +355,7 @@ class DesignSpaceDocumentReader(object):
         self.readSources()
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
         self.logger.info('Done')
+        self.reportProgress("done", 'stop')
     
     def readVersion(self):
         """ Read the document version.
@@ -357,6 +383,7 @@ class DesignSpaceDocumentReader(object):
             # filename is a path relaive to the documentpath. resolve first.
             sourcePath = os.path.join(os.path.dirname(self.path), filename)
             sourceName = sourceElement.attrib.get('name')
+            self.reportProgress("prep", 'load', sourcePath)
             if not os.path.exists(sourcePath):
                 raise MutatorError("Source not found at %s"%sourcePath)
             sourceObject = self._fontClass(sourcePath)
@@ -418,6 +445,7 @@ class DesignSpaceDocumentReader(object):
 
             # store
             self.sources[sourceName] = sourceObject, sourceLocationObject
+            self.reportProgress("prep", 'done')
 
     def locationFromElement(self, element):
         """ 
@@ -460,6 +488,7 @@ class DesignSpaceDocumentReader(object):
             <instance familyname="SuperFamily" filename="OutputNameInstance1.ufo" location="location-token-aaa" stylename="Regular">
         
         """
+        instanceElements = self.root.findall('.instances/instance')
         for instanceElement in self.root.findall('.instances/instance'):
             self._readSingleInstanceElement(instanceElement, makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
     
@@ -471,8 +500,9 @@ class DesignSpaceDocumentReader(object):
         # get the data from the instanceElement itself
         filename = instanceElement.attrib.get('filename')
 
-        filenameTokenForResults = os.path.basename(filename)
         instancePath = os.path.join(os.path.dirname(self.path), filename)
+        self.reportProgress("generate", 'start', instancePath)
+        filenameTokenForResults = os.path.basename(filename)
 
         if self.verbose:
             self.logger.info("Writing %s to %s", os.path.basename(filename), instancePath)
@@ -554,16 +584,19 @@ class DesignSpaceDocumentReader(object):
         
         # save the instance. Done.
         instanceObject.save()
-        failed = instanceObject.getFailed()
-        if failed:
-            failed.sort()
-            self.logger.info("Errors calculating %s glyphs:", len(failed))
-            self.logger.info(", ".join(failed))
-        missing = instanceObject.getMissingUnicodes()
-        if missing:
-            missing.sort()
-            self.logger.info("Missing unicodes for %s glyphs:", len(missing))
-            self.logger.info(", ".join(missing))
+        if self.verbose:
+            failed = instanceObject.getFailed()
+            if failed:
+                failed.sort()
+                self.logger.info("Errors calculating %s glyphs:", len(failed))
+                self.logger.info(", ".join(failed))
+            missing = instanceObject.getMissingUnicodes()
+            if missing:
+                    missing.sort()
+                    self.logger.info("Missing unicodes for %s glyphs:", len(missing))
+                    self.logger.info(", ".join(missing))
+
+        self.reportProgress("generate", 'stop', filenameTokenForResults)
 
     def readInfoElement(self, infoElement, instanceObject):
         """ Read the info element.

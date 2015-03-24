@@ -1,11 +1,35 @@
-""" These are some UFO specific tools for use with Mutator. """
+
+""" These are some UFO specific tools for use with Mutator.
+
+
+	build() is a convenience function for reading and executing a designspace file.
+		documentPath: 				filepath to the .designspace document
+		outputUFOFormatVersion:		ufo format for output
+		verbose:					True / False for lots or no feedback
+		logPath:					filepath to a log file
+		progressFunc:				an optional callback to report progress.
+									see mutatorMath.ufo.tokenProgressFunc
+
+"""
+
+
+def tokenProgressFunc(state="update", action=None, text=None, tick=0):
+	"""
+		state: 		string, "update", "reading sources", "wrapping up"
+		action:		string, "stop", "start"
+		text:		string, value, additional parameter. For instance ufoname.
+		tick:		a float between 0 and 1 indicating progress.
+	"""
+	print("tokenProgressFunc %s: %s\n%s (%d)"%(state, str(title), str(text), str(tick)))
 
 def build(
 		documentPath,
 		outputUFOFormatVersion=2,
 		roundGeometry=True,
 		verbose=True,
-		logPath=None):
+		logPath=None,
+		progressFunc=None,
+		):
 	"""
 
 		Simple builder for UFO designspaces.
@@ -24,10 +48,13 @@ def build(
 		reader = DesignSpaceDocumentReader(
 				path,
 		        ufoVersion=outputUFOFormatVersion,
-		        roundGeometry=True,
+		        roundGeometry=roundGeometry,
 		        verbose=verbose,
-		        logPath=logPath)
+		        logPath=logPath,
+				progressFunc=progressFunc
+		        )
 		reader.process()
 		results.append(reader.results)
+	reader = None
 	return results
 

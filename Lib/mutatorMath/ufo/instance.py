@@ -128,7 +128,9 @@ class InstanceWriter(object):
                     values[glyph.name][u] = 1
         for name, u in values.items():
             if len(u) > 1:
-                self.logger.info("\tMultiple unicode values for glyph %s: %s"%(name, ", ".join(str(u))))
+                msg = u", ".join([str(v) for v in u.keys()])
+                if self.verbose:
+                    self.logger.info("\tMultiple unicode values for glyph %s: %s"%(name, msg))
                 continue
             if len(u) == 0:
                 self._missingUnicodes.append(name)
@@ -170,6 +172,7 @@ class InstanceWriter(object):
         if self.roundGeometry:
             try:
                 instanceObject = instanceObject.round()
+                self.logger.info("Rounding info")
             except AttributeError:
                 warnings.warn("MathInfo object missing round() method.")
 
@@ -259,6 +262,7 @@ class InstanceWriter(object):
         bias, m = buildMutator(items)
         instanceObject = m.makeInstance(instanceLocation)
         if self.roundGeometry:
+            self.logger.info("Rounding kerning")
             instanceObject.round()
         instanceObject.extractKerning(self.font)
         
