@@ -613,40 +613,10 @@ def sortLocations(locations):
 
 def biasFromLocations(locs):
     """
-        Find the designspace vector for the best bias.
-        >>> locs = [Location(a=10), Location(a=10, b=10, c=10), Location(a=10, c=15), Location(a=5, c=15)]
-        >>> biasFromLocations(locs)
-        <Location a:10, b:10, c:15 >
-        
-        # 1
-        >>> locs = [Location(a=10, b=0), Location(a=5, b=10), Location(a=20, b=0)]
-        >>> biasFromLocations(locs)
-        <Location a:5, b:0 >
-        
-        # 2
-        >>> locs = [Location(a=10, b=300), Location(a=20, b=300), Location(a=20, b=600), Location(a=30, b=300)]
-        >>> biasFromLocations(locs)
-        <Location a:20, b:300 >
-        
-        # 3
-        >>> locs = [Location(a=-10, b=300), Location(a=0, b=400), Location(a=20, b=300)]
-        >>> biasFromLocations(locs)
-        <Location a:-10, b:300 >
-
-        # 4 
-        >>> locs = [Location(wt=0, wd=500),
-        ...     Location(wt=1000, wd=900),
-        ...     Location(wt=1200, wd=900),
-        ...     Location(wt=-200, wd=600),
-        ...     Location(wt=0, wd=600),
-        ...     Location(wt=1000, wd=600),
-        ...     Location(wt=1200, wd=600),
-        ...     Location(wt=-200, wd=300),
-        ...     Location(wt=0, wd=300), ]
-        >>> biasFromLocations(locs)
-        <Location wd:600, wt:0 >
+        Find the vector that translates the whole system to the origin. 
     """
     dims = {}
+    locs.sort()
     for l in locs:
         for d in l.keys():
             if not d in dims:
@@ -657,11 +627,30 @@ def biasFromLocations(locs):
                 dims[d].append(v[1])
             else:
                 dims[d].append(v)
-    l = Location()
+    candidate = Location()
     for k in dims.keys():
         dims[k].sort()
-        l[k] = mostCommon(dims[k])
-    return l
+        v = mostCommon(dims[k])
+        if dims[k].count(v) > 1:
+            # add the dimension with two or more hits
+            candidate[k] = mostCommon(dims[k])
+    matches = []
+    # 1. do we have an exact match?
+    for l in locs:
+        if candidate == l:
+            return l
+    # 2. find a location that matches candidate (but has more dimensions)
+    for l in locs:
+        ok = True
+        for k, v in candidate.items():
+            if l.get(k)!=v:
+                ok = False
+                break
+        if ok:
+            if not l in matches:
+                matches.append(l)
+    matches.sort()
+    return matches[0]
                     
 def mostCommon(L):
     """
@@ -679,6 +668,10 @@ def mostCommon(L):
         -1
         >>> mostCommon([-1, -1, -2, -2])
         -1
+        >>> mostCommon([0, 0.125, 0.275, 1])
+        0
+        >>> mostCommon([0, 0.1, 0.4, 0.4])
+        0.4
     """
     # get an iterable of (item, iterable) pairs
     SL = sorted((x, i) for i, x in enumerate(L))
@@ -701,6 +694,190 @@ def mostCommon(L):
 if __name__ == "__main__":
 
     import doctest
+
+    def _testBiasFromLocations(bias, locs):
+        """ 
+            # Find the designspace vector for the best bias.
+            # Test results: (<number of on-axis locations>, <number of off-axis locations>)
+
+            >>> locs = [Location(a=10), Location(a=10, b=10, c=10), Location(a=10, c=15), Location(a=5, c=15)]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location a:10, c:15 >
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 1)
+            
+            >>> locs = [Location(a=10, b=0), Location(a=5, b=10), Location(a=20, b=0)]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location a:10, b:0 >
+            >>> _testBiasFromLocations(bias, locs)
+            (1, 1)
+            
+            >>> locs = [Location(a=10, b=300), Location(a=20, b=300), Location(a=20, b=600), Location(a=30, b=300)]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location a:20, b:300 >
+            >>> _testBiasFromLocations(bias, locs)
+            (3, 0)
+            
+            >>> locs = [Location(a=-10, b=300), Location(a=0, b=400), Location(a=20, b=300)]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location a:-10, b:300 >
+            >>> _testBiasFromLocations(bias, locs)
+            (1, 1)
+
+            >>> locs = [Location(wt=0, wd=500),
+            ...     Location(wt=1000,  wd=900),
+            ...     Location(wt=1200,  wd=900),
+            ...     Location(wt=-200,  wd=600),
+            ...     Location(wt=0,     wd=600),
+            ...     Location(wt=1000,  wd=600),
+            ...     Location(wt=1200,  wd=600),
+            ...     Location(wt=-200,  wd=300),
+            ...     Location(wt=0,     wd=300),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location wd:600, wt:0 >
+            >>> _testBiasFromLocations(bias, locs)
+            (5, 3)
+
+            >>> locs = [
+            ...     Location(wt=1,     sz=0),
+            ...     Location(wt=0,     sz=0),
+            ...     Location(wt=0.275, sz=0),
+            ...     Location(wt=0.275, sz=1),
+            ...     Location(wt=1,     sz=1),
+            ...     Location(wt=0.125, sz=0.4),
+            ...     Location(wt=1,     sz=0.4),
+            ...     Location(wt=0.6,   sz=0.4),
+            ...     Location(wt=0,     sz=0.4),
+            ...     Location(wt=0.275, sz=0.4),
+            ...     Location(wt=0,     sz=1),
+            ...     Location(wt=0.125, sz=1),
+            ...     Location(wt=0.6,   sz=0),
+            ...     Location(wt=0.125, sz=0),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location sz:0, wt:0 >
+            >>> _testBiasFromLocations(bias, locs)
+            (6, 7)
+
+            # Nothing lines up
+            >>> locs = [
+            ...     Location(pop=1),
+            ...     Location(snap=1),
+            ...     Location(crackle=1)]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location crackle:1 >
+            >>> _testBiasFromLocations(bias, locs)
+            (0, 2)
+
+            # ... why crackle? because it sorts first
+            >>> locs.sort()
+            >>> locs
+            [<Location crackle:1 >, <Location pop:1 >, <Location snap:1 >]
+
+            # Two things line up
+            >>> locs = [
+            ...     Location(pop=-1),
+            ...     Location(pop=1),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location pop:-1 >
+            >>> _testBiasFromLocations(bias, locs)
+            (1, 0)
+
+            # Two things line up
+            >>> locs = [
+            ...     Location(pop=-1, snap=-1),
+            ...     Location(pop=1, snap=0),
+            ...     Location(pop=1, snap=1),
+            ...     Location(pop=1, snap=1),
+            ...     ]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location pop:1, snap:1 >
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 1)
+
+            # Almost Nothing Lines Up 1
+            # An incomplete set of masters can 
+            # create a situation in which there is nothing to interpolate.
+            # However, we still need to find a bias.
+            >>> locs = [
+            ...     Location(wt=1,     sz=0.4),
+            ...     Location(wt=0.275, sz=0.4),
+            ...     Location(wt=0,     sz=1),
+            ...     Location(wt=0.125, sz=0),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location sz:0.400, wt:0.275 >
+            >>> _testBiasFromLocations(bias, locs)
+            (1, 2)
+
+            # Almost Nothing Lines Up 2
+            >>> locs = [
+            ...     Location(wt=1,     sz=0.4),
+            ...     Location(wt=0.275, sz=0.4),
+            ...     Location(wt=0,     sz=1),
+            ...     Location(wt=0.6,   sz=1),
+            ...     Location(wt=0.125, sz=0),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location sz:0.400, wt:0.275 >
+            >>> _testBiasFromLocations(bias, locs)
+            (1, 3)
+
+            # A square on the origin
+            >>> locs = [
+            ...     Location(wt=0,     wd=0),
+            ...     Location(wt=1,     wd=0),
+            ...     Location(wt=0,     wd=1),
+            ...     Location(wt=1,     wd=1),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location wd:0, wt:0 >
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 1)
+
+            # A square, not on the origin
+            >>> locs = [
+            ...     Location(wt=100,     wd=100),
+            ...     Location(wt=200,     wd=100),
+            ...     Location(wt=100,     wd=200),
+            ...     Location(wt=200,     wd=200),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location wd:100, wt:100 >
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 1)
+
+            # A square, not on the origin
+            >>> locs = [
+            ...     Location(wt=200,     wd=100),
+            ...     Location(wt=100,     wd=200),
+            ...     Location(wt=200,     wd=200),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location wd:200, wt:200 >
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 0)
+        """
+        rel = []
+        # translate the test locations over the bias
+        for l in locs:
+            rel.append((l - bias).isOnAxis())
+        # MUST have one origin        
+        assert None in rel  
+        # how many end up off-axis?
+        offAxis = rel.count(False)
+        # how many end up on-axis?
+        onAxis = len(rel)-offAxis-1
+        # a good bias has more masters at on-axis locations.
+        return onAxis, offAxis
 
     def test_common():
         """ Make a new location with only the dimensions that the two have in common. 
@@ -737,14 +914,12 @@ if __name__ == "__main__":
         <Location weight:1, width:2, zip:3 >
         """
         
-        
     def test_onAxis():
         """
         # origin will return None
         >>> l = Location(pop=0, aap=0, lalala=0, poop=0)
         >>> l.isOnAxis()
 
-        
         # on axis will return axis name
         >>> l = Location(pop=0, aap=1, lalala=0, poop=0)
         >>> l.isOnAxis()
@@ -774,7 +949,6 @@ if __name__ == "__main__":
         >>> b = Location(pop=3, snap=4)
         >>> a.distance(b)
         5.0
-        
         """
     
     def test_limits_sorts():
@@ -794,6 +968,9 @@ if __name__ == "__main__":
         {'snap': (None, 0.5, None), 'pop': (0.35, None, 1)}
 
         # sort a group of locations
+        >>> sortLocations(l)
+        ([<Location pop:1 >, <Location snap:1 >], [<Location plop:0, pop:0.250, snap:1 >, <Location pop:0.350, snap:1 >], [<Location aap:10, pop:-1 >, <Location pop:0.250, snap:0.500 >])
+
         >>> a1, a2, a3 = sortLocations(l)
 
         # assert that each location in a1 is on axis, 
@@ -807,11 +984,8 @@ if __name__ == "__main__":
         # how to test for wild locations? Can only see if they're offAxis. Relevant?
         >>> sum([a.isOnAxis() is False for a in a3])
         2
-        
-        
         """
         
-
     def test_ambivalence():
         """ Test ambivalence qualities of locations.
         
@@ -1005,20 +1179,4 @@ if __name__ == "__main__":
         
          """
     
-    
-
     doctest.testmod()
-    
-    test_common()
-    test_misc()
-    test_onAxis()
-    test_distance()
-    test_limits_sorts()
-    test_ambivalence()
-    
-    test_asString()
-    test_comparisons()
-    
-    test_basicMath()
-    test17()
-    regressionTests()
