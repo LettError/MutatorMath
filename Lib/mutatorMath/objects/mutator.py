@@ -15,6 +15,8 @@ def buildMutator(items):
         Determine the bias based on the given locations.
     """
     m = Mutator()
+    # the order itself does not matter, but we should always build in the same order.
+    items.sort()
     bias = biasFromLocations([loc for loc, obj in items])
     m.setBias(bias)
     n = None
@@ -22,15 +24,17 @@ def buildMutator(items):
     onx = []
     for loc, obj in items:
         if (loc-bias).isOrigin():
-            n = obj
-    m.setNeutral(n)
+            m.setNeutral(obj)
+            break
+    if m.getNeutral() is None:
+        raise MutatorError("Did not find a neutral for this system", m)
     for loc, obj in items:
         lb = loc-bias
         if lb.isOrigin(): continue
         if lb.isOnAxis():
-            onx.append((lb, obj-n))
+            onx.append((lb, obj-m.getNeutral()))
         else:
-            ofx.append((lb, obj-n))
+            ofx.append((lb, obj-m.getNeutral()))
     for loc, obj in onx:
         m.addDelta(loc, obj, punch=False,  axisOnly=True)
     for loc, obj in ofx:
@@ -173,9 +177,7 @@ class Mutator(dict):
             if total is None:
                 total = f * item
                 continue
-            if not (f-_EPSILON < 0 < f+_EPSILON):
-                # only add non-zero deltas.
-                total += f * item
+            total += f * item
         if total is None:
             total = 0 * self._neutral
         if getFactors:
@@ -205,7 +207,11 @@ class Mutator(dict):
             deltaLocation = Location(deltaLocationTuple)
             deltaLocation.expand( self.getAxisNames())
             factor = self._accumulateFactors(aLocation, deltaLocation, limits, axisOnly)
-            deltas.append((factor, mathItem, deltaName))
+            if not (factor-_EPSILON < 0 < factor+_EPSILON):
+                # only add non-zero deltas.
+                deltas.append((factor, mathItem, deltaName))    
+        deltas.sort()
+        deltas.reverse()
         return deltas
 
     #
