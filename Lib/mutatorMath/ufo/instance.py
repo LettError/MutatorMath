@@ -167,12 +167,15 @@ class InstanceWriter(object):
                 # info in this master was muted, so do not add.
                 continue
             items.append((sourceLocation, MathInfo(source.info)))
-        bias, m = buildMutator(items)
+        try:
+            bias, m = buildMutator(items)
+        except:
+            self.logger.exception("Error processing font info. %s", items)
+            return
         instanceObject = m.makeInstance(instanceLocation)
         if self.roundGeometry:
             try:
                 instanceObject = instanceObject.round()
-                self.logger.info("Rounding info")
             except AttributeError:
                 warnings.warn("MathInfo object missing round() method.")
 
@@ -258,13 +261,19 @@ class InstanceWriter(object):
                 if self.verbose and self.logger:
                     self.logger.info("Muting kerning data for %s", instanceLocation)
                 continue
-            items.append((sourceLocation, MathKerning(source.kerning)))
-        bias, m = buildMutator(items)
-        instanceObject = m.makeInstance(instanceLocation)
-        if self.roundGeometry:
-            self.logger.info("Rounding kerning")
-            instanceObject.round()
-        instanceObject.extractKerning(self.font)
+            if len(source.kerning.keys())>0:
+                items.append((sourceLocation, MathKerning(source.kerning)))
+        if items:
+            m = None
+            try:
+                bias, m = buildMutator(items)
+            except:
+                self.logger.exception("Error processing kerning data. %s", items)
+                return
+            instanceObject = m.makeInstance(instanceLocation)
+            if self.roundGeometry:
+                instanceObject.round()
+            instanceObject.extractKerning(self.font)
         
     def addGlyph(self, glyphName, unicodeValue=None, instanceLocation=None, sources=None, note=None):
         """
@@ -305,9 +314,10 @@ class InstanceWriter(object):
         # make the glyphs
         try:
             self._calculateGlyph(glyphObject, instanceLocation, glyphMasters)
-        except IndexError:
-            # probably a compatibility error.
+        except:
             self._failed.append(glyphName)
+            if self.verbose and self.logger:
+                self.logger.exception("\tGlyph %s failed", glyphName)
     
     def _calculateGlyph(self, targetGlyphObject, instanceLocationObject, glyphMasters):
         """
