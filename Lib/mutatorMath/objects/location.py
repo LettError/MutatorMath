@@ -899,11 +899,6 @@ if __name__ == "__main__":
             >>> bias
             <Location A:0, G:0, H:1000, W:200 >
 
-            [(<Location Size:0, Untitled:0, Weight:64, Width:385 >, <MathGlyph a>), 
-            (<Location Size:0, Untitled:268, Weight:0, Width:1000 >, <MathGlyph a>), 
-            (<Location Size:8, Untitled:550, Weight:851, Width:126 >, <MathGlyph a>), 
-            (<Location Size:8, Untitled:868, Weight:1000, Width:1000 >, <MathGlyph a>)]
-            
             # Something from P
             >>> locs = [
             ...     Location(S=0,    U=0,      Wt=54,    Wd=385),
