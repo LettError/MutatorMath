@@ -101,7 +101,8 @@ class DesignSpaceDocumentWriter(object):
             location, 
             copyLib=False, 
             copyGroups=False, 
-            copyInfo=False, 
+            copyInfo=False,
+            copyFeatures=False,
             muteKerning=False, 
             muteInfo=False,
             mutedGlyphNames=None,
@@ -114,6 +115,7 @@ class DesignSpaceDocumentWriter(object):
         *   copyLib:        copy the contents of this source to instances
         *   copyGroups:     copy the groups of this source to instances
         *   copyInfo:       copy the non-numerical fields from this source.info to instances.
+        *   copyFeatures:   copy the feature text from this source to instances
         *   muteKerning:    mute the kerning data from this source
         *   muteInfo:       mute the font info data from this source
 
@@ -132,6 +134,11 @@ class DesignSpaceDocumentWriter(object):
             groupsElement = ET.Element('groups')
             groupsElement.attrib['copy'] = "1"
             sourceElement.append(groupsElement)
+
+        if copyFeatures:
+            featuresElement = ET.Element('features')
+            featuresElement.attrib['copy'] = "1"
+            sourceElement.append(featuresElement)
 
         if copyInfo or muteInfo:
             # copy info: 
@@ -319,6 +326,7 @@ class DesignSpaceDocumentReader(object):
         self.libSource = None
         self.groupsSource = None
         self.infoSource = None
+        self.featuresSource = None
         self.progressFunc=progressFunc
         self.muted = dict(kerning=[], info=[], glyphs={})
         if logPath is None:
@@ -428,6 +436,16 @@ class DesignSpaceDocumentReader(object):
                     self.muted['info'].append(sourceName)
                     if self.verbose:
                         self.logger.info("\tFont info from %s is muted.", sourceName)
+
+            # read the features flag
+            for featuresElement in sourceElement.findall(".features"):
+                if featuresElement.attrib.get('copy') == '1':
+                    if self.featuresSource is not None:
+                        if self.verbose:
+                            self.logger.info("\tError: Features copy source already defined: %s, %s", sourceName, self.featuresSource)
+                        self.featuresSource = None
+                    else:
+                        self.featuresSource = sourceName
 
             mutedGlyphs = []
             for glyphElement in sourceElement.findall(".glyph"):
@@ -566,6 +584,10 @@ class DesignSpaceDocumentReader(object):
         if makeInfo:
             for infoElement in instanceElement.findall('.info'):
                 self.readInfoElement(infoElement, instanceObject)
+
+        # copy the features
+        if self.featuresSource is not None:
+            instanceObject.copyFeatures(self.featuresSource)
 
         # copy the groups
         if self.groupsSource is not None:

@@ -109,6 +109,12 @@ class InstanceWriter(object):
         """ Set the familyName"""
         self.font.info.familyName = name
 
+    def copyFeatures(self, featureSource):
+        """ Copy the features from this source """
+        if featureSource in self.sources:
+            src, loc = self.sources[featureSource]
+            self.font.features.text = src.features.text
+
     def makeUnicodeMapFromSources(self):
         """ Create a dict with glyphName -> unicode value pairs
             using the data in the sources. 
@@ -178,7 +184,6 @@ class InstanceWriter(object):
                 instanceObject = instanceObject.round()
             except AttributeError:
                 warnings.warn("MathInfo object missing round() method.")
-
         instanceObject.extractInfo(self.font.info)
 
         # handle the copyable info fields
@@ -263,6 +268,7 @@ class InstanceWriter(object):
                 continue
             if len(source.kerning.keys())>0:
                 items.append((sourceLocation, MathKerning(source.kerning)))
+        # items.sort()
         if items:
             m = None
             try:

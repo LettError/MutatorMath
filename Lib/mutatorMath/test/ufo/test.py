@@ -47,6 +47,7 @@ if __name__ == "__main__":
         ...        copyLib=True,            # change to see the copy Lib test fail
         ...        copyGroups=True,         # change to see assertions fail on groupSource and instance groups.
         ...        copyInfo=True, 
+        ...        copyFeatures=True,
         ...        muteKerning=False, 
         ...        muteInfo=True,
         ...        mutedGlyphNames=['a',] )
@@ -107,6 +108,9 @@ if __name__ == "__main__":
 
             # check the lib
         >>> assert "testLibItemKey" in instance.lib.keys()
+
+            # check the feature text was copied from the source
+        >>> assert "Hi_this_is_the_feature." in instance.features.text
         
             # basic kerning processing.
         >>> documentPath = os.path.join(testRoot, 'exporttest_kerning.designspace')
