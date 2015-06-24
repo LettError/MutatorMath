@@ -4,6 +4,7 @@
         <source filename="sources/light/LightCondensed.ufo" name="master_1">
             <lib copy="1" />
             <groups copy="1" />
+            <features copy="1" />
             <info copy="1" mute="1" />
             <glyph mute="1" name="a" />
             <location>

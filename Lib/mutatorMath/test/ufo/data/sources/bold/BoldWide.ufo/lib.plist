@@ -248,30 +248,6 @@
 			<string>glyphList</string>
 		</dict>
 	</array>
-	<key>org.robofab.opentype.classes</key>
-	<string># this is the feature from BoldWide
-</string>
-	<key>org.robofab.postScriptHintData</key>
-	<dict>
-		<key>blueValues</key>
-		<array>
-		</array>
-		<key>familyBlues</key>
-		<array>
-		</array>
-		<key>familyOtherBlues</key>
-		<array>
-		</array>
-		<key>hStems</key>
-		<array>
-		</array>
-		<key>otherBlues</key>
-		<array>
-		</array>
-		<key>vStems</key>
-		<array>
-		</array>
-	</dict>
 	<key>public.glyphOrder</key>
 	<array>
 		<string>space</string>
