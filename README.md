@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/LettError/MutatorMath.svg)](https://travis-ci.org/LettError/MutatorMath)
+
 MutatorMath
 ===========
 
