@@ -272,6 +272,16 @@ if __name__ == "__main__":
         >>> doc.writeKerning()
         >>> doc.endInstance()
         >>> doc.save()
+
+            # test build function -- single designspace file
+        >>> from mutatorMath.ufo import build
+        >>> import os
+        >>> here = os.path.join(os.getcwd(), 'data', 'exporttest_basic.designspace')
+        >>> results = build(here, outputUFOFormatVersion=2)
+        >>> ufoFullPath = results[0]['testOutput_glyphs.ufo']
+        >>> ufoRelPath = ufoFullPath.replace(os.getcwd(), '')
+        >>> ufoRelPath
+        '/data/instances/A/testOutput_glyphs.ufo'
         """
 
     doctest.testmod()
