@@ -1,0 +1,19 @@
+language: python
+sudo: required
+python:
+  - "2.7"
+before_install:
+  - git clone https://github.com/typesupply/defcon.git --branch ufo3
+  - git clone https://github.com/typesupply/fontMath.git --branch ufo3
+  - git clone https://github.com/robofab-developers/robofab.git --branch ufo3k
+  - git clone https://github.com/behdad/fonttools.git
+install:
+  - cd defcon; python setup.py install; cd ..
+  - cd fontMath; python setup.py install; cd ..
+  - cd robofab; python install.py; cd ..
+  - cd fonttools; python setup.py install; cd ..
+  # MutatorMath
+  - python setup.py install
+script:
+  - cd Lib/mutatorMath/test/ufo
+  - python test.py | tee /dev/stderr | grep "\*\*\*Test Failed\*\*\*"; if [[ ${PIPESTATUS[2]} == "0" ]]; then exit 1 ; fi
