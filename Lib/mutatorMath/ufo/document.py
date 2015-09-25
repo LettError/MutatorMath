@@ -605,7 +605,9 @@ class DesignSpaceDocumentReader(object):
                 instanceObject.setLib(libSourceObject.lib)
         
         # save the instance. Done.
-        instanceObject.save()
+        success, report = instanceObject.save()
+        if not success: 
+                self.logger.info("Errors generating: %s", report)
         if self.verbose:
             failed = instanceObject.getFailed()
             if failed:

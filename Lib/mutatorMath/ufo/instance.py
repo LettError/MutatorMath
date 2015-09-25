@@ -359,5 +359,11 @@ class InstanceWriter(object):
         
     def save(self):
         """ Save the UFO."""
-        self.font.save(self.path, self.ufoVersion)
+        try:
+            self.font.save(self.path, self.ufoVersion)
+        except defcon.DefconError as error:
+            if self.logger:
+                self.logger.exception("Error generating.")
+            return False, error.report
+        return True, None
         
