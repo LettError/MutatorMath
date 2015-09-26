@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/LettError/MutatorMath.svg)](https://travis-ci.org/LettError/MutatorMath)
+[![Build Status](https://travis-ci.org/LettError/MutatorMath.svg?branch=master)](https://travis-ci.org/LettError/MutatorMath)
+[![Coverage Status](https://coveralls.io/repos/LettError/MutatorMath/badge.svg?branch=master&service=github)](https://coveralls.io/github/LettError/MutatorMath?branch=master)
 
 MutatorMath
 ===========
