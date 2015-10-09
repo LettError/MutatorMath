@@ -14,6 +14,10 @@ install:
   - cd fonttools; python setup.py install; cd ..
   # MutatorMath
   - python setup.py install
+  - pip install coveralls
 script:
   - cd Lib/mutatorMath/test/ufo
   - python test.py | tee /dev/stderr | grep "\*\*\*Test Failed\*\*\*"; if [[ ${PIPESTATUS[2]} == "0" ]]; then exit 1 ; fi
+  - coverage run --source=mutatorMath test.py
+after_success:
+  coveralls
