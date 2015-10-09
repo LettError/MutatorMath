@@ -615,11 +615,6 @@ def biasFromLocations(locs, preferOrigin=True):
     """
         Find the vector that translates the whole system to the origin. 
     """
-    # 0. do we have and want a location on the origin?
-    if preferOrigin:
-        for loc in locs:
-            if loc.isOrigin():
-                return loc
     dims = {}
     locs.sort()
     for l in locs:
@@ -656,6 +651,10 @@ def biasFromLocations(locs, preferOrigin=True):
                 matches.append(l)
     matches.sort()
     if len(matches)>0:
+        if preferOrigin:
+            for c in matches:
+                if c.isOrigin():
+                    return c
         return matches[0]
     # 3. no matches. Find the best from the available locations
     results = {}
@@ -667,9 +666,15 @@ def biasFromLocations(locs, preferOrigin=True):
         if not c in results:
             results[c] = []
         results[c].append(bias)
-    candidates = results[min(results.keys())]
-    candidates.sort()
-    return candidates[0]
+    if results:
+        candidates = results[min(results.keys())]
+        if preferOrigin:
+            for c in candidates:
+                if c.isOrigin():
+                    return c
+        candidates.sort()
+        return candidates[0]
+    return Location()
                     
 def mostCommon(L):
     """
@@ -885,6 +890,18 @@ if __name__ == "__main__":
             >>> _testBiasFromLocations(bias, locs)
             (2, 0)
 
+            # Two axes, three masters
+            >>> locs = [
+            ...     Location(ct=0,       wd=0),
+            ...     Location(ct=0,       wd=1000),
+            ...     Location(ct=100,     wd=1000),]
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location ct:0, wd:1000 >
+
+            >>> _testBiasFromLocations(bias, locs)
+            (2, 0)
+
             # Complex 4 D space
             >>> locs = [
             ...     Location(A=0,    H=0,    G=1000, W=0),
@@ -899,7 +916,6 @@ if __name__ == "__main__":
             >>> bias
             <Location A:0, G:0, H:1000, W:200 >
 
-            # Something from P
             >>> locs = [
             ...     Location(S=0,    U=0,      Wt=54,    Wd=385),
             ...     Location(S=0,    U=268,    Wt=54,    Wd=1000),
@@ -909,6 +925,12 @@ if __name__ == "__main__":
             >>> bias
             <Location S:0, U:268, Wd:1000, Wt:54 >
 
+
+            # empty locs
+            >>> locs = []
+            >>> bias = biasFromLocations(locs)
+            >>> bias
+            <Location origin >
         """
         rel = []
         # translate the test locations over the bias

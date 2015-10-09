@@ -17,7 +17,7 @@ def buildMutator(items):
     m = Mutator()
     # the order itself does not matter, but we should always build in the same order.
     items.sort()
-    bias = biasFromLocations([loc for loc, obj in items])
+    bias = biasFromLocations([loc for loc, obj in items], True)
     m.setBias(bias)
     n = None
     ofx = []
