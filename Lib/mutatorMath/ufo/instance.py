@@ -9,6 +9,8 @@ from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
 from fontMath.mathGlyph import MathGlyph
 
+from ufoLib.validators import kerningValidatorReportPairs
+
 import defcon
 
 class InstanceWriter(object):
@@ -350,15 +352,28 @@ class InstanceWriter(object):
             try:
                 instanceObject = instanceObject.round()
             except AttributeError:
-                warnings.warn("MathGlyph object missing round() method.")
+                self.logger.info("MathGlyph object missing round() method.")
         try:
             instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
         except TypeError:
-            warnings.warn("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
+            self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
             instanceObject.extractGlyph(targetGlyphObject)
-        
+    
+    def validateKerning(self):
+        " Make sure the kerning validates before saving. "
+        self.logger.info("Validating kerning...")
+        validates, errors, pairs = kerningValidatorReportPairs(self.font.kerning, self.font.groups)
+        if validates:
+            return
+        self.logger.info("Warning: removed these invalid kerning pairs:\n\t%s"%"\n\t".join(errors))
+        for pair in pairs:
+            if pair in self.font.kerning:
+                del self.font.kerning[pair]
+
+
     def save(self):
         """ Save the UFO."""
+        self.validateKerning()
         try:
             self.font.save(self.path, self.ufoVersion)
         except defcon.DefconError as error:
