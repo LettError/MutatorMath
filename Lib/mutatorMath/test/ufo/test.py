@@ -283,11 +283,6 @@ if __name__ == "__main__":
         >>> ufoRelPath
         '/data/instances/A/testOutput_glyphs.ufo'
 
-            # call the tests in kerningTest.py
-        >>> from mutatorMath.test.ufo.kerningTest import testOuroborosKerning
-        >>> testOuroborosKerning(os.path.join(os.getcwd(), "kerningTest"), cleanUp=True)
-        True
-
         """
 
     doctest.testmod()
