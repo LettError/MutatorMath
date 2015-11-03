@@ -26,6 +26,7 @@ from mutatorMath.objects.location import Location
 
 
 if __name__ == "__main__":
+    import sys
     import doctest
     def test1():
         """
@@ -285,4 +286,4 @@ if __name__ == "__main__":
 
         """
 
-    doctest.testmod()
+    sys.exit(doctest.testmod().failed)

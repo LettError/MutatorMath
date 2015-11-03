@@ -17,7 +17,8 @@ install:
   - pip install coveralls
 script:
   - cd Lib/mutatorMath/test/ufo
-  - python test.py | tee /dev/stderr | grep "\*\*\*Test Failed\*\*\*"; if [[ ${PIPESTATUS[2]} == "0" ]]; then exit 1 ; fi
-  - coverage run --source=mutatorMath test.py
+  - coverage run --parallel-mode --source=mutatorMath test.py
+  - coverage run --parallel-mode --source=mutatorMath kerningTest.py
 after_success:
-  coveralls
+  - coverage combine
+  - coveralls
