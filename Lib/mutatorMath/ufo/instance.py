@@ -186,6 +186,8 @@ class InstanceWriter(object):
                 instanceObject = instanceObject.round()
             except AttributeError:
                 warnings.warn("MathInfo object missing round() method.")
+        else:
+            self._roundSelectedFontInfo(instanceObject)
         instanceObject.extractInfo(self.font.info)
 
         # handle the copyable info fields
@@ -196,6 +198,63 @@ class InstanceWriter(object):
                     return
             copySourceObject, loc = sources[copySourceName]
             self._copyFontInfo(self.font.info, copySourceObject.info)
+
+    def _roundSelectedFontInfo(self, fontInfo):
+        """self.roundGeometry is false. However, most FontInfo fields have to be integer.
+        Exceptions are:
+            any of the PostScript Blue values.
+            postscriptStemSnapH, postscriptStemSnapV, postscriptSlantAngle
+        The Blue values should be rounded to 2 decimal places, with the exception
+        of postscriptBlueScale.
+        I round the float values because most Type1/Type2 rasterizers store
+        point and stem coordinates as Fixed numbers with 8 bits. You end up
+        cumulative rounding errors if you pass in relative values with more
+        than 2 decimal places. Other FontInfo float values are stored as Fixed
+        number with 16 bits,and can support 6 decimal places.
+        """
+        listType = type([])
+        strType = type("")
+        
+        fiKeys = dir(fontInfo)
+        for fieldName in fiKeys:
+            if fieldName.startswith("_"):
+                continue
+            srcValue = getattr(fontInfo, fieldName)
+            if type(srcValue) != listType:
+                try:
+                    realValue = float(srcValue)
+                except (TypeError, ValueError):
+                    continue
+                intValue = int(realValue)
+                if intValue == realValue:
+                    continue
+                
+                if ("Blue" in fieldName) or (fieldName == "postscriptSlantAngle"):
+                    if fieldName == "postscriptBlueScale":
+                        # round to 6 places
+                        rndValue = round(realValue*1000000)/1000000.0
+                        if rndValue != realValue:
+                            setattr(fontInfo, fieldName, rndValue)
+                    else:
+                        # round to 2 places
+                        rndValue = round(realValue*100)/100.0
+                        if rndValue != realValue:
+                            setattr(fontInfo, fieldName, rndValue)
+                else:
+                    intValue = int(round(realValue))
+                    setattr(fontInfo, fieldName, intValue)
+                    
+            elif ("Blue" in fieldName) or fieldName.startswith("postscriptStemSnap"):
+                # It is a list.
+                for i in range(len(srcValue)):
+                    realValue = float(srcValue[i])
+                    intVal = int(realValue)
+                    if intValue == realValue:
+                        continue
+                    # round to 2 places
+                    rndValue = round(realValue*100)/100.0
+                    if rndValue != realValue:
+                        srcValue[i] = rndValue
 
     def _copyFontInfo(self, targetInfo, sourceInfo):
         """ Copy the non-calculating fields from the source info.
@@ -279,8 +338,7 @@ class InstanceWriter(object):
                 self.logger.exception("Error processing kerning data. %s", items)
                 return
             instanceObject = m.makeInstance(instanceLocation)
-            if self.roundGeometry:
-                instanceObject.round()
+            instanceObject.round() # Kerning values must be integer, so we don't check self.roundGeometry
             instanceObject.extractKerning(self.font)
         
     def addGlyph(self, glyphName, unicodeValue=None, instanceLocation=None, sources=None, note=None):
@@ -352,7 +410,9 @@ class InstanceWriter(object):
             try:
                 instanceObject = instanceObject.round()
             except AttributeError:
-                self.logger.info("MathGlyph object missing round() method.")
+                warnings.warn("MathGlyph object missing round() method.")
+        else:
+        	instanceObject.width = int(round(instanceObject.width)) # Width values must be integer.
         try:
             instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
         except TypeError:
