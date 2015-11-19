@@ -47,6 +47,7 @@ class InstanceWriter(object):
         self.logger=logger
         self._failed = []            # list of glyphnames we could not generate
         self._missingUnicodes = []   # list of glyphnames with missing unicode values
+        self._kerningValidationProblems = []     # list of kerning pairs that failed validation
             
     def setSources(self, sources):
         """ Set a list of sources."""
@@ -81,6 +82,10 @@ class InstanceWriter(object):
     def getFailed(self):
         """ Return the list of glyphnames that failed to generate."""
         return self._failed
+
+    def getKerningErrors(self):
+        """ Return the list of kerning pairs that failed validation. """
+        return self._kerningValidationProblems
 
     def getMissingUnicodes(self):
         """ Return the list of glyphnames with missing unicode values. """
@@ -305,7 +310,6 @@ class InstanceWriter(object):
         glyphMasters = []
         if sources is None:
             # glyph has no special requests, add the default sources
-            #sources = self.sources
             for sourceName, (source, sourceLocation) in self.sources.items():
                 if glyphName in self.muted['glyphs'].get(sourceName, []):
                     # this glyph in this master was muted, so do not add.
@@ -324,8 +328,6 @@ class InstanceWriter(object):
             self._calculateGlyph(glyphObject, instanceLocation, glyphMasters)
         except:
             self._failed.append(glyphName)
-            if self.verbose and self.logger:
-                self.logger.exception("\tGlyph %s failed", glyphName)
     
     def _calculateGlyph(self, targetGlyphObject, instanceLocationObject, glyphMasters):
         """
@@ -365,11 +367,11 @@ class InstanceWriter(object):
         validates, errors, pairs = kerningValidatorReportPairs(self.font.kerning, self.font.groups)
         if validates:
             return
-        self.logger.info("Warning: removed these invalid kerning pairs:\n\t%s"%"\n\t".join(errors))
         for pair in pairs:
             if pair in self.font.kerning:
                 del self.font.kerning[pair]
-
+        for err in errors:
+            self._kerningValidationProblems.append(err)
 
     def save(self):
         """ Save the UFO."""

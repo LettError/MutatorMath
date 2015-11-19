@@ -342,6 +342,7 @@ class DesignSpaceDocumentReader(object):
             state:      'prep'      reading sources
                         'generate'  making instances
                         'done'      wrapping up
+                        'error'     reporting a problem
             
             action:     'start'     begin generating
                         'stop'      end generating
@@ -606,19 +607,36 @@ class DesignSpaceDocumentReader(object):
         
         # save the instance. Done.
         success, report = instanceObject.save()
-        if not success: 
-                self.logger.info("Errors generating: %s", report)
-        if self.verbose:
-            failed = instanceObject.getFailed()
-            if failed:
-                failed.sort()
-                self.logger.info("Errors calculating %s glyphs:", len(failed))
-                self.logger.info(", ".join(failed))
-            missing = instanceObject.getMissingUnicodes()
-            if missing:
-                    missing.sort()
-                    self.logger.info("Missing unicodes for %s glyphs:", len(missing))
-                    self.logger.info(", ".join(missing))
+        if not success:
+            # report problems other than validation errors and failed glyphs
+            self.logger.info("%s:\nErrors generating: %s", filename, report)
+
+        # report failed glyphs
+        failed = instanceObject.getFailed()
+        if failed:
+            failed.sort()
+            msg = "%s:\nErrors calculating %s glyphs: \n%s"%(filename, len(failed),"\n".join(failed))
+            self.reportProgress('error', 'glyphs', msg)
+            if self.verbose:
+                self.logger.info(msg)
+
+        # report missing unicodes
+        missing = instanceObject.getMissingUnicodes()
+        if missing:
+            missing.sort()
+            msg = "%s:\nMissing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\n".join(missing))
+            self.reportProgress('error', 'unicodes', msg)
+            if self.verbose:
+                self.logger.info(msg)
+
+        # report failed kerning pairs
+        failed = instanceObject.getKerningErrors()
+        if failed:
+            failed.sort()
+            msg = "%s:\nThese kerning pairs failed validation and have been removed:\n%s"%(filename, "\n".join(failed))
+            self.reportProgress('error', 'kerning', msg)
+            if self.verbose:
+                self.logger.info(msg)
 
         self.reportProgress("generate", 'stop', filenameTokenForResults)
 
