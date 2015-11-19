@@ -73,9 +73,10 @@ def makeTestFonts(rootPath):
 def testingProgressFunc(state, action, text, tick):
     """ Progress function that gets passed to the DesignSpaceDocumentReader should
         report on the faulty kerning pairs it found.
-    """ 
-    if state == "error":
-        assert text[0] == "Warning: Kerning for this UFO failed validation.\n\tRemoved these pairs:\n\tpublic.kern1.@MMK_L_one, glyphThree (-250) conflicts with glyphOne, public.kern2.@MMK_R_two (-400)\n\tglyphOne, public.kern2.@MMK_R_two (-400) conflicts with public.kern1.@MMK_L_one, glyphThree (-250)"
+    """
+    failPair1 = "invalidInstance.ufo:\nThese kerning pairs failed validation and have been removed:\nglyphOne, public.kern2.@MMK_R_two (-400) conflicts with public.kern1.@MMK_L_one, glyphThree (-250)\npublic.kern1.@MMK_L_one, glyphThree (-250) conflicts with glyphOne, public.kern2.@MMK_R_two (-400)"
+    if state == "error" and action == 'kerning':
+        assert failPair1 in text
 
 def testOuroborosKerning(rootPath, cleanUp=True):
     # that works, let's do it via MutatorMath
@@ -121,10 +122,11 @@ def testOuroborosKerning(rootPath, cleanUp=True):
     doc.process(makeGlyphs=True, makeKerning=True, makeInfo=True)
 
     # did we log the error?
-    report = u"""MutatorMath Warning: removed these invalid kerning pairs:\n\tpublic.kern1.@MMK_L_one, glyphThree (-250) conflicts with glyphOne, public.kern2.@MMK_R_two (-400)\n\tglyphOne, public.kern2.@MMK_R_two (-400) conflicts with public.kern1.@MMK_L_one, glyphThree (-250)"""
+    report = u"""invalidInstance.ufo:\nThese kerning pairs failed validation and have been removed:\nglyphOne, public.kern2.@MMK_R_two (-400) conflicts with public.kern1.@MMK_L_one, glyphThree (-250)\npublic.kern1.@MMK_L_one, glyphThree (-250) conflicts with glyphOne, public.kern2.@MMK_R_two (-400)"""
     log = open(logPath, 'r')
     logText = log.read()
     log.close()
+    #print logText
     assert report in logText
 
     if cleanUp:
