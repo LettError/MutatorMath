@@ -145,7 +145,7 @@ if __name__ == "__main__":
         """
         >>> import time
         >>> import os
-        >>> testOuroborosKerning(os.path.join(os.getcwd(), "kerningTest"), cleanUp=True)
+        >>> testOuroborosKerning(os.path.join(os.getcwd(), "testData"), cleanUp=True)
         True
         """
     sys.exit(doctest.testmod().failed)
