@@ -12,6 +12,7 @@ from fontMath.mathGlyph import MathGlyph
 from ufoLib.validators import kerningValidatorReportPairs
 
 import defcon
+import os
 
 class InstanceWriter(object):
     """ 
@@ -363,7 +364,7 @@ class InstanceWriter(object):
     
     def validateKerning(self):
         " Make sure the kerning validates before saving. "
-        self.logger.info("Validating kerning...")
+        self.logger.info("Validating kerning %s", os.path.basename(self.path))
         validates, errors, pairs = kerningValidatorReportPairs(self.font.kerning, self.font.groups)
         if validates:
             return
