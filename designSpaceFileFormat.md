@@ -18,7 +18,7 @@ The font.info contains different kinds of data. Some are strings (names, urls, c
 
 Both instance and source elements contain paths to files. These paths are expected to be relative to the path of the .designspace document. This allows the same .designspace to be deployed to multiple locations, but still reference the proper source files. It also allows sources to be stored in their own directories, and instances to be created into their own directories.
 
-```
+```xml
 <?xml version="1.0" ?>
 <designspace format="3">
 
