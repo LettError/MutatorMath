@@ -293,13 +293,6 @@ class Location(dict):
                 newOther = self.__class__()
             newSelf[dim] = self[dim]
             newOther[dim] = other[dim]
-        if newSelf is not None and newOther is not None:
-            t = []
-            for d in newSelf.keys():
-                t.append(newSelf[d]*newOther[d])
-            total = 1
-            for v in t:
-                total *= v
         return newSelf, newOther
     
     #
@@ -331,6 +324,8 @@ class Location(dict):
             *   False if the location is not on-axis
             *   The name of the axis if it is on-axis
             *   None if the Location is at the origin
+
+        Note: this is only valid for an unbiased location.
         ::
 
             >>> l = Location(pop=1)
