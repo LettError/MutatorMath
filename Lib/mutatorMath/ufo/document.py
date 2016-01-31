@@ -331,7 +331,7 @@ class DesignSpaceDocumentReader(object):
         self.infoSource = None
         self.featuresSource = None
         self.progressFunc=progressFunc
-        self.muted = dict(kerning=[], info=[], glyphs={'instance': []})
+        self.muted = dict(kerning=[], info=[], glyphs={})
         if logPath is None:
             logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
         self.logger = newLogger(logPath)
