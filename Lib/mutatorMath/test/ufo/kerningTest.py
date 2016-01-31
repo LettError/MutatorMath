@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 
 This is a test for a very specific problem that can occur

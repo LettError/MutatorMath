@@ -2,7 +2,10 @@
 
 """
 
-These are some basic tests for glyph geometry.
+    This is a test for the muting functionality. 
+
+    - mute masters
+    - mute specific glyphs
 
 """
 
@@ -22,54 +25,43 @@ def testingProgressFunc(state, action, text, tick):
         report on the faulty kerning pairs it found.
     """
     pass
+    #print "testingProgressFunc", state, action, text, tick
 
-def addGlyphs(font, s):
+
+def addGlyphs(font, offset=0):
     # we need to add the glyphs
-    for n in ['glyphOne', 'glyphTwo']:
+    # add an offset so we can see if the masters are active.
+    for n in ['glyphOne', 'glyphTwo', 'glyphThree', 'glyphFour']:
         font.newGlyph(n)
         g = font[n]
         p = g.getPen()
-        p.moveTo((0,0))
-        p.lineTo((s,0))
-        p.lineTo((s,s))
-        p.lineTo((0,s))
+        p.moveTo((100+offset,100+offset))
+        p.lineTo((200+offset,200+offset))
+        p.lineTo((offset,100+offset))
         p.closePath()
-        g.width = s
-
-def fillInfo(font):
-    font.info.unitsPerEm = 1000
-    font.info.ascender = 800
-    font.info.descender = -200
 
 def makeTestFonts(rootPath):
     """ Make some test fonts that have the kerning problem."""
-    path1 = os.path.join(rootPath, "geometryMaster1.ufo")
-    path2 = os.path.join(rootPath, "geometryMaster2.ufo")
-    path3 = os.path.join(rootPath, "geometryInstance.ufo")
-    path4 = os.path.join(rootPath, "geometryInstanceAnisotropic1.ufo")
-    path5 = os.path.join(rootPath, "geometryInstanceAnisotropic2.ufo")
-
+    path1 = os.path.join(rootPath, "mutingMaster1.ufo")
+    path2 = os.path.join(rootPath, "mutingMaster2.ufo")
+    path3 = os.path.join(rootPath, "mutedGlyphInstance.ufo")
     # Two masters
     f1 = Font()
-    addGlyphs(f1, 100)
-
+    addGlyphs(f1, 0)
     f2 = Font()
-    addGlyphs(f2, 500)
-
-    fillInfo(f1)
-    fillInfo(f2)
-
+    addGlyphs(f2, 33)
     # save
-    f1.save(path1, 2)
-    f2.save(path2, 2)
-    return path1, path2, path3, path4, path5
+    f1.save(path1, 3)
+    f2.save(path2, 3)
+    return path1, path2, path3
 
-
-def testGeometry(rootPath, cleanUp=True):
+def testMutingOptions(rootPath, cleanUp=True):
     # that works, let's do it via MutatorMath
-    path1, path2, path3, path4, path5 = makeTestFonts(rootPath)
-    documentPath = os.path.join(rootPath, 'geometryTest.designspace')
-    logPath = os.path.join(rootPath,"geometryTest.log")
+    # path1 and path2 are masters. path3 is the instance
+    path1, path2, path3 = makeTestFonts(rootPath)
+    documentPath = os.path.join(rootPath, 'mutingTest.designspace')
+    logPath = os.path.join(rootPath,"mutingTest.log")
+
     try:
         testLogFile = open(logPath, 'w')
         testLogFile.close()
@@ -94,48 +86,43 @@ def testGeometry(rootPath, cleanUp=True):
             copyGroups=False,
             copyInfo=False, 
             copyFeatures=False,
+            mutedGlyphNames=['glyphThree']  # mute glyphThree in master 1
             )
     doc.startInstance(fileName=path3,
             familyName="TestInstance",
             styleName="Regular",
             location=dict(width=500)
             )
-    doc.endInstance()
-    doc.startInstance(fileName=path4,
-            familyName="TestInstance",
-            styleName="Anisotropic1",
-            location=dict(width=(0, 1000))
-            )
-    doc.endInstance()
-    doc.startInstance(fileName=path5,
-            familyName="TestInstance",
-            styleName="Anisotropic2",
-            location=dict(width=(1000, 0))
-            )
+    doc.writeGlyph('glyphFour', mute=True)  # mute glyphFour in the instance
     doc.endInstance()
     doc.save()
 
-    # execute the designspace.
+    # execute the designspace. 
     doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, logPath=logPath, progressFunc=testingProgressFunc)
-    doc.process(makeGlyphs=True, makeKerning=False, makeInfo=True)
+    doc.process(makeGlyphs=True, makeKerning=True, makeInfo=True)
 
-    r1 = Font(path3)
-    assert r1['glyphOne'].bounds == (0, 0, 300, 300)
-
-    r2 = Font(path4)
-    assert r2['glyphOne'].bounds == (0, 0, 100, 500)
-
-    r3 = Font(path5)
-    assert r3['glyphOne'].bounds == (0, 0, 500, 100)
+    # look at the results
+    m1 = Font(path1)
+    m2 = Font(path2)
+    r = Font(path3)
+    # 
+    # the glyphThree master was muted in the second master
+    # so the instance glyphThree should be the same as the first master:
+    assert r['glyphThree'].bounds == m1['glyphThree'].bounds
+    # we muted glyphFour in the instance.
+    # so it should not be part of the instance UFO:
+    assert "glyphFour" not in r
 
     if cleanUp:
         # remove the mess
-        shutil.rmtree(path1)
-        shutil.rmtree(path2)
-        shutil.rmtree(path3)
+        try:
+            shutil.rmtree(path1)
+            shutil.rmtree(path2)
+            shutil.rmtree(path3)
+        except:
+            pass
 
     return True
-
 
 if __name__ == "__main__":
     import sys
@@ -144,7 +131,7 @@ if __name__ == "__main__":
         """
         >>> import time
         >>> import os
-        >>> testGeometry(os.path.join(os.getcwd(), "testData"), cleanUp=False)
+        >>> testMutingOptions(os.path.join(os.getcwd(), "testData"), cleanUp=False)
         True
         """
     sys.exit(doctest.testmod().failed)
