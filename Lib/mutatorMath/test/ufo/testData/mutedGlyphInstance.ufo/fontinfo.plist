@@ -24,5 +24,7 @@
 	</array>
 	<key>styleName</key>
 	<string>Regular</string>
+	<key>unitsPerEm</key>
+	<integer>1000</integer>
 </dict>
 </plist>

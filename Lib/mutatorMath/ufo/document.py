@@ -236,6 +236,8 @@ class DesignSpaceDocumentWriter(object):
             * unicodeValue: unicode value for this glyph if it needs to be different from the unicode value associated with this glyph name in the masters.
             * location: a design space location for this glyph if it needs to be different from the instance location. 
             * masters: a list of masters and locations for this glyph if they need to be different from the masters specified for this instance.
+            * note: a note for this glyph
+            * mute: if this glyph is muted. None of the other attributes matter if this one is true.
         """
         if self.currentInstance is None:
             return

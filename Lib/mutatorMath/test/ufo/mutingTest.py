@@ -48,8 +48,12 @@ def makeTestFonts(rootPath):
     # Two masters
     f1 = Font()
     addGlyphs(f1, 0)
+    f1.info.unitsPerEm = 1000
+    f1.kerning[('glyphOne', 'glyphOne')] = -100
     f2 = Font()
     addGlyphs(f2, 33)
+    f2.info.unitsPerEm = 2000
+    f2.kerning[('glyphOne', 'glyphOne')] = -200
     # save
     f1.save(path1, 3)
     f2.save(path2, 3)
@@ -77,6 +81,7 @@ def testMutingOptions(rootPath, cleanUp=True):
             copyGroups=True,
             copyInfo=True, 
             copyFeatures=True,
+            muteKerning=True
             )
     doc.addSource(
             path2,
@@ -86,6 +91,7 @@ def testMutingOptions(rootPath, cleanUp=True):
             copyGroups=False,
             copyInfo=False, 
             copyFeatures=False,
+            muteInfo=True,
             mutedGlyphNames=['glyphThree']  # mute glyphThree in master 1
             )
     doc.startInstance(fileName=path3,
@@ -94,6 +100,8 @@ def testMutingOptions(rootPath, cleanUp=True):
             location=dict(width=500)
             )
     doc.writeGlyph('glyphFour', mute=True)  # mute glyphFour in the instance
+    doc.writeKerning()
+    doc.writeInfo()
     doc.endInstance()
     doc.save()
 
@@ -112,6 +120,10 @@ def testMutingOptions(rootPath, cleanUp=True):
     # we muted glyphFour in the instance.
     # so it should not be part of the instance UFO:
     assert "glyphFour" not in r
+    # font.info is muted for master2, so the instance has to have the values from master 1
+    assert r.info.unitsPerEm == m1.info.unitsPerEm
+    # kerning is muted for master1, so the instance has to have the kerning from master 2
+    assert r.kerning[('glyphOne', 'glyphOne')] == m2.kerning[('glyphOne', 'glyphOne')]
 
     if cleanUp:
         # remove the mess

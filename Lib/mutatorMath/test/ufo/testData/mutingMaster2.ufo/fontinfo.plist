@@ -23,5 +23,7 @@
 	<key>postscriptStemSnapV</key>
 	<array>
 	</array>
+	<key>unitsPerEm</key>
+	<integer>2000</integer>
 </dict>
 </plist>
