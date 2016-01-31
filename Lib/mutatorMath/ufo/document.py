@@ -228,7 +228,8 @@ class DesignSpaceDocumentWriter(object):
             unicodeValue=None,
             location=None,
             masters=None,
-            note=None
+            note=None,
+            mute=False,
             ):
         """ Add a new glyph to the current instance. 
             * name: the glyph name. Required.
@@ -239,6 +240,8 @@ class DesignSpaceDocumentWriter(object):
         if self.currentInstance is None:
             return
         glyphElement = ET.Element('glyph')
+        if mute:
+            glyphElement.attrib['mute'] = "1"
         if unicodeValue is not None:
             glyphElement.attrib['unicode'] = hex(unicodeValue)
         if location is not None:
@@ -328,7 +331,7 @@ class DesignSpaceDocumentReader(object):
         self.infoSource = None
         self.featuresSource = None
         self.progressFunc=progressFunc
-        self.muted = dict(kerning=[], info=[], glyphs={})
+        self.muted = dict(kerning=[], info=[], glyphs={'instance': []})
         if logPath is None:
             logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
         self.logger = newLogger(logPath)
@@ -692,6 +695,13 @@ class DesignSpaceDocumentReader(object):
         if glyphName is None:
             raise MutatorError("Glyph object without name attribute.")
         
+        # mute
+        mute = glyphElement.attrib.get("mute")
+        if mute == "1":
+            instanceObject.muteGlyph(glyphName)
+            # we do not need to stick around after this
+            return
+
         # unicode
         unicodeValue = glyphElement.attrib.get('unicode')
         if unicodeValue == None:

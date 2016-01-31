@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<designspace format="3">
+    <sources>
+        <source filename="geometryMaster1.ufo" name="master_1">
+            <lib copy="1" />
+            <groups copy="1" />
+            <features copy="1" />
+            <info copy="1" />
+            <location>
+                <dimension name="width" xvalue="0.000000" />
+            </location>
+        </source>
+        <source filename="geometryMaster2.ufo" name="master_2">
+            <location>
+                <dimension name="width" xvalue="1000.000000" />
+            </location>
+        </source>
+    </sources>
+    <instances>
+        <instance familyname="TestInstance" filename="geometryInstance.ufo" stylename="Regular">
+            <location>
+                <dimension name="width" xvalue="500.000000" />
+            </location>
+        </instance>
+        <instance familyname="TestInstance" filename="geometryInstanceAnisotropic1.ufo" stylename="Anisotropic1">
+            <location>
+                <dimension name="width" xvalue="0.000000" yvalue="1000.000000" />
+            </location>
+        </instance>
+        <instance familyname="TestInstance" filename="geometryInstanceAnisotropic2.ufo" stylename="Anisotropic2">
+            <location>
+                <dimension name="width" xvalue="1000.000000" yvalue="0.000000" />
+            </location>
+        </instance>
+    </instances>
+</designspace>

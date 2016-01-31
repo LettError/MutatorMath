@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<designspace format="2">
+    <!-- Superpolator Designspace Object -->
+    <!-- info -->
+    <version superpolator="2"/>
+    <!-- measurements -->
+    <!-- application data -->
+    <data name="horizontalPreviewAxis" value="weight"/>
+    <data name="lineInverted" value="True"/>
+    <data name="lineViewFilled" value="False"/>
+    <data name="lineStacked" value="sequence"/>
+    <data name="generateFontsAtFolder" value="/Users/erik/Develop/git.letterror.com/mutatorMath/Lib/mutatorMath/test/ufo/data/SP_Instances"/>
+    <data name="previewtext" value="nnnii"/>
+    <data name="verticalPreviewAxis" value="width"/>
+    <!-- don't generate these glyphs -->
+    <ignore glyphs=""/>
+    <!-- axis definitions -->
+    <axis initialvalue="0.000000" maximum="1000.000000" minimum="0.000000" name="width" shortname="wd">
+        <color a="1.000" b="0.612" g="0.993" r="0.053"/>
+    </axis>
+    <axis initialvalue="0.000000" maximum="1000.000000" minimum="0.000000" name="weight" shortname="wt">
+        <color a="1.000" b="0.764" g="0.000" r="0.989"/>
+    </axis>
+    <!-- master definitions -->
+    <master familyname="AdobeSans" filename="sources/light/LightCondensed.ufo" sortorder="3" stylename="LightCondensed">
+        <location>
+            <dimension name="width" xvalue="0.000000"/>
+            <dimension name="weight" xvalue="0.000000"/>
+        </location>
+    </master>
+    <master familyname="AdobeSans" filename="sources/light/LightWide.ufo" sortorder="0" stylename="LightWide">
+        <location>
+            <dimension name="width" xvalue="1000.000000"/>
+            <dimension name="weight" xvalue="0.000000"/>
+        </location>
+        <provideFeatures state="1"/>
+        <provideGroups state="1"/>
+        <provideLib state="1"/>
+        <provideInfo state="1"/>
+    </master>
+    <master familyname="AdobeSans" filename="sources/bold/BoldCondensed.ufo" sortorder="2" stylename="BoldCondensed">
+        <location>
+            <dimension name="width" xvalue="0.000000"/>
+            <dimension name="weight" xvalue="1000.000000"/>
+        </location>
+    </master>
+    <master familyname="AdobeSans" filename="sources/bold/BoldWide.ufo" sortorder="1" stylename="BoldWide">
+        <location>
+            <dimension name="width" xvalue="1000.000000"/>
+            <dimension name="weight" xvalue="1000.000000"/>
+        </location>
+    </master>
+    <!-- instance definitions -->
+    <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-One.ufo" sortorder="4" stylename="One">
+        <location>
+            <dimension name="width" xvalue="396.071743"/>
+            <dimension name="weight" xvalue="166.607815"/>
+        </location>
+        <provideFeatures state="1"/>
+        <provideGroups state="1"/>
+        <provideLib state="1"/>
+        <provideInfo state="1"/>
+    </instance>
+    <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-Other.ufo" sortorder="5" stylename="Other">
+        <location>
+            <dimension name="width" xvalue="396.071743"/>
+            <dimension name="weight" xvalue="589.600989"/>
+        </location>
+        <provideFeatures state="1"/>
+        <provideGroups state="1"/>
+        <provideLib state="1"/>
+        <provideInfo state="1"/>
+    </instance>
+    <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-wd666.48_wt772.84.ufo" sortorder="6" stylename="wd666.48_wt772.84">
+        <location>
+            <dimension name="width" xvalue="666.483275"/>
+            <dimension name="weight" xvalue="772.841631"/>
+        </location>
+        <provideFeatures state="1"/>
+        <provideGroups state="1"/>
+        <provideLib state="1"/>
+        <provideInfo state="1"/>
+    </instance>
+    <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-wd666.48_wt772.84.ufo" sortorder="7" stylename="wd666.48_wt772.84">
+        <location>
+            <dimension name="width" xvalue="666.483275"/>
+            <dimension name="weight" xvalue="772.841631"/>
+        </location>
+        <provideFeatures state="1"/>
+        <provideGroups state="1"/>
+        <provideLib state="1"/>
+        <provideInfo state="1"/>
+    </instance>
+</designspace>

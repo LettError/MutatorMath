@@ -38,7 +38,7 @@ class InstanceWriter(object):
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
         self.sources = {} 
-        self.muted = dict(kerning=[], info=[], glyphs={})
+        self.muted = dict(kerning=[], info=[], glyphs={'instance': []})
         self.familyName = None
         self.styleName = None
         self.postScriptFontName = None
@@ -56,7 +56,11 @@ class InstanceWriter(object):
 
     def setMuted(self, muted):
         """ Set the mute states. """
-        self.muted = muted
+        self.muted.update(muted)
+
+    def muteGlyph(self, glyphName):
+        """ Mute the generating of this specific glyph. """
+        self.muted['glyphs']['instance'].append(glyphName)
     
     def setGroups(self, groups, kerningGroupConversionRenameMaps=None):
         """ Copy the groups into our font. """
@@ -301,6 +305,10 @@ class InstanceWriter(object):
         """
         self.font.newGlyph(glyphName)
         glyphObject = self.font[glyphName]
+        self.logger.info("\t-> -> -> self.muted: %s", self.muted)
+        #if glyphName in self.muted['glyphs']['instance']:
+        #    self.logger.info("\tGlyph %s is muted", glyphName)
+        #    return
         if note is not None:
             glyphObject.note = note
             # why does this not save?
