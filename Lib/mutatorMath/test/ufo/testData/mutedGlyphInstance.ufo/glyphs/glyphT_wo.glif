@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="glyphTwo" format="1">
+  <outline>
+    <contour>
+      <point x="117" y="117" type="line"/>
+      <point x="217" y="217" type="line"/>
+      <point x="17" y="117" type="line"/>
+    </contour>
+  </outline>
+</glyph>

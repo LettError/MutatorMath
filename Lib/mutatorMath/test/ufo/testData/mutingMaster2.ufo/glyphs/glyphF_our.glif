@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="glyphFour" format="2">
+  <outline>
+    <contour>
+      <point x="133" y="133" type="line"/>
+      <point x="233" y="233" type="line"/>
+      <point x="33" y="133" type="line"/>
+    </contour>
+  </outline>
+</glyph>
