@@ -38,7 +38,8 @@ class InstanceWriter(object):
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
         self.sources = {} 
-        self.muted = dict(kerning=[], info=[], glyphs={})
+        self.muted = dict(kerning=[], info=[], glyphs={})   # muted data in the masters
+        self.mutedGlyphsNames = []                          # muted glyphs in the instance
         self.familyName = None
         self.styleName = None
         self.postScriptFontName = None
@@ -56,7 +57,11 @@ class InstanceWriter(object):
 
     def setMuted(self, muted):
         """ Set the mute states. """
-        self.muted = muted
+        self.muted.update(muted)
+
+    def muteGlyph(self, glyphName):
+        """ Mute the generating of this specific glyph. """
+        self.mutedGlyphsNames.append(glyphName)
     
     def setGroups(self, groups, kerningGroupConversionRenameMaps=None):
         """ Copy the groups into our font. """
@@ -376,7 +381,17 @@ class InstanceWriter(object):
 
     def save(self):
         """ Save the UFO."""
+        # validate the kerning to avoid failing surprises during save
         self.validateKerning()
+        # handle glyphs that were muted
+        for name in self.mutedGlyphsNames:
+            if name not in self.font: continue
+            if self.logger:
+                self.logger.info("removing muted glyph %s", name)
+            del self.font[name]
+            # XXX housekeeping:
+            # remove glyph from groups / kerning as well?
+            # remove components referencing this glyph?
         try:
             self.font.save(self.path, self.ufoVersion)
         except defcon.DefconError as error:

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<designspace format="3">
+    <sources>
+        <source filename="sources/light/LightWide.ufo" name="master.AdobeSans.LightWide.0">
+            <lib copy="1" />
+            <groups copy="1" />
+            <features copy="1" />
+            <info copy="1" />
+            <location>
+                <dimension name="width" xvalue="1000.000000" />
+                <dimension name="weight" xvalue="0.000000" />
+            </location>
+        </source>
+        <source filename="sources/bold/BoldWide.ufo" name="master.AdobeSans.BoldWide.1">
+            <location>
+                <dimension name="width" xvalue="1000.000000" />
+                <dimension name="weight" xvalue="1000.000000" />
+            </location>
+        </source>
+        <source filename="sources/bold/BoldCondensed.ufo" name="master.AdobeSans.BoldCondensed.2">
+            <location>
+                <dimension name="width" xvalue="0.000000" />
+                <dimension name="weight" xvalue="1000.000000" />
+            </location>
+        </source>
+        <source filename="sources/light/LightCondensed.ufo" name="master.AdobeSans.LightCondensed.3">
+            <location>
+                <dimension name="width" xvalue="0.000000" />
+                <dimension name="weight" xvalue="0.000000" />
+            </location>
+        </source>
+    </sources>
+    <instances>
+        <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-One.ufo" postscriptfontname="AdobeSans-One" stylename="One">
+            <location>
+                <dimension name="width" xvalue="396.071743" />
+                <dimension name="weight" xvalue="166.607815" />
+            </location>
+            <kerning />
+            <info />
+        </instance>
+        <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-Other.ufo" postscriptfontname="AdobeSans-Other" stylename="Other">
+            <location>
+                <dimension name="width" xvalue="396.071743" />
+                <dimension name="weight" xvalue="589.600989" />
+            </location>
+            <kerning />
+            <info />
+        </instance>
+        <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-wd666.48_wt772.84.ufo" postscriptfontname="AdobeSans-wd666.48_wt772.84" stylename="wd666.48_wt772.84">
+            <location>
+                <dimension name="width" xvalue="666.483275" />
+                <dimension name="weight" xvalue="772.841631" />
+            </location>
+            <kerning />
+            <info />
+        </instance>
+        <instance familyname="AdobeSans" filename="SP_Instances/AdobeSans-wd666.48_wt772.84.ufo" postscriptfontname="AdobeSans-wd666.48_wt772.84" stylename="wd666.48_wt772.84">
+            <location>
+                <dimension name="width" xvalue="666.483275" />
+                <dimension name="weight" xvalue="772.841631" />
+            </location>
+            <kerning />
+            <info />
+        </instance>
+    </instances>
+</designspace>

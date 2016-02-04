@@ -228,17 +228,22 @@ class DesignSpaceDocumentWriter(object):
             unicodeValue=None,
             location=None,
             masters=None,
-            note=None
+            note=None,
+            mute=False,
             ):
         """ Add a new glyph to the current instance. 
             * name: the glyph name. Required.
             * unicodeValue: unicode value for this glyph if it needs to be different from the unicode value associated with this glyph name in the masters.
             * location: a design space location for this glyph if it needs to be different from the instance location. 
             * masters: a list of masters and locations for this glyph if they need to be different from the masters specified for this instance.
+            * note: a note for this glyph
+            * mute: if this glyph is muted. None of the other attributes matter if this one is true.
         """
         if self.currentInstance is None:
             return
         glyphElement = ET.Element('glyph')
+        if mute:
+            glyphElement.attrib['mute'] = "1"
         if unicodeValue is not None:
             glyphElement.attrib['unicode'] = hex(unicodeValue)
         if location is not None:
@@ -692,6 +697,13 @@ class DesignSpaceDocumentReader(object):
         if glyphName is None:
             raise MutatorError("Glyph object without name attribute.")
         
+        # mute
+        mute = glyphElement.attrib.get("mute")
+        if mute == "1":
+            instanceObject.muteGlyph(glyphName)
+            # we do not need to stick around after this
+            return
+
         # unicode
         unicodeValue = glyphElement.attrib.get('unicode')
         if unicodeValue == None:

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 
 These are some basic tests for glyph geometry.
