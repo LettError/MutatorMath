@@ -47,6 +47,8 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 *   **neutral**:        a master inserted at the origin
 *   **instance**:       an object calculated at a specific location, same class as the master.
 
+[An explanation with colorful graphs of how the MutatorMath calculates the factors.](designSpaceFactors.md)
+
 ## Building a Mutator
 
 A convenient Mutator builder function `buildMutator()` accepts a list of `(location, object)` pairs. Internally it sorts the neutral / on / off axis masters and calculates the bias.
