@@ -72,39 +72,8 @@ The requirements for a UFO designspace will differ from project to project. The 
 ## Designspace XML structure
 
 
-A `.designspace` file contains all data needed for setting up interpolations between a number of master UFOs. A more comprehensive specification of the .designspace structure will follow. 
-
-```xml
-<?xml version="1.0" ?>
-<designspace format="3">
-    <sources>
-        <source filename="../sources/Light/font.ufo" name="master_1">
-            <lib copy="1"/>
-            <groups copy="1"/>
-            <info copy="1"/>
-            <location>
-                <dimension name="weight" xvalue="0.000000"/>
-            </location>
-        </source>
-        <source filename="../sources/Bold/font.ufo" name="master_2">
-            <location>
-                <dimension name="weight" xvalue="1.000000"/>
-            </location>
-        </source>
-    </sources>
-    <instances>
-        <instance familyname="MyFamily" filename="../instance/Medium.ufo" stylename="Medium">
-            <location>
-                <dimension name="weight" xvalue="0.500000"/>
-            </location>
-            <info/>
-            <kerning/>
-        </instance>
-    </instances>
-</designspace>
-```
-
-A more detailed description of the designspace format here: [designspace file format](Docs/designSpaceFileFormat.md)
+A `.designspace` file contains all data needed for setting up interpolations between a number of master UFOs. 
+A detailed description of the designspace format here: [designspace file format](Docs/designSpaceFileFormat.md)
 
 
 ### Writing a designspace
