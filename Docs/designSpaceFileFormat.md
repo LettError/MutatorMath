@@ -18,6 +18,40 @@ The font.info contains different kinds of data. Some are strings (names, urls, c
 
 Both instance and source elements contain paths to files. These paths are expected to be relative to the path of the .designspace document. This allows the same .designspace to be deployed to multiple locations, but still reference the proper source files. It also allows sources to be stored in their own directories, and instances to be created into their own directories.
 
+## An example of a DesignSpace description
+
+```xml
+<?xml version="1.0" ?>
+<designspace format="3">
+    <sources>
+        <source filename="../sources/Light/font.ufo" name="master_1">
+            <lib copy="1"/>
+            <groups copy="1"/>
+            <info copy="1"/>
+            <location>
+                <dimension name="weight" xvalue="0.000000"/>
+            </location>
+        </source>
+        <source filename="../sources/Bold/font.ufo" name="master_2">
+            <location>
+                <dimension name="weight" xvalue="1.000000"/>
+            </location>
+        </source>
+    </sources>
+    <instances>
+        <instance familyname="MyFamily" filename="../instance/Medium.ufo" stylename="Medium">
+            <location>
+                <dimension name="weight" xvalue="0.500000"/>
+            </location>
+            <info/>
+            <kerning/>
+        </instance>
+    </instances>
+</designspace>
+```
+
+## The Elements
+
 ```xml
 <?xml version="1.0" ?>
 <designspace format="3">
