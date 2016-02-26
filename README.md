@@ -4,7 +4,7 @@
 MutatorMath
 ===========
 
-![A MutatorMath Colorfield](mutatorMath_colorField.jpg)
+![A MutatorMath Colorfield](Docs/mutatorMath_colorField.jpg)
 
 MutatorMath is a Python library for the calculation of piecewise linear interpolations in n-dimensions with any number of masters. It was developed for interpolating data related to fonts, but if can handle any arithmetic object.
 
@@ -47,7 +47,7 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 *   **neutral**:        a master inserted at the origin
 *   **instance**:       an object calculated at a specific location, same class as the master.
 
-[An explanation with colorful graphs of how the MutatorMath calculates the factors.](designSpaceFactors.md)
+[An explanation with colorful graphs of how the MutatorMath calculates the factors.](Docs/designSpaceFactors.md)
 
 ## Building a Mutator
 
@@ -104,7 +104,7 @@ A `.designspace` file contains all data needed for setting up interpolations bet
 </designspace>
 ```
 
-A more detailed description of the designspace format here: [designspace file format](designSpaceFileFormat.md)
+A more detailed description of the designspace format here: [designspace file format](Docs/designSpaceFileFormat.md)
 
 
 ### Writing a designspace
