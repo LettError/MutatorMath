@@ -195,10 +195,11 @@ class Mutator(dict):
             instanceObject = self.getInstance(locX-self._bias)*(1,0)+self.getInstance(locY-self._bias)*(0,1)
         return instanceObject+self._neutral
 
-    def getFactors(self, aLocation, axisOnly=False):
+    def getFactors(self, aLocation, axisOnly=False, allFactors=False):
         """
             Return a list of all factors and math items at aLocation.
             factor, mathItem, deltaName
+            all = True: include factors that are zero or near-zero
         """
         deltas = []
         aLocation.expand(self.getAxisNames())
@@ -207,9 +208,9 @@ class Mutator(dict):
             deltaLocation = Location(deltaLocationTuple)
             deltaLocation.expand( self.getAxisNames())
             factor = self._accumulateFactors(aLocation, deltaLocation, limits, axisOnly)
-            if not (factor-_EPSILON < 0 < factor+_EPSILON):
+            if not (factor-_EPSILON < 0 < factor+_EPSILON) or allFactors:
                 # only add non-zero deltas.
-                deltas.append((factor, mathItem, deltaName))    
+                deltas.append((factor, mathItem, deltaName))
         deltas.sort()
         deltas.reverse()
         return deltas
@@ -227,7 +228,7 @@ class Mutator(dict):
         if deltaAxis is None:
             relative.append(1)
         elif deltaAxis:
-            deltasOnSameAxis = self._axes.get(deltaAxis, None)
+            deltasOnSameAxis = self._axes.get(deltaAxis, [])
             d = ((deltaAxis, 0),)
             if d not in deltasOnSameAxis:
                 deltasOnSameAxis.append(d)
