@@ -4,7 +4,7 @@
 MutatorMath
 ===========
 
-![A MutatorMath Colorfield](mutatorMath_colorField.jpg)
+![A MutatorMath Colorfield](Docs/mutatorMath_colorField.jpg)
 
 MutatorMath is a Python library for the calculation of piecewise linear interpolations in n-dimensions with any number of masters. It was developed for interpolating data related to fonts, but if can handle any arithmetic object.
 
@@ -47,7 +47,7 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 *   **neutral**:        a master inserted at the origin
 *   **instance**:       an object calculated at a specific location, same class as the master.
 
-[An explanation with colorful graphs of how the MutatorMath calculates the factors.](designSpaceFactors.md)
+[An explanation with colorful graphs of how the MutatorMath calculates the factors.](Docs/designSpaceFactors.md)
 
 ## Building a Mutator
 
@@ -72,39 +72,8 @@ The requirements for a UFO designspace will differ from project to project. The 
 ## Designspace XML structure
 
 
-A `.designspace` file contains all data needed for setting up interpolations between a number of master UFOs. A more comprehensive specification of the .designspace structure will follow. 
-
-```xml
-<?xml version="1.0" ?>
-<designspace format="3">
-    <sources>
-        <source filename="../sources/Light/font.ufo" name="master_1">
-            <lib copy="1"/>
-            <groups copy="1"/>
-            <info copy="1"/>
-            <location>
-                <dimension name="weight" xvalue="0.000000"/>
-            </location>
-        </source>
-        <source filename="../sources/Bold/font.ufo" name="master_2">
-            <location>
-                <dimension name="weight" xvalue="1.000000"/>
-            </location>
-        </source>
-    </sources>
-    <instances>
-        <instance familyname="MyFamily" filename="../instance/Medium.ufo" stylename="Medium">
-            <location>
-                <dimension name="weight" xvalue="0.500000"/>
-            </location>
-            <info/>
-            <kerning/>
-        </instance>
-    </instances>
-</designspace>
-```
-
-A more detailed description of the designspace format here: [designspace file format](designSpaceFileFormat.md)
+A `.designspace` file contains all data needed for setting up interpolations between a number of master UFOs. 
+A detailed description of the designspace format here: [designspace file format](Docs/designSpaceFileFormat.md)
 
 
 ### Writing a designspace
