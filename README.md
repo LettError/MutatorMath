@@ -21,13 +21,14 @@ The MutatorMath package is published under the [BSD-3 license](http://opensource
 
 The basic Mutator and Location objects will run on any standard Python 2.7 or higher distribution, but has not been tested on Python 3.x.
 
-The UFO processing tools in MutatorMath need some additional libraries. Note that anticipating the move to UFO3, MutatorMath already uses the UFO3 branches for Defcon, FontMath. While these modules have received a lot of testing, these are not the main branches yet. UFOlib has moved to the unified-font-object repository.
+The UFO processing tools in MutatorMath need some additional libraries. Note that anticipating the move to UFO3, MutatorMath already uses the UFO3 branches for Defcon, FontMath. While these modules have received a lot of testing, these are not the main branches yet. UFOlib has moved to the unified-font-object repository. It still needs a couple of pen objects from Robofab but that dependency will disappear eventually.
 
 | Library  | Author                    | Branch | URL                                              |
 | -------- | ------------------------- | ------ | ------------------------------------------------ | 
 | Defcon   | TypeSupply.com            | ufo3   |  https://github.com/typesupply/defcon            |
 | FontMath | TypeSupply.com            | ufo3   |  https://github.com/typesupply/fontMath          |
 | ufoLib   | UnifiedFontObject.org     | master |  https://github.com/unified-font-object/ufoLib   |
+| Robofab  | RoboFab Consortium        | ufo3k  |  https://github.com/robofab-developers/robofab   |
 
 ## MutatorMath terminology
 
