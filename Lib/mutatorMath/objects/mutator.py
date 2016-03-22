@@ -2,7 +2,6 @@
 
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
-from mutatorMath.objects.bender import Bender
 
 import sys
 
@@ -19,6 +18,7 @@ def buildMutator(items, warpDict=None):
         Build a mutator with the (location, obj) pairs in items.
         Determine the bias based on the given locations.
     """
+    from mutatorMath.objects.bender import Bender
     m = Mutator()
     if warpDict is not None:
         bender = Bender(warpDict)

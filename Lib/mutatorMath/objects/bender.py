@@ -1,9 +1,15 @@
 import math
+import sys
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
 import mutatorMath.objects.mutator
+from error import MutatorError
 
 def noBend(loc): return loc
+
+class WarpMutator(mutatorMath.objects.mutator.Mutator):
+    def __call__(self, value):
+        return self.makeInstance(Location(w=value))
 
 """
 
@@ -35,20 +41,24 @@ class Bender(object):
     def __init__(self, warpDict):
         self.warps = {}
         self.maps = {}    # not needed?
-        for axisName, d in warpDict.items():
-            self._makeWarp(axisName, d)
+        for axisName, obj in warpDict.items():
+            if type(obj)==list:
+                self._makeWarpFromList(axisName, obj)
+            elif hasattr(obj, '__call__'):
+                # self.warps[axisName] = WarpFunctionWrapper(obj)
+                self.warps[axisName] = obj
     
     def getMap(self, axisName):
         return self.maps.get(axisName, [])
             
-    def _makeWarp(self, axisName, warpMap):
+    def _makeWarpFromList(self, axisName, warpMap):
         if not warpMap:
             warpMap = [(0,0), (1000,1000)]
         self.maps[axisName] = warpMap
         items = []
         for x, y in warpMap:
             items.append((Location(w=x), y))
-        m = mutatorMath.objects.mutator.Mutator()
+        m = WarpMutator()
         items.sort()
         bias = biasFromLocations([loc for loc, obj in items], True)
         m.setBias(bias)
@@ -79,7 +89,11 @@ class Bender(object):
         new = loc.copy()
         for dim, warp in self.warps.items():
             if not dim in loc: continue
-            new[dim] = warp.makeInstance(Location(w=loc.get(dim)))
+            try:
+                new[dim] = warp(loc.get(dim))
+            except:
+                ex_type, ex, tb = sys.exc_info()
+                raise MutatorError("A warpfunction \"%s\" (for axis \"%s\") raised \"%s\" at location %s"%(warp.__name__, dim, ex, loc.asString()), loc)
         return new
 
 if __name__ == "__main__":
@@ -109,3 +123,26 @@ if __name__ == "__main__":
     assert b(Location(a=500)) == Location(a=200)
     assert b(Location(a=750)) == Location(a=600)
     assert b(Location(a=1000)) == Location(a=1000)
+
+    # now with warp functions
+    def warpFunc_1(value):
+        return value * 2
+    def warpFunc_2(value):
+        return value ** 2
+    def warpFunc_Error(value):
+        return 1/0
+
+    w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
+    b = Bender(w)
+    assert b(Location(a=100)) == Location(a=200)
+    assert b(Location(b=100)) == Location(b=10000)
+
+    # see if the errors are caught and reported:
+    try:
+        b(Location(c=-1))
+    except:
+        ex_type, ex, tb = sys.exc_info()
+        err = 'A warpfunction "warpFunc_Error" (for axis "c") raised "integer division or modulo by zero" at location c:-1'
+        assert ex.msg == err
+
+
