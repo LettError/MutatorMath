@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <designspace format="3">
     <sources>
-        <source filename="sources/light/LightCondensed.ufo" name="master_1">
+        <source filename="sources/stems/StemThin.ufo" name="master_1">
             <lib copy="1" />
             <groups copy="1" />
             <info copy="1" />
@@ -9,25 +9,197 @@
                 <dimension name="weight" xvalue="0.000000" />
             </location>
         </source>
-        <source filename="sources/bold/BoldCondensed.ufo" name="master_2">
+        <source filename="sources/stems/StemBold.ufo" name="master_2">
             <location>
-                <dimension name="weight" xvalue="1.000000" />
+                <dimension name="weight" xvalue="1000.000000" />
             </location>
         </source>
     </sources>
     <instances>
-        <instance familyname="TestFamily" filename="instances/E/testOutput_build.ufo" stylename="TestStyleName">
+        <instance familyname="TestFamily" filename="instances/W/StemOutput.ufo" stylename="TestStyleName">
             <location>
-                <dimension name="weight" xvalue="0.250000" />
+                <dimension name="weight" xvalue="0.000000" />
             </location>
             <info />
             <kerning />
+            <glyphs>
+                <glyph name="I.0100">
+                    <location>
+                        <dimension name="weight" xvalue="100.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0200">
+                    <location>
+                        <dimension name="weight" xvalue="200.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0300">
+                    <location>
+                        <dimension name="weight" xvalue="300.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0400">
+                    <location>
+                        <dimension name="weight" xvalue="400.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0500">
+                    <location>
+                        <dimension name="weight" xvalue="500.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0600">
+                    <location>
+                        <dimension name="weight" xvalue="600.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0700">
+                    <location>
+                        <dimension name="weight" xvalue="700.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0800">
+                    <location>
+                        <dimension name="weight" xvalue="800.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.0900">
+                    <location>
+                        <dimension name="weight" xvalue="900.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+                <glyph name="I.1000">
+                    <location>
+                        <dimension name="weight" xvalue="1000.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
+            </glyphs>
         </instance>
     </instances>
     <warp>
         <axis name="weight">
             <point input="0" output="0" />
-            <point input="500" output="200" />
+            <point input="500" output="10" />
             <point input="1000" output="1000" />
         </axis>
     </warp>

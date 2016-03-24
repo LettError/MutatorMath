@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>I</key>
+	<string>I_.glif</string>
+	<key>I.0100</key>
+	<string>I_.0100.glif</string>
+	<key>I.0200</key>
+	<string>I_.0200.glif</string>
+	<key>I.0300</key>
+	<string>I_.0300.glif</string>
+	<key>I.0400</key>
+	<string>I_.0400.glif</string>
+	<key>I.0500</key>
+	<string>I_.0500.glif</string>
+	<key>I.0600</key>
+	<string>I_.0600.glif</string>
+	<key>I.0700</key>
+	<string>I_.0700.glif</string>
+	<key>I.0800</key>
+	<string>I_.0800.glif</string>
+	<key>I.0900</key>
+	<string>I_.0900.glif</string>
+	<key>I.1000</key>
+	<string>I_.1000.glif</string>
+</dict>
+</plist>

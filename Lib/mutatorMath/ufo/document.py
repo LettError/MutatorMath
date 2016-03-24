@@ -416,7 +416,7 @@ class DesignSpaceDocumentReader(object):
             warpDict[axisName] = []
             for warpPoint in warpAxisElement.findall(".point"):
                 inputValue = float(warpPoint.attrib.get("input"))
-                outputValue = float(warpPoint.attrib.get("ouput"))
+                outputValue = float(warpPoint.attrib.get("output"))
                 warpDict[axisName].append((inputValue, outputValue))
         self.warpDict = warpDict
 
@@ -574,7 +574,8 @@ class DesignSpaceDocumentReader(object):
 
         instanceObject = self._instanceWriterClass(instancePath,    
             ufoVersion=self.ufoVersion,
-            roundGeometry=self.roundGeometry, 
+            roundGeometry=self.roundGeometry,
+            warpDict = self.warpDict,
             verbose=self.verbose,
             logger=self.logger
             )

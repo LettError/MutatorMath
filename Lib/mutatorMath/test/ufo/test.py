@@ -289,9 +289,9 @@ if __name__ == "__main__":
         # test the warp elements
         >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
-        >>> doc.writeWarp({'weight':[(0,0), (500,200), (1000, 1000)]})
+        >>> doc.writeWarp({'weight':[(0,0), (500,10), (1000, 1000)]})
         >>> doc.addSource(
-        ...        os.path.join(sourcePath, "light", "LightCondensed.ufo"),
+        ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
         ...        name="master_1", 
         ...        location=dict(weight=0), 
         ...        copyLib=True, 
@@ -300,16 +300,16 @@ if __name__ == "__main__":
         ...        muteKerning=False,
         ...        muteInfo=False) 
         >>> doc.addSource(
-        ...        os.path.join(sourcePath, "bold", "BoldCondensed.ufo"),
+        ...        os.path.join(sourcePath, "stems", "StemBold.ufo"),
         ...        name="master_2", 
-        ...        location=dict(weight=1), 
+        ...        location=dict(weight=1000), 
         ...        copyLib=False, 
         ...        copyGroups=False, 
         ...        copyInfo=False, 
         ...        muteKerning=False,
         ...        muteInfo=False )
-        >>> testOutputFileName = os.path.join(instancePath, "E", "testOutput_build.ufo")
-        >>> testLocation = dict(weight=0.25)       # change this location to see calculation assertions fail.
+        >>> testOutputFileName = os.path.join(instancePath, "W", "StemOutput.ufo")
+        >>> testLocation = dict(weight=0)       # change this location to see calculation assertions fail.
         >>> doc.startInstance(
         ...        fileName=testOutputFileName,
         ...        familyName="TestFamily",
@@ -317,6 +317,10 @@ if __name__ == "__main__":
         ...        location=testLocation)
         >>> doc.writeInfo()
         >>> doc.writeKerning()
+        >>> glyphMasters = [('I', "master_1", dict(weight=0)), ('I', "master_2", dict(weight=1000)), ]
+        >>> for i in range(100, 1100, 100):
+        ...    doc.writeGlyph("I.%04d"%i, location=dict(weight=i), masters=glyphMasters)
+        ...
         >>> doc.endInstance()
         >>> doc.save()
 
