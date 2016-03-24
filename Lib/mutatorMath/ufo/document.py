@@ -297,6 +297,22 @@ class DesignSpaceDocumentWriter(object):
             locationElement = self._makeLocationElement(location)
             kerningElement.append(locationElement)
         self.currentInstance.append(kerningElement)
+
+    def writeWarp(self, warpDict):
+        """ Write a list of (in, out) values for a warpmap """
+        warpElement = ET.Element("warp")
+        axisNames = warpDict.keys()
+        axisNames = sorted(axisNames)
+        for name in axisNames:
+            axisElement = ET.Element("axis")
+            axisElement.attrib['name'] = name
+            for a, b in warpDict[name]:
+                warpPt = ET.Element("point")
+                warpPt.attrib['input'] = str(a)
+                warpPt.attrib['output'] = str(b)
+                axisElement.append(warpPt)
+            warpElement.append(axisElement)
+        self.root.append(warpElement)
     
     
 class DesignSpaceDocumentReader(object):
@@ -366,6 +382,8 @@ class DesignSpaceDocumentReader(object):
         self.root = tree.getroot()
         self.readVersion()
         assert self.documentFormatVersion == 3
+        self.warpDict = None
+        self.readWarp()
         self.readSources()
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
         self.logger.info('Done')
@@ -378,7 +396,30 @@ class DesignSpaceDocumentReader(object):
         """
         ds = self.root.findall("[@format]")[0]
         self.documentFormatVersion = int(ds.attrib['format'])
-        
+
+    def readWarp(self):
+        """ Read the warp element
+
+        ::
+            <warp>
+                <axis name="weight">
+                    <point input="0" output="0" />
+                    <point input="500" output="200" />
+                    <point input="1000" output="1000" />
+                </axis>
+            </warp>
+
+        """
+        warpDict = {}
+        for warpAxisElement in self.root.findall(".warp/axis"):
+            axisName = warpAxisElement.attrib.get("name")
+            warpDict[axisName] = []
+            for warpPoint in warpAxisElement.findall(".point"):
+                inputValue = float(warpPoint.attrib.get("input"))
+                outputValue = float(warpPoint.attrib.get("ouput"))
+                warpDict[axisName].append((inputValue, outputValue))
+        self.warpDict = warpDict
+
     def readSources(self):
         """ Read the source elements.
         

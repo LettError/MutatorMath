@@ -284,6 +284,45 @@ if __name__ == "__main__":
         >>> ufoRelPath
         '/data/instances/A/testOutput_glyphs.ufo'
 
+
+
+        # test the warp elements
+        >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
+        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
+        >>> doc.writeWarp({'weight':[(0,0), (500,200), (1000, 1000)]})
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "light", "LightCondensed.ufo"),
+        ...        name="master_1", 
+        ...        location=dict(weight=0), 
+        ...        copyLib=True, 
+        ...        copyGroups=True, 
+        ...        copyInfo=True,
+        ...        muteKerning=False,
+        ...        muteInfo=False) 
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "bold", "BoldCondensed.ufo"),
+        ...        name="master_2", 
+        ...        location=dict(weight=1), 
+        ...        copyLib=False, 
+        ...        copyGroups=False, 
+        ...        copyInfo=False, 
+        ...        muteKerning=False,
+        ...        muteInfo=False )
+        >>> testOutputFileName = os.path.join(instancePath, "E", "testOutput_build.ufo")
+        >>> testLocation = dict(weight=0.25)       # change this location to see calculation assertions fail.
+        >>> doc.startInstance(
+        ...        fileName=testOutputFileName,
+        ...        familyName="TestFamily",
+        ...        styleName="TestStyleName",
+        ...        location=testLocation)
+        >>> doc.writeInfo()
+        >>> doc.writeKerning()
+        >>> doc.endInstance()
+        >>> doc.save()
+
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
+
         """
 
     sys.exit(doctest.testmod().failed)

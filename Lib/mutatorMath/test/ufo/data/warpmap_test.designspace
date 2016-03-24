@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<designspace format="3">
+    <sources>
+        <source filename="sources/light/LightCondensed.ufo" name="master_1">
+            <lib copy="1" />
+            <groups copy="1" />
+            <info copy="1" />
+            <location>
+                <dimension name="weight" xvalue="0.000000" />
+            </location>
+        </source>
+        <source filename="sources/bold/BoldCondensed.ufo" name="master_2">
+            <location>
+                <dimension name="weight" xvalue="1.000000" />
+            </location>
+        </source>
+    </sources>
+    <instances>
+        <instance familyname="TestFamily" filename="instances/E/testOutput_build.ufo" stylename="TestStyleName">
+            <location>
+                <dimension name="weight" xvalue="0.250000" />
+            </location>
+            <info />
+            <kerning />
+        </instance>
+    </instances>
+    <warp>
+        <axis name="weight">
+            <point input="0" output="0" />
+            <point input="500" output="200" />
+            <point input="1000" output="1000" />
+        </axis>
+    </warp>
+</designspace>
