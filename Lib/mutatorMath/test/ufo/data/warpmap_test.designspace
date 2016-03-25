@@ -23,6 +23,23 @@
             <info />
             <kerning />
             <glyphs>
+                <glyph name="I.0000">
+                    <location>
+                        <dimension name="weight" xvalue="0.000000" />
+                    </location>
+                    <masters>
+                        <master glyphname="I" source="master_1">
+                            <location>
+                                <dimension name="weight" xvalue="0.000000" />
+                            </location>
+                        </master>
+                        <master glyphname="I" source="master_2">
+                            <location>
+                                <dimension name="weight" xvalue="1000.000000" />
+                            </location>
+                        </master>
+                    </masters>
+                </glyph>
                 <glyph name="I.0100">
                     <location>
                         <dimension name="weight" xvalue="100.000000" />
@@ -176,31 +193,22 @@
                         </master>
                     </masters>
                 </glyph>
-                <glyph name="I.1000">
-                    <location>
-                        <dimension name="weight" xvalue="1000.000000" />
-                    </location>
-                    <masters>
-                        <master glyphname="I" source="master_1">
-                            <location>
-                                <dimension name="weight" xvalue="0.000000" />
-                            </location>
-                        </master>
-                        <master glyphname="I" source="master_2">
-                            <location>
-                                <dimension name="weight" xvalue="1000.000000" />
-                            </location>
-                        </master>
-                    </masters>
-                </glyph>
             </glyphs>
         </instance>
     </instances>
     <warp>
         <axis name="weight">
-            <point input="0" output="0" />
-            <point input="500" output="10" />
-            <point input="1000" output="1000" />
+            <point input="0" output="100.0" />
+            <point input="1" output="115.0" />
+            <point input="2" output="132.25" />
+            <point input="3" output="152.0875" />
+            <point input="4" output="174.900625" />
+            <point input="5" output="201.13571875" />
+            <point input="6" output="231.306076562" />
+            <point input="7" output="266.001988047" />
+            <point input="8" output="305.902286254" />
+            <point input="9" output="351.787629192" />
+            <point input="10" output="404.555773571" />
         </axis>
     </warp>
 </designspace>

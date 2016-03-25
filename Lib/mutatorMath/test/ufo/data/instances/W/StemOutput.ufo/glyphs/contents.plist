@@ -4,6 +4,8 @@
 <dict>
 	<key>I</key>
 	<string>I_.glif</string>
+	<key>I.0000</key>
+	<string>I_.0000.glif</string>
 	<key>I.0100</key>
 	<string>I_.0100.glif</string>
 	<key>I.0200</key>
@@ -22,7 +24,5 @@
 	<string>I_.0800.glif</string>
 	<key>I.0900</key>
 	<string>I_.0900.glif</string>
-	<key>I.1000</key>
-	<string>I_.1000.glif</string>
 </dict>
 </plist>
