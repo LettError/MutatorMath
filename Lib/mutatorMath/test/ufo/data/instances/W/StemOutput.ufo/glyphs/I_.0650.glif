@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<glyph name="I.0800" format="1">
-  <advance width="297"/>
+<glyph name="I.0650" format="1">
+  <advance width="180"/>
   <outline>
     <contour>
-      <point x="277" y="0" type="line"/>
-      <point x="277" y="709" type="line"/>
+      <point x="160" y="0" type="line"/>
+      <point x="160" y="709" type="line"/>
       <point x="20" y="709" type="line"/>
       <point x="20" y="0" type="line"/>
     </contour>

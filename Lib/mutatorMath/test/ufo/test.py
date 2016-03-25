@@ -290,8 +290,8 @@ if __name__ == "__main__":
         >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> def grow(base, factor, steps):
-        ...     return [(i, base*(1+factor)**i) for i in range(steps)]
-        >>> doc.writeWarp({'weight':grow(100,0.15,11)})
+        ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
+        >>> doc.writeWarp({'weight':grow(100,0.55,11)})
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
         ...        name="master_1", 
@@ -320,7 +320,7 @@ if __name__ == "__main__":
         >>> doc.writeInfo()
         >>> doc.writeKerning()
         >>> glyphMasters = [('I', "master_1", dict(weight=0)), ('I', "master_2", dict(weight=1000)), ]
-        >>> for i in range(0, 1000, 100):
+        >>> for i in range(0, 1000, 50):
         ...    doc.writeGlyph("I.%04d"%i, location=dict(weight=i), masters=glyphMasters)
         ...
         >>> doc.endInstance()
