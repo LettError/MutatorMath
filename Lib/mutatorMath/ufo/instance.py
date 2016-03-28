@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+1# -*- coding: utf-8 -*-
 
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
@@ -132,7 +132,10 @@ class InstanceWriter(object):
         """ Copy the features from this source """
         if featureSource in self.sources:
             src, loc = self.sources[featureSource]
-            self.font.features.text = src.features.text
+            if isinstance(src.features.text, str):
+                self.font.features.text = u""+src.features.text
+            elif isinstance(src.features.text, unicode):
+                self.font.features.text = src.features.text
 
     def makeUnicodeMapFromSources(self):
         """ Create a dict with glyphName -> unicode value pairs
