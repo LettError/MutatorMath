@@ -360,6 +360,20 @@ class DesignSpaceDocumentReader(object):
         if self.progressFunc is not None:
             self.progressFunc(state=state, action=action, text=text, tick=tick)
 
+    def getSourcePaths(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
+        """ Return a list of paths referenced in the document."""
+        tree = ET.parse(self.path)        
+        self.root = tree.getroot()
+        self.readVersion()
+        assert self.documentFormatVersion == 3
+        self.warpDict = None
+        # self.readWarp()
+        self.readSources()
+        paths = []
+        for name in self.sources.keys():
+            paths.append(self.sources[name][0].path)
+        return paths
+
     def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Process the input file and generate the instances. """
         tree = ET.parse(self.path)        

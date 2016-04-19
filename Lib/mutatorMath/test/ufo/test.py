@@ -177,6 +177,9 @@ if __name__ == "__main__":
         >>> doc.endInstance()
         >>> doc.save()
         >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=False, logPath=logPath)
+        >>> paths = doc.getSourcePaths()
+        >>> len(paths)
+        2
         >>> doc.process(makeGlyphs=False, makeKerning=True, makeInfo=False)
         >>> assert doc.groupsSource == 'master_1'
         >>> assert os.path.basename(testOutputFileName) in doc.results
