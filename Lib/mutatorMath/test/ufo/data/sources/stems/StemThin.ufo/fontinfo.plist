@@ -5,9 +5,11 @@
 	<key>ascender</key>
 	<integer>750</integer>
 	<key>capHeight</key>
-	<integer>750</integer>
+	<integer>500</integer>
 	<key>descender</key>
 	<integer>-250</integer>
+	<key>familyName</key>
+	<string>Stem</string>
 	<key>postscriptBlueValues</key>
 	<array>
 	</array>
@@ -26,9 +28,11 @@
 	<key>postscriptStemSnapV</key>
 	<array>
 	</array>
+	<key>styleName</key>
+	<string>Small</string>
 	<key>unitsPerEm</key>
 	<integer>1000</integer>
 	<key>xHeight</key>
-	<integer>500</integer>
+	<integer>300</integer>
 </dict>
 </plist>

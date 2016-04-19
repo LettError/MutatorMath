@@ -181,6 +181,8 @@ if __name__ == "__main__":
         >>> len(paths)
         2
         >>> doc.process(makeGlyphs=False, makeKerning=True, makeInfo=False)
+        >>> for m in doc.sources.keys():
+        ...     print(m, doc.sources[m][0].path)
         >>> assert doc.groupsSource == 'master_1'
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
@@ -294,7 +296,8 @@ if __name__ == "__main__":
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> def grow(base, factor, steps):
         ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
-        >>> doc.writeWarp({'weight':grow(100,0.55,11)})
+        >>> growFactor = 0.5
+        >>> doc.writeWarp({'weight':grow(100,growFactor,11)})
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
         ...        name="master_1", 
@@ -313,8 +316,8 @@ if __name__ == "__main__":
         ...        copyInfo=False, 
         ...        muteKerning=False,
         ...        muteInfo=False )
-        >>> testOutputFileName = os.path.join(instancePath, "W", "StemOutput.ufo")
-        >>> testLocation = dict(weight=0)       # change this location to see calculation assertions fail.
+        >>> testOutputFileName = os.path.join(instancePath, "W", "StemSequence.ufo")
+        >>> testLocation = dict(weight=0)
         >>> doc.startInstance(
         ...        fileName=testOutputFileName,
         ...        familyName="TestFamily",
@@ -323,15 +326,71 @@ if __name__ == "__main__":
         >>> doc.writeInfo()
         >>> doc.writeKerning()
         >>> glyphMasters = [('I', "master_1", dict(weight=0)), ('I', "master_2", dict(weight=1000)), ]
-        >>> for i in range(0, 1000, 50):
+        >>> for i in range(200, 1000, 50):
         ...    doc.writeGlyph("I.%04d"%i, location=dict(weight=i), masters=glyphMasters)
-        ...
         >>> doc.endInstance()
         >>> doc.save()
 
         >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
+
+
+        # test the warp elements
+        >>> from defcon.objects.font import Font
+        >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
+        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
+        >>> thisLinearWarpMap = [(0,0), (500,100), (1000,1000)]
+        >>> doc.writeWarp({'weight':thisLinearWarpMap})
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
+        ...        name="master_1", 
+        ...        location=dict(weight=0), 
+        ...        copyLib=True, 
+        ...        copyGroups=True, 
+        ...        copyInfo=True,
+        ...        muteKerning=False,
+        ...        muteInfo=False) 
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "stems", "StemBold.ufo"),
+        ...        name="master_2", 
+        ...        location=dict(weight=1000), 
+        ...        copyLib=False, 
+        ...        copyGroups=False, 
+        ...        copyInfo=False, 
+        ...        muteKerning=False,
+        ...        muteInfo=False )
+        >>> testOutputFileName = os.path.join(instancePath, "W", "StemWeight_%d.ufo")
+        >>> paths = {}
+        >>> for weight in [0, 250, 500, 750, 1000]:
+        ...     testLocation = dict(weight=weight)
+        ...     doc.startInstance(
+        ...        fileName=testOutputFileName%weight,
+        ...        familyName="TestFamily",
+        ...        styleName="Stem_%d"%weight,
+        ...        location=testLocation)
+        ...     doc.writeInfo()
+        ...     doc.writeKerning()
+        ...     doc.endInstance()
+        ...     paths[weight] = testOutputFileName%weight
+        >>> doc.save()
+
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
+        >>> m1 = Font(os.path.join(sourcePath, "stems", "StemThin.ufo"))
+        >>> m2 = Font(os.path.join(sourcePath, "stems", "StemBold.ufo"))
+        >>> m3 = Font(paths[500])
+        >>> g1 = m1["I"]
+        >>> g2 = m2["I"]
+        >>> g3 = m3["I"]
+        >>> g1.width
+        60
+        >>> g2.width
+        440
+        >>> g3.width
+        98
+        >>> g3.width / (float(g2.width)-g1.width)
+        10
         """
 
     sys.exit(doctest.testmod().failed)
