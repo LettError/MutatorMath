@@ -26,12 +26,15 @@ from mutatorMath.ufo.instance import InstanceWriter
 
 def newLogger(proposedLogPath):
     """ Create a new logging object at this path """
-    logging.basicConfig(filename=proposedLogPath,
-            level=logging.INFO,
-            filemode="w",
-            format='%(asctime)s MutatorMath %(message)s',
-            )
-    return logging.getLogger("mutatorMath")
+    logger = logging.getLogger("mutatorMath")
+    handler = logging.FileHandler(proposedLogPath, 'w')
+    formatter = logging.Formatter('%(asctime)s MutatorMath %(message)s')
+    handler.setFormatter(formatter)
+    for h in logger.handlers[:]:
+        logger.removeHandler(h)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    return logger
 
 def _indent(elem, whitespace="    ", level=0):
     # taken from http://effbot.org/zone/element-lib.htm#prettyprint
