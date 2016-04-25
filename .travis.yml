@@ -18,7 +18,6 @@ install:
 script:
   - cd Lib/mutatorMath/test/ufo
   - coverage run --parallel-mode --source=mutatorMath test.py
-  - coverage run --parallel-mode --source=mutatorMath kerningTest.py
 after_success:
   - coverage combine
   - coveralls
