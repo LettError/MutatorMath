@@ -297,6 +297,22 @@ class DesignSpaceDocumentWriter(object):
             locationElement = self._makeLocationElement(location)
             kerningElement.append(locationElement)
         self.currentInstance.append(kerningElement)
+
+    def writeWarp(self, warpDict):
+        """ Write a list of (in, out) values for a warpmap """
+        warpElement = ET.Element("warp")
+        axisNames = warpDict.keys()
+        axisNames = sorted(axisNames)
+        for name in axisNames:
+            axisElement = ET.Element("axis")
+            axisElement.attrib['name'] = name
+            for a, b in warpDict[name]:
+                warpPt = ET.Element("point")
+                warpPt.attrib['input'] = str(a)
+                warpPt.attrib['output'] = str(b)
+                axisElement.append(warpPt)
+            warpElement.append(axisElement)
+        self.root.append(warpElement)
     
     
 class DesignSpaceDocumentReader(object):
@@ -380,6 +396,8 @@ class DesignSpaceDocumentReader(object):
         self.root = tree.getroot()
         self.readVersion()
         assert self.documentFormatVersion == 3
+        self.warpDict = None
+        self.readWarp()
         self.readSources()
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
         self.logger.info('Done')
@@ -392,7 +410,30 @@ class DesignSpaceDocumentReader(object):
         """
         ds = self.root.findall("[@format]")[0]
         self.documentFormatVersion = int(ds.attrib['format'])
-        
+
+    def readWarp(self):
+        """ Read the warp element
+
+        ::
+            <warp>
+                <axis name="weight">
+                    <point input="0" output="0" />
+                    <point input="500" output="200" />
+                    <point input="1000" output="1000" />
+                </axis>
+            </warp>
+
+        """
+        warpDict = {}
+        for warpAxisElement in self.root.findall(".warp/axis"):
+            axisName = warpAxisElement.attrib.get("name")
+            warpDict[axisName] = []
+            for warpPoint in warpAxisElement.findall(".point"):
+                inputValue = float(warpPoint.attrib.get("input"))
+                outputValue = float(warpPoint.attrib.get("output"))
+                warpDict[axisName].append((inputValue, outputValue))
+        self.warpDict = warpDict
+
     def readSources(self):
         """ Read the source elements.
         
@@ -426,32 +467,17 @@ class DesignSpaceDocumentReader(object):
             # read lib flag
             for libElement in sourceElement.findall('.lib'):
                 if libElement.attrib.get('copy') == '1':
-                    if self.libSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Lib copy source already defined: %s, %s", sourceName, self.libSource)
-                        self.libSource = None
-                    else:
-                        self.libSource = sourceName
+                    self.libSource = sourceName
 
             # read the groups flag
             for groupsElement in sourceElement.findall('.groups'):
-                if groupsElement.attrib.get('copy') == '1':
-                    if self.groupsSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Groups copy source already defined: %s, %s", sourceName, self.groupsSource)
-                        self.groupsSource = None
-                    else:
-                        self.groupsSource = sourceName
+                if libElement.attrib.get('copy') == '1':
+                    self.groupsSource = sourceName
             
             # read the info flag
             for infoElement in sourceElement.findall(".info"):
                 if infoElement.attrib.get('copy') == '1':
-                    if self.infoSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Info copy source already defined: %s, %s", sourceName, self.infoSource)
-                        self.infoSource = None
-                    else:
-                        self.infoSource = sourceName
+                    self.infoSource = sourceName
                 if infoElement.attrib.get('mute') == '1':
                     self.muted['info'].append(sourceName)
                     if self.verbose:
@@ -547,7 +573,8 @@ class DesignSpaceDocumentReader(object):
 
         instanceObject = self._instanceWriterClass(instancePath,    
             ufoVersion=self.ufoVersion,
-            roundGeometry=self.roundGeometry, 
+            roundGeometry=self.roundGeometry,
+            warpDict = self.warpDict,
             verbose=self.verbose,
             logger=self.logger
             )
@@ -645,15 +672,6 @@ class DesignSpaceDocumentReader(object):
             missing.sort()
             msg = "%s:\nMissing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\n".join(missing))
             self.reportProgress('error', 'unicodes', msg)
-            if self.verbose:
-                self.logger.info(msg)
-
-        # report failed kerning pairs
-        failed = instanceObject.getKerningErrors()
-        if failed:
-            failed.sort()
-            msg = "%s:\nThese kerning pairs failed validation and have been removed:\n%s"%(filename, "\n".join(failed))
-            self.reportProgress('error', 'kerning', msg)
             if self.verbose:
                 self.logger.info(msg)
 

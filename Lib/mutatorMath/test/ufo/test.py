@@ -287,6 +287,51 @@ if __name__ == "__main__":
         >>> ufoRelPath
         '/data/instances/A/testOutput_glyphs.ufo'
 
+
+
+        # test the warp elements
+        >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
+        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
+        >>> def grow(base, factor, steps):
+        ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
+        >>> doc.writeWarp({'weight':grow(100,0.55,11)})
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
+        ...        name="master_1", 
+        ...        location=dict(weight=0), 
+        ...        copyLib=True, 
+        ...        copyGroups=True, 
+        ...        copyInfo=True,
+        ...        muteKerning=False,
+        ...        muteInfo=False) 
+        >>> doc.addSource(
+        ...        os.path.join(sourcePath, "stems", "StemBold.ufo"),
+        ...        name="master_2", 
+        ...        location=dict(weight=1000), 
+        ...        copyLib=False, 
+        ...        copyGroups=False, 
+        ...        copyInfo=False, 
+        ...        muteKerning=False,
+        ...        muteInfo=False )
+        >>> testOutputFileName = os.path.join(instancePath, "W", "StemOutput.ufo")
+        >>> testLocation = dict(weight=0)       # change this location to see calculation assertions fail.
+        >>> doc.startInstance(
+        ...        fileName=testOutputFileName,
+        ...        familyName="TestFamily",
+        ...        styleName="TestStyleName",
+        ...        location=testLocation)
+        >>> doc.writeInfo()
+        >>> doc.writeKerning()
+        >>> glyphMasters = [('I', "master_1", dict(weight=0)), ('I', "master_2", dict(weight=1000)), ]
+        >>> for i in range(0, 1000, 50):
+        ...    doc.writeGlyph("I.%04d"%i, location=dict(weight=i), masters=glyphMasters)
+        ...
+        >>> doc.endInstance()
+        >>> doc.save()
+
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
+
         """
 
     sys.exit(doctest.testmod().failed)

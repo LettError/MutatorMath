@@ -2,14 +2,13 @@
 
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
+from mutatorMath.objects.bender import Bender, noBend
 
 import warnings
 
 from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
 from fontMath.mathGlyph import MathGlyph
-
-from ufoLib.validators import kerningValidatorReportPairs
 
 import defcon
 import os
@@ -31,12 +30,17 @@ class InstanceWriter(object):
     
     def __init__(self, path, ufoVersion=1,
             roundGeometry=False,
+            warpDict=None,
             verbose=False,
             logger=None):
         self.path = path
         self.font = self._fontClass()
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
+        if warpDict is not None:
+            self.warpDict = warpDict
+        else:
+            self.warpDict = {}
         self.sources = {} 
         self.muted = dict(kerning=[], info=[], glyphs={})   # muted data in the masters
         self.mutedGlyphsNames = []                          # muted glyphs in the instance
@@ -49,7 +53,6 @@ class InstanceWriter(object):
         self.logger=logger
         self._failed = []            # list of glyphnames we could not generate
         self._missingUnicodes = []   # list of glyphnames with missing unicode values
-        self._kerningValidationProblems = []     # list of kerning pairs that failed validation
             
     def setSources(self, sources):
         """ Set a list of sources."""
@@ -89,10 +92,6 @@ class InstanceWriter(object):
         """ Return the list of glyphnames that failed to generate."""
         return self._failed
 
-    def getKerningErrors(self):
-        """ Return the list of kerning pairs that failed validation. """
-        return self._kerningValidationProblems
-
     def getMissingUnicodes(self):
         """ Return the list of glyphnames with missing unicode values. """
         return self._missingUnicodes
@@ -126,7 +125,10 @@ class InstanceWriter(object):
         """ Copy the features from this source """
         if featureSource in self.sources:
             src, loc = self.sources[featureSource]
-            self.font.features.text = src.features.text
+            if isinstance(src.features.text, str):
+                self.font.features.text = u""+src.features.text
+            elif isinstance(src.features.text, unicode):
+                self.font.features.text = src.features.text
 
     def makeUnicodeMapFromSources(self):
         """ Create a dict with glyphName -> unicode value pairs
@@ -187,7 +189,7 @@ class InstanceWriter(object):
                 continue
             items.append((sourceLocation, MathInfo(source.info)))
         try:
-            bias, m = buildMutator(items)
+            bias, m = buildMutator(items, warpDict=self.warpDict)
         except:
             self.logger.exception("Error processing font info. %s", items)
             return
@@ -285,7 +287,7 @@ class InstanceWriter(object):
         if items:
             m = None
             try:
-                bias, m = buildMutator(items)
+                bias, m = buildMutator(items, warpDict=self.warpDict)
             except:
                 self.logger.exception("Error processing kerning data. %s", items)
                 return
@@ -354,7 +356,7 @@ class InstanceWriter(object):
                 continue
             glyphObject = MathGlyph(fontObject[glyphName])
             items.append((locationObject, glyphObject))
-        bias, m = buildMutator(items)
+        bias, m = buildMutator(items, warpDict=self.warpDict)
         instanceObject = m.makeInstance(instanceLocationObject)
         if self.roundGeometry:
             try:
@@ -367,22 +369,9 @@ class InstanceWriter(object):
             self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
             instanceObject.extractGlyph(targetGlyphObject)
     
-    def validateKerning(self):
-        " Make sure the kerning validates before saving. "
-        self.logger.info("Validating kerning %s", os.path.basename(self.path))
-        validates, errors, pairs = kerningValidatorReportPairs(self.font.kerning, self.font.groups)
-        if validates:
-            return
-        for pair in pairs:
-            if pair in self.font.kerning:
-                del self.font.kerning[pair]
-        for err in errors:
-            self._kerningValidationProblems.append(err)
-
     def save(self):
         """ Save the UFO."""
-        # validate the kerning to avoid failing surprises during save
-        self.validateKerning()
+
         # handle glyphs that were muted
         for name in self.mutedGlyphsNames:
             if name not in self.font: continue

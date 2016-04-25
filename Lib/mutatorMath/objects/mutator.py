@@ -5,24 +5,35 @@ from mutatorMath.objects.location import Location, sortLocations, biasFromLocati
 
 import sys
 
+
 __all__ = ['Mutator', 'buildMutator']
 
 _EPSILON = sys.float_info.epsilon
 
-def buildMutator(items):
+
+def noBend(loc): return loc
+
+def buildMutator(items, warpDict=None):
     """
         Build a mutator with the (location, obj) pairs in items.
         Determine the bias based on the given locations.
     """
+    from mutatorMath.objects.bender import Bender
     m = Mutator()
+    if warpDict is not None:
+        bender = Bender(warpDict)
+        m.setBender(bender)
+    else:
+        bender = noBend
     # the order itself does not matter, but we should always build in the same order.
     items.sort()
-    bias = biasFromLocations([loc for loc, obj in items], True)
+    bias = biasFromLocations([bender(loc) for loc, obj in items], True)
     m.setBias(bias)
     n = None
     ofx = []
     onx = []
     for loc, obj in items:
+        loc = bender(loc)
         if (loc-bias).isOrigin():
             m.setNeutral(obj)
             break
@@ -63,9 +74,13 @@ class Mutator(dict):
     def __init__(self, neutral=None):
         self._axes = {}
         self._tags = {}
+        self._bender = noBend
         self._neutral = neutral
         self._bias = Location()
     
+    def setBender(self, bender):
+        self._bender = bender
+
     def setBias(self, bias):
         self._bias = bias
 
@@ -90,6 +105,7 @@ class Mutator(dict):
                 *   True: add the difference with the instance value at that location and the delta
                 *   False: just add the delta.
         """
+        location = self._bender(location)
         if punch:
             r = self.getInstance(location, axisOnly=axisOnly)
             if r is not None:
@@ -188,6 +204,7 @@ class Mutator(dict):
         """ 
             Calculate an instance with the right bias and add the neutral. 
         """
+        aLocation = self._bender(aLocation)
         if not aLocation.isAmbivalent():
             instanceObject = self.getInstance(aLocation-self._bias)
         else:
@@ -601,6 +618,66 @@ if __name__ == "__main__":
         4.5
         """
 
+
+    def test_builderBender_1():
+        """ Test the mutator builder with a warp dict
+
+        >>> items = [
+        ...    (Location(pop=0), 0),
+        ...    (Location(pop=10), 10),
+        ... ]
+        >>> warpdict = {'pop': [(0,0), (5, 2), (7, 7), (10,10)]}
+        >>> bias, mb = buildMutator(items, warpdict)
+        >>> bias
+        <Location pop:0 >
+        >>> mb
+        {(): (0, 'origin'), (('pop', 10),): (10, None)}
+        >>> mb.makeInstance(Location(pop=0))
+        0
+        >>> mb.makeInstance(Location(pop=1))
+        0.4
+        >>> mb.makeInstance(Location(pop=2))
+        0.8
+        >>> mb.makeInstance(Location(pop=3))
+        1.2
+        >>> mb.makeInstance(Location(pop=4))
+        1.6
+        >>> mb.makeInstance(Location(pop=5))
+        2.0
+        >>> mb.makeInstance(Location(pop=6))
+        4.5
+        >>> mb.makeInstance(Location(pop=7))
+        7.0
+        >>> mb.makeInstance(Location(pop=8))
+        7.999999999999999
+        >>> mb.makeInstance(Location(pop=9))
+        9.0
+        >>> mb.makeInstance(Location(pop=10))
+        10
+        """
+
+    def test_builderBender_2():
+        """ Test the mutator builder with a warp dict
+
+        >>> items = [
+        ...    (Location(pop=0), 0),
+        ...    #(Location(pop=7), 5),
+        ...    (Location(pop=10), 10),
+        ... ]
+        >>> warpdict = {'pop': [(0,0), (5, 2), (10,10)]}
+        >>> bias, mb = buildMutator(items, warpdict)
+        >>> bias
+        <Location pop:0 >
+        >>> mb
+        {(): (0, 'origin'), (('pop', 10),): (10, None)}
+        >>> mb.makeInstance(Location(pop=0))
+        0
+        >>> r = []
+        >>> for p in range(0, 11):
+        ...     r.append(mb.makeInstance(Location(pop=p)))
+        >>> r
+        [0, 0.4, 0.8, 1.2, 1.6, 2.0, 3.5999999999999996, 5.2, 6.799999999999999, 8.4, 10]
+        """
         
     def _test():
         import doctest

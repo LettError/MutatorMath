@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="I.0250" format="1">
+  <advance width="72"/>
+  <outline>
+    <contour>
+      <point x="52" y="0" type="line"/>
+      <point x="52" y="309" type="line"/>
+      <point x="20" y="309" type="line"/>
+      <point x="20" y="0" type="line"/>
+    </contour>
+  </outline>
+</glyph>
