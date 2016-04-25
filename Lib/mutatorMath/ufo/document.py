@@ -467,32 +467,17 @@ class DesignSpaceDocumentReader(object):
             # read lib flag
             for libElement in sourceElement.findall('.lib'):
                 if libElement.attrib.get('copy') == '1':
-                    if self.libSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Lib copy source already defined: %s, %s", sourceName, self.libSource)
-                        self.libSource = None
-                    else:
-                        self.libSource = sourceName
+                    self.libSource = sourceName
 
             # read the groups flag
             for groupsElement in sourceElement.findall('.groups'):
-                if groupsElement.attrib.get('copy') == '1':
-                    if self.groupsSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Groups copy source already defined: %s, %s", sourceName, self.groupsSource)
-                        self.groupsSource = None
-                    else:
-                        self.groupsSource = sourceName
+                if libElement.attrib.get('copy') == '1':
+                    self.groupsSource = sourceName
             
             # read the info flag
             for infoElement in sourceElement.findall(".info"):
                 if infoElement.attrib.get('copy') == '1':
-                    if self.infoSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Info copy source already defined: %s, %s", sourceName, self.infoSource)
-                        self.infoSource = None
-                    else:
-                        self.infoSource = sourceName
+                    self.infoSource = sourceName
                 if infoElement.attrib.get('mute') == '1':
                     self.muted['info'].append(sourceName)
                     if self.verbose:
@@ -687,15 +672,6 @@ class DesignSpaceDocumentReader(object):
             missing.sort()
             msg = "%s:\nMissing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\n".join(missing))
             self.reportProgress('error', 'unicodes', msg)
-            if self.verbose:
-                self.logger.info(msg)
-
-        # report failed kerning pairs
-        failed = instanceObject.getKerningErrors()
-        if failed:
-            failed.sort()
-            msg = "%s:\nThese kerning pairs failed validation and have been removed:\n%s"%(filename, "\n".join(failed))
-            self.reportProgress('error', 'kerning', msg)
             if self.verbose:
                 self.logger.info(msg)
 

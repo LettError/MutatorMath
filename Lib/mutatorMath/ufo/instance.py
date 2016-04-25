@@ -1,4 +1,4 @@
-1# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
@@ -9,8 +9,6 @@ import warnings
 from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
 from fontMath.mathGlyph import MathGlyph
-
-from ufoLib.validators import kerningValidatorReportPairs
 
 import defcon
 import os
@@ -55,7 +53,6 @@ class InstanceWriter(object):
         self.logger=logger
         self._failed = []            # list of glyphnames we could not generate
         self._missingUnicodes = []   # list of glyphnames with missing unicode values
-        self._kerningValidationProblems = []     # list of kerning pairs that failed validation
             
     def setSources(self, sources):
         """ Set a list of sources."""
@@ -94,10 +91,6 @@ class InstanceWriter(object):
     def getFailed(self):
         """ Return the list of glyphnames that failed to generate."""
         return self._failed
-
-    def getKerningErrors(self):
-        """ Return the list of kerning pairs that failed validation. """
-        return self._kerningValidationProblems
 
     def getMissingUnicodes(self):
         """ Return the list of glyphnames with missing unicode values. """
@@ -376,22 +369,9 @@ class InstanceWriter(object):
             self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
             instanceObject.extractGlyph(targetGlyphObject)
     
-    def validateKerning(self):
-        " Make sure the kerning validates before saving. "
-        self.logger.info("Validating kerning %s", os.path.basename(self.path))
-        validates, errors, pairs = kerningValidatorReportPairs(self.font.kerning, self.font.groups)
-        if validates:
-            return
-        for pair in pairs:
-            if pair in self.font.kerning:
-                del self.font.kerning[pair]
-        for err in errors:
-            self._kerningValidationProblems.append(err)
-
     def save(self):
         """ Save the UFO."""
-        # validate the kerning to avoid failing surprises during save
-        self.validateKerning()
+
         # handle glyphs that were muted
         for name in self.mutedGlyphsNames:
             if name not in self.font: continue

@@ -10,12 +10,13 @@ It is hard to predict these conflicts exclusively on the input.
 But they are easy to detect using the kerning validator from
 ufoLib. 
 
+20160425 Changes in the validation of kerning in Defcon made this test irrelevant. 
 """
 
 from defcon.objects.font import Font
 from fontMath import MathKerning
 
-from ufoLib.validators import kerningValidatorReportPairs
+#from ufoLib.validators import kerningValidatorReportPairs
 from fontMath.mathKerning import MathKerning
 
 from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocumentReader
@@ -64,8 +65,8 @@ def makeTestFonts(rootPath):
     f2.kerning[('glyphOne', 'public.kern2.@MMK_R_two')] = -800
 
     # make sure the kerning and groups in each master validate.
-    assert kerningValidatorReportPairs(f1.kerning, f1.groups) == (True, [], [])
-    assert kerningValidatorReportPairs(f2.kerning, f2.groups) == (True, [], [])
+    #assert kerningValidatorReportPairs(f1.kerning, f1.groups) == (True, [], [])
+    #assert kerningValidatorReportPairs(f2.kerning, f2.groups) == (True, [], [])
 
     # save
     f1.save(path1, 3)
@@ -129,7 +130,7 @@ def testOuroborosKerning(rootPath, cleanUp=True):
     logText = log.read()
     log.close()
     #print logText
-    assert report in logText
+    #assert report in logText
 
     if cleanUp:
         # remove the mess
