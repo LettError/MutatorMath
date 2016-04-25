@@ -51,7 +51,9 @@ if __name__ == "__main__":
         ...        copyFeatures=True,
         ...        muteKerning=False, 
         ...        muteInfo=True,
-        ...        mutedGlyphNames=['a',] )
+        ...        mutedGlyphNames=['a',],
+        ...        familyName="ExplicitSourceFamilyName",
+        ...        styleName="ExplicitSourceStyleName",)
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "light", "LightWide.ufo"),
         ...        name="master_2", 

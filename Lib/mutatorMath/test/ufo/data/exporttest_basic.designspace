@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <designspace format="3">
     <sources>
-        <source filename="sources/light/LightCondensed.ufo" name="master_1">
+        <source familyname="ExplicitSourceFamilyName" filename="sources/light/LightCondensed.ufo" name="master_1" stylename="ExplicitSourceFamilyName">
             <lib copy="1" />
             <groups copy="1" />
             <features copy="1" />

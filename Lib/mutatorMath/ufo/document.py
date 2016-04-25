@@ -109,6 +109,8 @@ class DesignSpaceDocumentWriter(object):
             muteKerning=False, 
             muteInfo=False,
             mutedGlyphNames=None,
+            familyName=None,
+            styleName=None,
         ):
         """
         Add a new UFO source to the document.
@@ -121,6 +123,8 @@ class DesignSpaceDocumentWriter(object):
         *   copyFeatures:   copy the feature text from this source to instances
         *   muteKerning:    mute the kerning data from this source
         *   muteInfo:       mute the font info data from this source
+        *   familyName:     family name for this UFO (to be able to work on the names without reading the whole UFO)
+        *   styleName:      style name for this UFO (to be able to work on the names without reading the whole UFO)
 
         Note: no separate flag for mute font: the source is just not added. 
         """
@@ -165,6 +169,12 @@ class DesignSpaceDocumentWriter(object):
                 glyphElement.attrib["name"] = name
                 glyphElement.attrib["mute"] = '1'
                 sourceElement.append(glyphElement)
+
+        if familyName is not None:
+            sourceElement.attrib['familyname'] = familyName
+        if styleName is not None:
+            sourceElement.attrib['stylename'] = familyName
+
 
         locationElement = self._makeLocationElement(location)
         sourceElement.append(locationElement)

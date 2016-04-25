@@ -27,8 +27,10 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 | -------- | ------------------------- | ------ | ------------------------------------------------ | 
 | Defcon   | TypeSupply.com            | ufo3   |  https://github.com/typesupply/defcon            |
 | FontMath | TypeSupply.com            | ufo3   |  https://github.com/typesupply/fontMath          |
-| ufoLib   | UnifiedFontObject.org     | master |  https://github.com/unified-font-object/ufoLib   |
-| Robofab  | RoboFab Consortium        | ufo3k  |  https://github.com/robofab-developers/robofab   |
+| ufoLib*  | UnifiedFontObject.org     | master |  https://github.com/unified-font-object/ufoLib   |
+| Robofab* | RoboFab Consortium        | ufo3k  |  https://github.com/robofab-developers/robofab   |
+
+* Note: there is currently a lot of work going on in the ufoLib and Robofab repositories. Dependencies might change because of this. 
 
 ## MutatorMath terminology
 
@@ -90,6 +92,8 @@ A detailed description of the designspace format here: [designspace file format]
     *   **copyInfo**:       copy the non-numerical fields from this source.info to instances.
     *   **muteKerning**:    mute the kerning data from this source
     *   **muteInfo**:       mute the font info data from this source
+    *   **familyName**:     the family name for this source. Optional. Can be used for processing or building names of instances. 
+    *   **styleName**:     the style name for this source. Optional. Can be used for processing or building names of instances. 
 * **startInstance**(name, familyName, styleName, fileName, postScriptFontName, styleMapFamilyName, styleMapStyleName)
     This starts a new current instance object.
     *   **name**: the name of this instance
