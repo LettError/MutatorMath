@@ -484,7 +484,7 @@ class DesignSpaceDocumentReader(object):
 
             # read the groups flag
             for groupsElement in sourceElement.findall('.groups'):
-                if libElement.attrib.get('copy') == '1':
+                if groupsElement.attrib.get('copy') == '1':
                     self.groupsSource = sourceName
             
             # read the info flag
