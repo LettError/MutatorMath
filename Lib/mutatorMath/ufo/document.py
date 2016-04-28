@@ -173,7 +173,7 @@ class DesignSpaceDocumentWriter(object):
         if familyName is not None:
             sourceElement.attrib['familyname'] = familyName
         if styleName is not None:
-            sourceElement.attrib['stylename'] = familyName
+            sourceElement.attrib['stylename'] = styleName
 
 
         locationElement = self._makeLocationElement(location)
