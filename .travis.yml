@@ -13,6 +13,7 @@ install:
   - cd fontMath; python setup.py install; cd ..
   - cd robofab; python install.py; cd ..
   - cd fonttools; python setup.py install; cd ..
+  - cd ufoLib; python setup.py install; cd ..
   # MutatorMath
   - python setup.py install
   - pip install coveralls
