@@ -2,6 +2,7 @@
 
 from setuptools import setup
 
+
 setup(name = "MutatorMath",
       version = "1.8",
       description = "Python for piecewise linear interpolation in multiple dimensions with multiple, arbitrarily placed, masters.",
