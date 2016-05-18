@@ -31,7 +31,7 @@ if __name__ == "__main__":
     def test1():
         """
         >>> import time
-        >>> testRoot = os.path.join(os.getcwd(), 'data')
+        >>> testRoot = os.path.join(os.path.dirname(__file__), 'data')
         >>> documentPath = os.path.join(testRoot, 'exporttest_basic.designspace')
         >>> sourcePath = os.path.join(testRoot, 'sources')
         >>> instancePath = os.path.join(testRoot, 'instances')
@@ -282,12 +282,12 @@ if __name__ == "__main__":
             # test build function -- single designspace file
         >>> from mutatorMath.ufo import build
         >>> import os
-        >>> here = os.path.join(os.getcwd(), 'data', 'exporttest_basic.designspace')
+        >>> here = os.path.join(os.path.dirname(__file__), 'data', 'exporttest_basic.designspace')
         >>> results = build(here, outputUFOFormatVersion=2)
         >>> ufoFullPath = results[0]['testOutput_glyphs.ufo']
-        >>> ufoRelPath = ufoFullPath.replace(os.getcwd(), '')
+        >>> ufoRelPath = os.path.relpath(ufoFullPath, os.path.dirname(__file__))
         >>> ufoRelPath
-        '/data/instances/A/testOutput_glyphs.ufo'
+        'data/instances/A/testOutput_glyphs.ufo'
 
 
 
