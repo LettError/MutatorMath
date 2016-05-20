@@ -1,7 +1,7 @@
-import math
+
 import sys
 from mutatorMath.objects.error import MutatorError
-from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
+from mutatorMath.objects.location import Location, biasFromLocations
 import mutatorMath.objects.mutator
 
 def noBend(loc): return loc

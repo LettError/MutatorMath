@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import print_function, division
 import math, sys
 import itertools, operator
 
@@ -73,6 +73,22 @@ class Location(dict):
         t.append(self.asString())
         t.append(">")
         return " ".join(t)
+
+    def __lt__(self, other):
+        if len(self) < len(other):
+            return True
+        elif len(self) > len(other):
+            return False
+        self_keys = sorted(self.keys())
+        other_keys = sorted(other.keys())
+        for i, key in enumerate(self_keys):
+            if key < other_keys[i]:
+                return True
+            elif key > other_keys[i]:
+                return False
+            if self[key] < other[key]:
+                return True
+        return False
     
     def expand(self, axisNames):
         """
@@ -85,7 +101,7 @@ class Location(dict):
             <Location crackle:0, pop:1, snap:0 >
         """
         for k in axisNames:
-            if not self.has_key(k):
+            if k not in self:
                 self[k] = 0
     
     def copy(self):
@@ -130,8 +146,7 @@ class Location(dict):
             (('pop', 1), ('snap', -100))
         """
         t = []
-        k = self.keys()
-        k.sort()
+        k = sorted(self.keys())
         for key in k:
             t.append((key, self[key]))
         return tuple(t)
@@ -181,8 +196,7 @@ class Location(dict):
             >>> l.getActiveAxes()
             ['crackle', 'pop']
         """
-        names = [k for k in self.keys() if self[k]!=0]
-        names.sort()
+        names = sorted(k for k in self.keys() if self[k]!=0)
         return names
         
     def asString(self, strict=False):
@@ -244,8 +258,7 @@ class Location(dict):
             
         """
         data = []
-        names = self.keys()
-        names.sort()
+        names = sorted(self.keys())
         for n in names:
             data.append({'axis':n, 'value':numberToString(self[n])})
         return data
@@ -260,7 +273,14 @@ class Location(dict):
             <Location pop:1 >
             
         """
-        return self.__class__([(k, v) for k, v in self.items() if v > _EPSILON or v < -_EPSILON])
+        result = []
+        for k, v in self.items():
+            if isinstance(v, tuple):
+                if v > (_EPSILON, ) * len(v) or v < (-_EPSILON, ) * len(v):
+                    result.append((k, v))
+            elif v > _EPSILON or v < -_EPSILON:
+                result.append((k, v))
+        return self.__class__(result)
     
     def common(self, other):
         """
@@ -312,6 +332,10 @@ class Location(dict):
             True
         """
         for name, value in self.items():
+            if isinstance(value, tuple):
+                if (value < (-_EPSILON,) * len(value)
+                        or value > (_EPSILON,) * len(value)):
+                    return False
             if value < -_EPSILON or value > _EPSILON:
                 return False
         return True
@@ -340,7 +364,7 @@ class Location(dict):
         new = self.__class__()
         new.update(self)
         s = new.strip()
-        dims = s.keys()
+        dims = list(s.keys())
         if len(dims)> 1:
             return False
         elif len(dims)==1:
@@ -548,7 +572,7 @@ class Location(dict):
     
     __rmul__ = __mul__
     
-    def __div__(self, factor):
+    def __truediv__(self, factor):
         if factor == 0:
             raise ZeroDivisionError
         if isinstance(factor, tuple):
@@ -556,6 +580,9 @@ class Location(dict):
                 raise ZeroDivisionError
             return self * (1.0/factor[0]) + self * (1.0/factor[1])
         return self * (1.0/factor)
+    
+    __div__ = __truediv__
+
     
     def transform(self, transformDict):
         if transformDict is None:
@@ -587,7 +614,7 @@ def sortLocations(locations):
         if l.isOnAxis():
             onAxis.append(l)
             for axis in l.keys():
-                if not onAxisValues.has_key(axis):
+                if axis not in onAxisValues:
                     onAxisValues[axis] = []
                 onAxisValues[axis].append(l[axis])
         else:
@@ -595,7 +622,7 @@ def sortLocations(locations):
     for l in offAxis:
         ok = False
         for axis in l.keys():
-            if not onAxisValues.has_key(axis):
+            if axis not in onAxisValues:
                 continue
             if l[axis] in onAxisValues[axis]:
                 ok = True

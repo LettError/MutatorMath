@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-    
 from __future__ import print_function
 
 """
@@ -106,7 +105,7 @@ if __name__ == "__main__":
         >>> assert instance['M'].unicode == 0xff
 
             # check the groups
-        >>> instance.groups.items()
+        >>> list(instance.groups.items())
         [('testGroup', ['E', 'F', 'H'])]
 
             # check the lib
@@ -148,7 +147,7 @@ if __name__ == "__main__":
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
         >>> instance = defcon.objects.font.Font(resultUFOPath)
-        >>> assert instance.kerning.items() == [(('@MMK_L_A', 'V'), 100), (('V', '@MMK_R_A'), 100)]
+        >>> assert sorted(instance.kerning.items()) == [(('@MMK_L_A', 'V'), 100), (('V', '@MMK_R_A'), 100)]
 
 
             # test the effects of muting the kerning
@@ -189,7 +188,7 @@ if __name__ == "__main__":
         >>> instance = defcon.objects.font.Font(resultUFOPath)
 
             # the bold condensed kerning master has been muted, we expect the light condensed data in the instance
-        >>> assert instance.kerning.items() == [(('@MMK_L_A', 'V'), -100), (('V', '@MMK_R_A'), -100)]
+        >>> assert sorted(instance.kerning.items()) == [(('@MMK_L_A', 'V'), -100), (('V', '@MMK_R_A'), -100)]
 
 
             # info data

@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-
-These are some basic tests for glyph geometry.
-
-"""
-
+from __future__ import print_function
 from defcon.objects.font import Font
 from fontMath import MathKerning
 
@@ -15,6 +9,12 @@ from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocum
 from mutatorMath.objects.location import Location
 
 import os, sys, shutil
+
+"""
+
+These are some basic tests for glyph geometry.
+
+"""
 
 def testingProgressFunc(state, action, text, tick):
     """ Progress function that gets passed to the DesignSpaceDocumentReader should
@@ -73,7 +73,7 @@ def testGeometry(rootPath, cleanUp=True):
         testLogFile = open(logPath, 'w')
         testLogFile.close()
     except:
-        print "Can't make a logfile."
+        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(

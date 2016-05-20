@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-
-    This is a test for the muting functionality. 
-
-    - mute masters
-    - mute specific glyphs
-
-"""
-
+from __future__ import print_function
 from defcon.objects.font import Font
 from fontMath import MathKerning
 
@@ -18,6 +9,15 @@ from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocum
 from mutatorMath.objects.location import Location
 
 import os, sys, shutil
+
+"""
+
+    This is a test for the muting functionality.
+
+    - mute masters
+    - mute specific glyphs
+
+"""
 
 def testingProgressFunc(state, action, text, tick):
     """ Progress function that gets passed to the DesignSpaceDocumentReader should
