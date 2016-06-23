@@ -111,7 +111,7 @@ class Mutator(dict):
             if r is not None:
                 self[location.asTuple()] = aMathObject-r, deltaName
             else:
-                raise mutator.error.MutatorError()
+                raise MutatorError("Could not get instance.")
         else:
             self[location.asTuple()] = aMathObject, deltaName
                 
