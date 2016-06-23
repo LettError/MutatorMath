@@ -20,7 +20,7 @@ def tokenProgressFunc(state="update", action=None, text=None, tick=0):
 		text:		string, value, additional parameter. For instance ufoname.
 		tick:		a float between 0 and 1 indicating progress.
 	"""
-	print("tokenProgressFunc %s: %s\n%s (%d)"%(state, str(action), str(text), str(tick)))
+	print("tokenProgressFunc %s: %s\n%s (%s)"%(state, str(action), str(text), str(tick)))
 
 def build(
 		documentPath,
