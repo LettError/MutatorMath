@@ -685,6 +685,8 @@ class DesignSpaceDocumentReader(object):
             if self.verbose:
                 self.logger.info(msg)
 
+        # store
+        self.instances[postScriptFontName] = instanceObject
         self.reportProgress("generate", 'stop', filenameTokenForResults)
 
     def readInfoElement(self, infoElement, instanceObject):
