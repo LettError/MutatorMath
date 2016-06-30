@@ -382,7 +382,7 @@ class InstanceWriter(object):
             # remove glyph from groups / kerning as well?
             # remove components referencing this glyph?
         try:
-            self.font.save(self.path, self.ufoVersion)
+            self.font.save(os.path.abspath(self.path), self.ufoVersion)
         except defcon.DefconError as error:
             if self.logger:
                 self.logger.exception("Error generating.")

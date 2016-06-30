@@ -460,7 +460,7 @@ class DesignSpaceDocumentReader(object):
             # shall we just read the UFO here?
             filename = sourceElement.attrib.get('filename')
             # filename is a path relaive to the documentpath. resolve first.
-            sourcePath = os.path.join(os.path.dirname(self.path), filename)
+            sourcePath = os.path.abspath(os.path.join(os.path.dirname(self.path), filename))
             sourceName = sourceElement.attrib.get('name')
             self.reportProgress("prep", 'load', sourcePath)
             if not os.path.exists(sourcePath):
