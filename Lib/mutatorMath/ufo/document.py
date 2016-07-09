@@ -371,7 +371,11 @@ class DesignSpaceDocumentReader(object):
         self.results = {}   # dict with instancename / filepaths for post processing.
         tree = ET.parse(self.path)
         self.root = tree.getroot()
+        self.readVersion()
+        assert self.documentFormatVersion == 3
         self.warpDict = None
+        self.readWarp()
+        self.readSources()
 
     def reportProgress(self, state, action, text=None, tick=None):
         """ If we want to keep other code updated about our progress.
@@ -394,10 +398,6 @@ class DesignSpaceDocumentReader(object):
 
     def getSourcePaths(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Return a list of paths referenced in the document."""
-        self.readVersion()
-        assert self.documentFormatVersion == 3
-        # self.readWarp()
-        self.readSources()
         paths = []
         for name in self.sources.keys():
             paths.append(self.sources[name][0].path)
@@ -405,10 +405,6 @@ class DesignSpaceDocumentReader(object):
 
     def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Process the input file and generate the instances. """
-        self.readVersion()
-        assert self.documentFormatVersion == 3
-        self.readWarp()
-        self.readSources()
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
         self.logger.info('Done')
         self.reportProgress("done", 'stop')
