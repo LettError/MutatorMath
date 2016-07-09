@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from types import TupleType
 import math, sys
 import itertools, operator
 
@@ -362,12 +361,12 @@ class Location(dict):
         """
         if dim is not None:
             try:
-                return type(self[dim]) == TupleType
+                return isinstance(self[dim], tuple)
             except KeyError:
                 # dimension is not present, it should be 0, so not ambivalent
                 return False
         for dim, val in self.items():
-            if type(val) == TupleType:
+            if isinstance(val, tuple):
                 return True
         return False
     
@@ -383,7 +382,7 @@ class Location(dict):
         x = self.__class__()
         y = self.__class__()
         for dim, val in self.items():
-            if type(val) == TupleType:
+            if isinstance(val, tuple):
                 x[dim] = val[0]
                 y[dim] = val[1]
             else:
@@ -402,7 +401,7 @@ class Location(dict):
         """
         new = self.__class__()
         for dim, val in self.items():
-            if type(val) == TupleType:
+            if isinstance(val, tuple):
                 new[dim] = val[0]
             else:
                 new[dim] = val
@@ -419,7 +418,7 @@ class Location(dict):
         """
         new = self.__class__()
         for dim, val in self.items():
-            if type(val) == TupleType:
+            if isinstance(val, tuple):
                 new[dim] = val[1]
             else:
                 new[dim] = val
