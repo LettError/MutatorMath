@@ -667,7 +667,7 @@ class DesignSpaceDocumentReader(object):
         failed = instanceObject.getFailed()
         if failed:
             failed.sort()
-            msg = "%s:\nErrors calculating %s glyphs: \n%s"%(filename, len(failed),"\n".join(failed))
+            msg = "%s:\nErrors calculating %s glyphs: \n%s"%(filename, len(failed),"\t"+"\n\t".join(failed))
             self.reportProgress('error', 'glyphs', msg)
             if self.verbose:
                 self.logger.info(msg)
@@ -676,7 +676,7 @@ class DesignSpaceDocumentReader(object):
         missing = instanceObject.getMissingUnicodes()
         if missing:
             missing.sort()
-            msg = "%s:\nMissing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\n".join(missing))
+            msg = "%s:\nPossibly missing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\t"+"\n\t".join(missing))
             self.reportProgress('error', 'unicodes', msg)
             if self.verbose:
                 self.logger.info(msg)

@@ -154,7 +154,9 @@ class InstanceWriter(object):
                     self.logger.info("\tMultiple unicode values for glyph %s: %s"%(name, msg))
                 continue
             if len(u) == 0:
-                self._missingUnicodes.append(name)
+                # only report missing unicodes if the name has no extension
+                if "." not in name:
+                    self._missingUnicodes.append(name)
                 continue
             k = u.keys()
             self.unicodeValues[name] = k[0]
