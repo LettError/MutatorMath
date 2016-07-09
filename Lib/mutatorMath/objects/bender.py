@@ -3,7 +3,6 @@ import sys
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
 import mutatorMath.objects.mutator
-from error import MutatorError
 
 def noBend(loc): return loc
 
