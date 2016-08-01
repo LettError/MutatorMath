@@ -9,7 +9,6 @@ These are some basic tests for glyph geometry.
 from defcon.objects.font import Font
 from fontMath import MathKerning
 
-from ufoLib.validators import kerningValidatorReportPairs
 from fontMath.mathKerning import MathKerning
 
 from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocumentReader
