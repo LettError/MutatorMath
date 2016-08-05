@@ -26,7 +26,7 @@ def buildMutator(items, warpDict=None):
     else:
         bender = noBend
     # the order itself does not matter, but we should always build in the same order.
-    items.sort()
+    items = sorted(items)
     bias = biasFromLocations([bender(loc) for loc, obj in items], True)
     m.setBias(bias)
     n = None
@@ -126,8 +126,8 @@ class Mutator(dict):
         s = {}
         for l, x in self.items():
             s.update(dict.fromkeys([k for k, v in l], None))
-        return s.keys()
-        
+        return list(s.keys())
+
     def _collectAxisPoints(self):
         """ 
             Return a dictionary with all on-axis locations.
@@ -136,7 +136,7 @@ class Mutator(dict):
             location = Location(l)
             name = location.isOnAxis()
             if name is not None and name is not False:
-                if not self._axes.has_key(name):
+                if name not in self._axes:
                     self._axes[name] = []
                 if l not in self._axes[name]:
                     self._axes[name].append(l)
@@ -152,8 +152,8 @@ class Mutator(dict):
             name = location.isOnAxis()
             if name is None or name is False:
                 offAxis[l] = 1
-        return offAxis.keys()
-    
+        return list(offAxis.keys())
+
 
     def collectLocations(self):
         """
@@ -221,7 +221,7 @@ class Mutator(dict):
         deltas = []
         aLocation.expand(self.getAxisNames())
         limits = getLimits(self._allLocations(), aLocation)
-        for deltaLocationTuple, (mathItem, deltaName) in sorted(self.iteritems()):
+        for deltaLocationTuple, (mathItem, deltaName) in sorted(self.items()):
             deltaLocation = Location(deltaLocationTuple)
             deltaLocation.expand( self.getAxisNames())
             factor = self._accumulateFactors(aLocation, deltaLocation, limits, axisOnly)
@@ -280,8 +280,7 @@ class Mutator(dict):
         iv = {}
         for value in deltasOnSameAxis:
             iv[Location(value)[deltaAxis]]=1
-        i = iv.keys()
-        i.sort()
+        i = sorted(iv.keys())
         r = 0
         B, M, A = [], [], []
         mA, mB, mM = None, None, None
@@ -379,7 +378,7 @@ def getLimits(locations, current, sortResults=True, verbose=False):
             continue
         for name, value in b.items():
             f = a[name]
-            if not limit.has_key(name):
+            if name not in limit:
                 limit[name] = {}
                 limit[name]['<'] = {}
                 limit[name]['='] = {}
@@ -391,15 +390,15 @@ def getLimits(locations, current, sortResults=True, verbose=False):
                 else:
                     limit[name]['='] = {0: [Location()]}
             if current[name] < value - _EPSILON:
-                if not limit[name]["<"].has_key(value):
+                if value not in limit[name]["<"]:
                     limit[name]["<"][value] = []
                 limit[name]["<"][value].append(l)
             elif current[name] > value + _EPSILON:
-                if not limit[name][">"].has_key(value):
+                if value not in limit[name][">"]:
                     limit[name][">"][value] = []
                 limit[name][">"][value].append(l)
             else:
-                if not limit[name]["="].has_key(value):
+                if value not in limit[name]["="]:
                     limit[name]["="][value] = []
                 limit[name]["="][value].append(l)
     if not sortResults:
@@ -410,21 +409,19 @@ def getLimits(locations, current, sortResults=True, verbose=False):
         less = []
         more = []
         if lims[">"].keys():
-            less = lims[">"].keys()
-            less.sort()
+            less = sorted(lims[">"].keys())
             lim_min = less[-1]
         else:
             lim_min = None
         if lims["<"].keys():
-            more = lims["<"].keys()
-            more.sort()
+            more = sorted(lims["<"].keys())
             lim_max = more[0]
         else:
             lim_max = None
         if lim_min is None and lim_max is not None:
             # extrapolation < min
             if len(limit[name]['='])>0:
-                l[name] = (None,  limit[name]['='].keys()[0], None)
+                l[name] = (None, list(limit[name]['='].keys())[0], None)
             elif len(more) > 1 and len(limit[name]['='])==0:
                 # extrapolation
                 l[name] = (None,  more[0], more[1])
@@ -440,7 +437,7 @@ def getLimits(locations, current, sortResults=True, verbose=False):
                 l[name] = (less[-2], less[-1], None)
         else:
             if len(limit[name]['=']) > 0:
-                l[name] = (None,  limit[name]['='].keys()[0], None)
+                l[name] = (None, list(limit[name]['='].keys())[0], None)
             else:
                 l[name] = (lim_min,  None, lim_max)
     return l

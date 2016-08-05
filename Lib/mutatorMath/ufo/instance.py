@@ -158,7 +158,7 @@ class InstanceWriter(object):
                 if "." not in name:
                     self._missingUnicodes.append(name)
                 continue
-            k = u.keys()
+            k = list(u.keys())
             self.unicodeValues[name] = k[0]
         return self.unicodeValues
                 
@@ -168,8 +168,7 @@ class InstanceWriter(object):
         for locationName, (source, loc) in self.sources.items():
             for glyph in source:
                 glyphNames[glyph.name] = 1
-        names = glyphNames.keys()
-        names.sort()
+        names = sorted(glyphNames.keys())
         return names
     
     def setLocation(self, locationObject):

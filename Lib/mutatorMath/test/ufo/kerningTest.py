@@ -1,18 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-
-This is a test for a very specific problem that can occur
-when two or more masters have valid kerning and groups,
-but interpolations receive exceptions from both masters.
-These exceptions can be in conflict.
-It is hard to predict these conflicts exclusively on the input.
-But they are easy to detect using the kerning validator from
-ufoLib. 
-
-20160425 Changes in the validation of kerning in Defcon made this test irrelevant. 
-"""
-
+from __future__ import print_function
 from defcon.objects.font import Font
 from fontMath import MathKerning
 
@@ -23,6 +10,19 @@ from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocum
 from mutatorMath.objects.location import Location
 
 import os, sys, shutil
+
+"""
+
+This is a test for a very specific problem that can occur
+when two or more masters have valid kerning and groups,
+but interpolations receive exceptions from both masters.
+These exceptions can be in conflict.
+It is hard to predict these conflicts exclusively on the input.
+But they are easy to detect using the kerning validator from
+ufoLib.
+
+20160425 Changes in the validation of kerning in Defcon made this test irrelevant.
+"""
 
 def addGlyphs(font):
     # we need to add the glyphs
@@ -90,7 +90,7 @@ def testOuroborosKerning(rootPath, cleanUp=True):
         testLogFile = open(logPath, 'w')
         testLogFile.close()
     except:
-        print "Can't make a logfile."
+        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(

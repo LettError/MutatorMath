@@ -314,8 +314,7 @@ class DesignSpaceDocumentWriter(object):
     def writeWarp(self, warpDict):
         """ Write a list of (in, out) values for a warpmap """
         warpElement = ET.Element("warp")
-        axisNames = warpDict.keys()
-        axisNames = sorted(axisNames)
+        axisNames = sorted(warpDict.keys())
         for name in axisNames:
             axisElement = ET.Element("axis")
             axisElement.attrib['name'] = name
