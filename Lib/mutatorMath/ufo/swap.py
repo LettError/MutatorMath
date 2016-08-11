@@ -1,5 +1,18 @@
 import os
-    
+
+
+"""
+
+    Swap the contents of two glyphs.
+        - contours
+        - components
+        - width
+        - group membership
+        - kerning
+
+    Remap components
+
+"""
 def swapGlyphname(font, oldName, newName, swapNameExtension = "____swap"):
     if not oldName in font or not newName in font:
         return None
@@ -75,28 +88,23 @@ def swapGlyphname(font, oldName, newName, swapNameExtension = "____swap"):
         del font[r]
 
 
-# tests need fixing, or integrate in the other tests.
+if __name__ == "__main__":
+    from defcon.objects.font import Font
+    import os
+    root = os.getcwd()
+    srcPath = os.path.join(root, "../", "test", "ufo", "data", "sources", "swap", "Swap.ufo")    #"../../test/ufo/data/sources/swap/RulesTestFont.ufo"
+    dstPath = os.path.join(root, "../", "test", "ufo", "data", "instances", "S", "SwapTestOutput.ufo")    #"../../test/ufo/data/sources/swap/RulesTestFont.ufo"
+    
+    # start with a fresh defcon font
+    f = Font(srcPath)
+    swapGlyphname(f, "a", "a.alt")
+    swapGlyphname(f, "adieresis", "adieresis.alt")
+    f.info.styleName = "Swapped"
+    f.save(dstPath)
+    
+    # test the results in newly opened fonts
+    old = Font(srcPath)
+    new = Font(dstPath)
+    assert new.kerning.get(("a", "a")) == old.kerning.get(("a.alt","a.alt"))
+    assert new.kerning.get(("a.alt", "a.alt")) == old.kerning.get(("a","a"))
 
-# if __name__ == "__main__":
-#     from defcon.objects.font import Font
-#     srcPath = "../test/ufo/data/sources/swap/RulesTestFont.ufo"
-#     dstPath = "../test/ufo/data/sources/swap/RulesTestFont_swapped.ufo"
-    
-#     # close any open fonts
-#     #for f in AllFonts():
-#     #    if os.path.basename(f.path) == os.path.basename(dstPath):
-#     #        f.close()
-            
-#     # start with a fresh defcon font
-#     f = Font(srcPath)
-#     swapGlyphname(f, "a", "a.alt")
-#     swapGlyphname(f, "adieresis", "adieresis.alt")
-#     f.info.styleName = "Swapped"
-#     f.save(dstPath)
-    
-#     # test the results in newly opened fonts
-#     old = OpenFont(srcPath)
-#     new = OpenFont(dstPath)
-#     assert new.kerning.get(("a", "a")) == old.kerning.get(("a.alt","a.alt"))
-#     assert new.kerning.get(("a.alt", "a.alt")) == old.kerning.get(("a","a"))
-#     
