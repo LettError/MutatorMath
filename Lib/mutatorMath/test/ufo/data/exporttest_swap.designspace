@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<designspace format="3">
+    <sources>
+        <source filename="sources/swap/Swap.ufo" name="master_1">
+            <lib copy="1" />
+            <groups copy="1" />
+            <info copy="1" />
+            <location>
+                <dimension name="weight" xvalue="0.000000" />
+            </location>
+        </source>
+        <source filename="sources/swap/Swap.ufo" name="master_2">
+            <location>
+                <dimension name="weight" xvalue="1000.000000" />
+            </location>
+        </source>
+    </sources>
+    <instances>
+        <instance familyname="SwapTestFamily" filename="instances/S/SwapTestOutput.ufo" stylename="TestStyleName">
+            <location>
+                <dimension name="weight" xvalue="0.000000" />
+            </location>
+            <swaps>
+                <swap name="a" with="a.alt" />
+                <swap name="adieresis" with="adieresis.alt" />
+            </swaps>
+            <info />
+            <kerning />
+        </instance>
+    </instances>
+    <warp>
+        <axis name="weight">
+            <point input="0" output="100.0" />
+            <point input="100" output="155.0" />
+            <point input="200" output="240.25" />
+            <point input="300" output="372.3875" />
+            <point input="400" output="577.200625" />
+            <point input="500" output="894.66096875" />
+            <point input="600" output="1386.72450156" />
+            <point input="700" output="2149.42297742" />
+            <point input="800" output="3331.605615" />
+            <point input="900" output="5163.98870326" />
+            <point input="1000" output="8004.18249005" />
+        </axis>
+    </warp>
+</designspace>

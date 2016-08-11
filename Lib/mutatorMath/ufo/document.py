@@ -236,6 +236,24 @@ class DesignSpaceDocumentWriter(object):
         allInstances = self.root.findall('.instances')[0].append(self.currentInstance)
         self.currentInstance = None
 
+    def writeSwap(self, name, swapName):
+        """ Add a swap element to the current instance.
+            * name: the name of the source glyph
+            * swapName: the name of the other glyph
+        """
+        if self.currentInstance is None:
+            return
+        swapElement = ET.Element('swap')
+        swapElement.attrib['name'] = name
+        swapElement.attrib['with'] = swapName
+
+        if self.currentInstance.findall('.swaps') == []:
+            swapsElement = ET.Element('swaps')
+            self.currentInstance.append(swapsElement)
+        else:
+            swapsElement = self.currentInstance.findall('.swaps')[0]
+        swapsElement.append(swapElement)
+
     def writeGlyph(self,
             name,
             unicodeValue=None,
@@ -655,6 +673,14 @@ class DesignSpaceDocumentReader(object):
             if self.libSource in self.sources:
                 libSourceObject, loc = self.sources[self.libSource]
                 instanceObject.setLib(libSourceObject.lib)
+
+        # we're done calculating. Now process the swaps
+        for swapElement in instanceElement.findall('.swaps/swap'):
+            name1 = swapElement.attrib.get("name")
+            name2 = swapElement.attrib.get("with")
+            print('swap', name1, name2)
+            instanceObject.addSwap(name1, name2)
+        instanceObject.processSwaps()
 
         # save the instance. Done.
         success, report = instanceObject.save()

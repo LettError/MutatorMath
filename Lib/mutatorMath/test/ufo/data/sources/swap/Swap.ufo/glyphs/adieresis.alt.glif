@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="adieresis.alt" format="1">
+  <advance width="955"/>
+  <note>
+  </note>
+  <outline>
+    <component base="a.alt" yOffset="-60"/>
+    <component base="dieresis" xOffset="273" yOffset="-10"/>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.typemytype.robofont.mark</key>
+      <array>
+        <real>1.0</real>
+        <real>1.0</real>
+        <real>0.0</real>
+        <real>1.0</real>
+      </array>
+    </dict>
+  </lib>
+</glyph>

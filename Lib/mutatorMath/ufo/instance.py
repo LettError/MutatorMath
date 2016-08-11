@@ -10,6 +10,8 @@ from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
 from fontMath.mathGlyph import MathGlyph
 
+from mutatorMath.ufo.swap import swapGlyphname
+
 import defcon
 import os
 
@@ -49,6 +51,7 @@ class InstanceWriter(object):
         self.postScriptFontName = None
         self.locationObject = None
         self.unicodeValues = {}
+        self.swaps = []              # list of glyphname pairs that need swapping
         self.verbose=verbose
         self.logger=logger
         self._failed = []            # list of glyphnames we could not generate
@@ -174,6 +177,16 @@ class InstanceWriter(object):
     def setLocation(self, locationObject):
         """ Set the location directly. """
         self.locationObject = locationObject
+
+    def addSwap(self, glyphName, withName):
+        """ Add glyph name swap pairs """
+        self.swaps.append((glyphName, withName))
+
+    def processSwaps(self):
+        """ Process any swap pairs we might have """
+        for a, b in self.swaps:
+            print('processing swap', a, b)
+            swapGlyphname(self.font, a, b)
     
     def addInfo(self, instanceLocation=None, sources=None, copySourceName=None):
         """ Add font info data. """
