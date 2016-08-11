@@ -185,7 +185,6 @@ class InstanceWriter(object):
     def processSwaps(self):
         """ Process any swap pairs we might have """
         for a, b in self.swaps:
-            print('processing swap', a, b)
             swapGlyphname(self.font, a, b)
     
     def addInfo(self, instanceLocation=None, sources=None, copySourceName=None):

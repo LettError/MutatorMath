@@ -1,5 +1,3 @@
-import os
-
 
 """
 
@@ -10,16 +8,18 @@ import os
         - group membership
         - kerning
 
-    Remap components
+    Remap components so that glyphs that reference either of the swapped glyphs maintain appearance
+    Keep the unicode value of the original glyph
 
 """
-def swapGlyphname(font, oldName, newName, swapNameExtension = "____swap"):
+def swapGlyphname(font, oldName, newName, swapNameExtension = "_______________swap"):
     if not oldName in font or not newName in font:
         return None
     swapName = oldName + swapNameExtension
     # park the old glyph 
     if not swapName in font:
         font.newGlyph(swapName)
+    # swap the outlines
     font[swapName].clear()
     p = font[swapName].getPointPen()
     font[oldName].drawPoints(p)
@@ -89,13 +89,12 @@ def swapGlyphname(font, oldName, newName, swapNameExtension = "____swap"):
 
 
 if __name__ == "__main__":
-    from defcon.objects.font import Font
     import os
+    from defcon.objects.font import Font
     root = os.getcwd()
     srcPath = os.path.join(root, "../", "test", "ufo", "data", "sources", "swap", "Swap.ufo")    #"../../test/ufo/data/sources/swap/RulesTestFont.ufo"
     dstPath = os.path.join(root, "../", "test", "ufo", "data", "instances", "S", "SwapTestOutput.ufo")    #"../../test/ufo/data/sources/swap/RulesTestFont.ufo"
     
-    # start with a fresh defcon font
     f = Font(srcPath)
     swapGlyphname(f, "a", "a.alt")
     swapGlyphname(f, "adieresis", "adieresis.alt")
@@ -107,4 +106,5 @@ if __name__ == "__main__":
     new = Font(dstPath)
     assert new.kerning.get(("a", "a")) == old.kerning.get(("a.alt","a.alt"))
     assert new.kerning.get(("a.alt", "a.alt")) == old.kerning.get(("a","a"))
+    assert old['a'].unicode == new['a'].unicode
 

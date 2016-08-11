@@ -674,11 +674,10 @@ class DesignSpaceDocumentReader(object):
                 libSourceObject, loc = self.sources[self.libSource]
                 instanceObject.setLib(libSourceObject.lib)
 
-        # we're done calculating. Now process the swaps
+        # process the swaps
         for swapElement in instanceElement.findall('.swaps/swap'):
             name1 = swapElement.attrib.get("name")
             name2 = swapElement.attrib.get("with")
-            print('swap', name1, name2)
             instanceObject.addSwap(name1, name2)
         instanceObject.processSwaps()
 
