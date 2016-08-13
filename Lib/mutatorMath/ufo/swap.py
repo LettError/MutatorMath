@@ -8,8 +8,11 @@
         - group membership
         - kerning
 
-    Remap components so that glyphs that reference either of the swapped glyphs maintain appearance
-    Keep the unicode value of the original glyph
+    + Remap components so that glyphs that reference either of the swapped glyphs maintain appearance
+    + Keep the unicode value of the original glyph.
+    
+    Notes
+    Parking the glyphs under a swapname is a bit lazy, but at least it guarantees the glyphs have the right parent.
 
 """
 def swapGlyphname(font, oldName, newName, swapNameExtension = "_______________swap"):
