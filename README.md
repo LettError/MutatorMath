@@ -25,8 +25,8 @@ The UFO processing tools in MutatorMath need some additional libraries. Note tha
 
 | Library  | Author                    | Branch | URL                                              |
 | -------- | ------------------------- | ------ | ------------------------------------------------ | 
-| Defcon   | TypeSupply.com            | ufo3   |  https://github.com/typesupply/defcon            |
-| FontMath | TypeSupply.com            | ufo3   |  https://github.com/typesupply/fontMath          |
+| Defcon   | TypeSupply.com            | master |  https://github.com/typesupply/defcon            |
+| FontMath | TypeSupply.com            | master |  https://github.com/typesupply/fontMath          |
 | ufoLib   | UnifiedFontObject.org     | master |  https://github.com/unified-font-object/ufoLib   |
 
 ## MutatorMath terminology
