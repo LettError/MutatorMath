@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="macron" format="1">
+  <advance width="479"/>
+  <unicode hex="00AF"/>
+  <outline>
+    <contour>
+      <point x="228" y="579" type="line"/>
+      <point x="225" y="828" type="line"/>
+      <point x="245" y="901" type="line"/>
+      <point x="282" y="905" type="line"/>
+      <point x="309" y="845" type="line"/>
+      <point x="323" y="588" type="line"/>
+      <point x="291" y="585" type="line"/>
+      <point x="280" y="833" type="line"/>
+      <point x="249" y="830" type="line"/>
+      <point x="264" y="583" type="line"/>
+    </contour>
+    <contour>
+      <point x="246" y="702" type="line"/>
+      <point x="299" y="706" type="line"/>
+      <point x="305" y="659" type="line"/>
+      <point x="249" y="654" type="line"/>
+    </contour>
+    <contour>
+      <point x="340" y="813" type="line"/>
+      <point x="344" y="640" type="line"/>
+      <point x="373" y="557" type="line"/>
+      <point x="462" y="575" type="line"/>
+      <point x="464" y="636" type="line"/>
+      <point x="394" y="615" type="line"/>
+      <point x="381" y="774" type="line"/>
+      <point x="452" y="783" type="line"/>
+      <point x="451" y="832" type="line"/>
+    </contour>
+    <contour>
+      <point x="24" y="582" type="line"/>
+      <point x="39" y="868" type="line"/>
+      <point x="85" y="869" type="line"/>
+      <point x="113" y="704" type="line"/>
+      <point x="158" y="865" type="line"/>
+      <point x="198" y="868" type="line"/>
+      <point x="204" y="569" type="line"/>
+      <point x="153" y="575" type="line"/>
+      <point x="155" y="734" type="line"/>
+      <point x="121" y="599" type="line"/>
+      <point x="91" y="601" type="line"/>
+      <point x="74" y="740" type="line"/>
+      <point x="68" y="579" type="line"/>
+    </contour>
+    <contour>
+      <point x="239.0" y="700.0" type="move" name="_top"/>
+    </contour>
+    <contour>
+      <point x="239.0" y="881.0" type="move" name="top"/>
+    </contour>
+  </outline>
+  <lib>
+    <dict>
+      <key>com.typemytype.robofont.guides</key>
+      <array>
+        <dict>
+          <key>angle</key>
+          <real>90.0</real>
+          <key>isGlobal</key>
+          <false/>
+          <key>magnetic</key>
+          <integer>5</integer>
+          <key>name</key>
+          <string></string>
+          <key>x</key>
+          <integer>211</integer>
+          <key>y</key>
+          <integer>701</integer>
+        </dict>
+      </array>
+      <key>com.typemytype.robofont.mark</key>
+      <array>
+        <real>0.0</real>
+        <real>0.0</real>
+        <real>1.0</real>
+        <real>1.0</real>
+      </array>
+    </dict>
+  </lib>
+</glyph>

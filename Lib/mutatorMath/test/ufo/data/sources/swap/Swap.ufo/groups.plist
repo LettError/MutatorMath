@@ -6,21 +6,37 @@
 	<array>
 		<string>a.alt</string>
 		<string>adieresis.alt</string>
+		<string>amacron.alt</string>
 	</array>
 	<key>@MMK_L_lighter_left</key>
 	<array>
 		<string>a</string>
 		<string>adieresis</string>
+		<string>amacron</string>
+	</array>
+	<key>@MMK_L_round_left</key>
+	<array>
+		<string>o</string>
+		<string>odieresis</string>
+		<string>omacron</string>
 	</array>
 	<key>@MMK_R_fatter_right</key>
 	<array>
 		<string>a.alt</string>
 		<string>adieresis.alt</string>
+		<string>amacron.alt</string>
 	</array>
 	<key>@MMK_R_lighter_right</key>
 	<array>
 		<string>a</string>
 		<string>adieresis</string>
+		<string>amacron</string>
+	</array>
+	<key>@MMK_R_round_right</key>
+	<array>
+		<string>o</string>
+		<string>odieresis</string>
+		<string>omacron</string>
 	</array>
 </dict>
 </plist>

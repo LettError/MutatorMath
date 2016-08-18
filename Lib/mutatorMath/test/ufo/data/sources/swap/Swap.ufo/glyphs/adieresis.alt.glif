@@ -4,8 +4,8 @@
   <note>
   </note>
   <outline>
-    <component base="a.alt" yOffset="-60"/>
-    <component base="dieresis" xOffset="273" yOffset="-10"/>
+    <component base="dieresis" xOffset="273" yOffset="54"/>
+    <component base="a.alt"/>
   </outline>
   <lib>
     <dict>

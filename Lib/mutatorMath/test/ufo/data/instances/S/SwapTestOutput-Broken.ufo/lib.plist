@@ -253,6 +253,9 @@
 				<string>space</string>
 				<string>guillemotleft</string>
 				<string>guillemotright</string>
+				<string>omacron</string>
+				<string>amacron</string>
+				<string>amacron.alt</string>
 			</array>
 			<key>type</key>
 			<string>glyphList</string>

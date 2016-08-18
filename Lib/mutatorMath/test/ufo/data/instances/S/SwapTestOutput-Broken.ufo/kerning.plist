@@ -5,7 +5,7 @@
 	<key>@MMK_L_fatter_left</key>
 	<dict>
 		<key>@MMK_R_fatter_right</key>
-		<integer>270</integer>
+		<integer>100</integer>
 		<key>@MMK_R_lighter_right</key>
 		<integer>105</integer>
 		<key>@MMK_R_round_right</key>
@@ -21,7 +21,7 @@
 		<integer>-60</integer>
 		<key>@MMK_R_round_right</key>
 		<integer>-90</integer>
-		<key>adieresis.alt</key>
+		<key>adieresis</key>
 		<integer>5</integer>
 		<key>v</key>
 		<integer>-70</integer>
@@ -33,32 +33,27 @@
 		<key>@MMK_R_lighter_right</key>
 		<integer>-50</integer>
 		<key>@MMK_R_round_right</key>
-		<integer>-80</integer>
-		<key>adieresis.alt</key>
+		<integer>-100</integer>
+		<key>adieresis</key>
 		<integer>15</integer>
 		<key>v</key>
 		<integer>-60</integer>
 	</dict>
-	<key>a.alt</key>
+	<key>a</key>
 	<dict>
-		<key>adieresis.alt</key>
+		<key>adieresis</key>
 		<integer>170</integer>
 	</dict>
-	<key>adieresis</key>
+	<key>adieresis.alt</key>
 	<dict>
 		<key>@MMK_R_lighter_right</key>
 		<integer>65</integer>
-		<key>a.alt</key>
+		<key>a</key>
 		<integer>230</integer>
 		<key>o</key>
 		<integer>35</integer>
 		<key>v</key>
 		<integer>55</integer>
-	</dict>
-	<key>o</key>
-	<dict>
-		<key>adieresisalt</key>
-		<integer>0</integer>
 	</dict>
 	<key>v</key>
 	<dict>
@@ -68,7 +63,7 @@
 		<integer>-70</integer>
 		<key>@MMK_R_round_right</key>
 		<integer>-100</integer>
-		<key>adieresis.alt</key>
+		<key>adieresis</key>
 		<integer>-5</integer>
 		<key>v</key>
 		<integer>-80</integer>
