@@ -69,7 +69,7 @@ def testMutingOptions(rootPath, cleanUp=True):
         testLogFile = open(logPath, 'w')
         testLogFile.close()
     except:
-        print "Can't make a logfile."
+        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(
