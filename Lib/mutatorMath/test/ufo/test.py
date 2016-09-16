@@ -90,6 +90,8 @@ if __name__ == "__main__":
         >>> fontObj, loc = doc.sources['master_1']
         >>> loc.asTuple()
         (('width', 0.0),)
+        >>> loc.asTuple()
+        (('width', 0.0),)
         >>> fontObj, loc = doc.sources['master_2']
         >>> loc.asTuple()
         (('width', 1.0),)
