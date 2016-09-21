@@ -51,24 +51,24 @@ def buildMutator(items, warpDict=None):
     for loc, obj in ofx:
         m.addDelta(loc, obj, punch=True,  axisOnly=True)
     return bias, m
-    
+
 
 class Mutator(dict):
-    
-    """ 
+
+    """
         Calculator for multi dimensional interpolations.
-    
+
     ::
-        
+
         # The mutator needs one neutral object.
         m = Mutator(myNeutralMathObject)
-        
+
         # The mutator needs one or more deltas.
         m.addDelta(Location(pop=1), myMasterMathObject-myNeutralMathObject)
-        
+
         # The mutator calculates instances at other locations. Remember to inflate.
         m.getInstance(Location(pop=0.5)) + myNeutralMathObject
-    
+
     """
 
     def __init__(self, neutral=None):
@@ -77,25 +77,25 @@ class Mutator(dict):
         self._bender = noBend
         self._neutral = neutral
         self._bias = Location()
-    
+
     def setBender(self, bender):
         self._bender = bender
 
     def setBias(self, bias):
         self._bias = bias
 
-    def getBias(self, bias):
+    def getBias(self):
         return self._bias
 
     def setNeutral(self, aMathObject, deltaName="origin"):
         """Set the neutral object."""
         self._neutral = aMathObject
         self.addDelta(Location(), aMathObject-aMathObject, deltaName, punch=False, axisOnly=True)
-    
+
     def getNeutral(self):
         """Get the neutral object."""
         return self._neutral
-        
+
     def addDelta(self, location, aMathObject, deltaName = None, punch=False,  axisOnly=True):
         """ Add a delta at this location.
             *   location:   a Location object
@@ -114,11 +114,11 @@ class Mutator(dict):
                 raise MutatorError("Could not get instance.")
         else:
             self[location.asTuple()] = aMathObject, deltaName
-                
+
     #
     # info
-    #       
-    
+    #
+
     def getAxisNames(self):
         """
             Collect a list of axis names from all deltas.
@@ -129,7 +129,7 @@ class Mutator(dict):
         return list(s.keys())
 
     def _collectAxisPoints(self):
-        """ 
+        """
             Return a dictionary with all on-axis locations.
         """
         for l, (value, deltaName) in self.items():
@@ -141,7 +141,7 @@ class Mutator(dict):
                 if l not in self._axes[name]:
                     self._axes[name].append(l)
         return self._axes
-    
+
     def _collectOffAxisPoints(self):
         """
             Return a dictionary with all off-axis locations.
@@ -163,16 +163,16 @@ class Mutator(dict):
         for l, (value, deltaName) in self.items():
             pts.append(Location(l))
         return pts
-                
+
     def _allLocations(self):
         """
             Return a list of all locations of all objects.
         """
-        l = [] 
+        l = []
         for locationTuple in self.keys():
             l.append(Location(locationTuple))
         return l
-            
+
     #
     #   get instances
     #
@@ -201,8 +201,8 @@ class Mutator(dict):
         return total
 
     def makeInstance(self, aLocation):
-        """ 
-            Calculate an instance with the right bias and add the neutral. 
+        """
+            Calculate an instance with the right bias and add the neutral.
         """
         aLocation = self._bender(aLocation)
         if not aLocation.isAmbivalent():
@@ -267,7 +267,7 @@ class Mutator(dict):
         return f
 
     def _calcOnAxisFactor(self, aLocation, deltaAxis, deltasOnSameAxis, deltaLocation):
-        """ 
+        """
             Calculate the on-axis factors.
         """
         if deltaAxis == "origin":
@@ -324,7 +324,7 @@ class Mutator(dict):
         return r
 
     def _calcOffAxisFactor(self, aLocation, deltaLocation, limits):
-        """ 
+        """
             Calculate the off-axis factors.
         """
         relative = []
@@ -367,9 +367,9 @@ class Mutator(dict):
         return f
 
 def getLimits(locations, current, sortResults=True, verbose=False):
-    """ 
+    """
         Find the projections for each delta in the list of locations, relative to the current location.
-        Return only the dimensions that are relevant for current. 
+        Return only the dimensions that are relevant for current.
     """
     limit = {}
     for l in locations:
@@ -441,7 +441,7 @@ def getLimits(locations, current, sortResults=True, verbose=False):
             else:
                 l[name] = (lim_min,  None, lim_max)
     return l
-        
+
 if __name__ == "__main__":
     def test_singleAxis(n):
         """
@@ -532,7 +532,7 @@ if __name__ == "__main__":
         m.addDelta(Location(snap=1), -1*value-neutral, deltaName="test2")
         m.addDelta(Location(pop=1, snap=1), 50, punch=True, deltaName="test2")
         return m.getInstance(Location(pop=l, snap=n)) + neutral
-    
+
     def test_twoAxesOffAxisSmall(l, n):
         """Test for a system with two axes. Three values, two on-axis, one off-axis.
         >>> test_twoAxesOffAxisSmall(0, 0)
@@ -560,14 +560,14 @@ if __name__ == "__main__":
         m.addDelta(Location(snap=1), -1*value-neutral, deltaName="test2")
         m.addDelta(Location(pop=1, snap=1), 0.5*value-neutral, punch=True, deltaName="test2")
         return m.getInstance(Location(pop=l, snap=n)) + neutral
-    
+
     def test_getLimits(a, b, t):
         """Test the getLimits function
-        >>> test_getLimits(0, 1, 0)   
+        >>> test_getLimits(0, 1, 0)
         {'pop': (None, 0, None)}
-        >>> test_getLimits(0, 1, 0.5)   
+        >>> test_getLimits(0, 1, 0.5)
         {'pop': (0, None, 1)}
-        >>> test_getLimits(0, 1, 1)   
+        >>> test_getLimits(0, 1, 1)
         {'pop': (None, {1: [<Location pop:1 >]}, None)}
         """
         la = Location(pop=a)
@@ -575,7 +575,7 @@ if __name__ == "__main__":
         locations = [la, lb]
         test  = Location(pop=t)
         print(getLimits(locations, test))
-    
+
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
@@ -675,7 +675,7 @@ if __name__ == "__main__":
         >>> r
         [0, 0.4, 0.8, 1.2, 1.6, 2.0, 3.5999999999999996, 5.2, 6.799999999999999, 8.4, 10]
         """
-        
+
     def _test():
         import doctest
         doctest.testmod()

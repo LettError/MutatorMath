@@ -336,7 +336,18 @@ class DesignSpaceDocumentReader(object):
         *   roundGeometry:  apply rounding to all geometry
 
     """
-    _fontClass = defcon.objects.font.Font
+    _fontClass = defcon.Font
+    _glyphClass = defcon.Glyph
+    _libClass = defcon.Lib
+    _glyphContourClass = defcon.Contour
+    _glyphPointClass = defcon.Point
+    _glyphComponentClass = defcon.Component
+    _glyphAnchorClass = defcon.Anchor
+    _kerningClass = defcon.Kerning
+    _groupsClass = defcon.Groups
+    _infoClass = defcon.Info
+    _featuresClass = defcon.Features
+
     _instanceWriterClass = InstanceWriter
     _tempFontLibGlyphMuteKey = "_mutatorMath.temp.mutedGlyphNames"
     _tempFontLocationKey = "_mutatorMath.temp.fontLocation"
@@ -460,8 +471,7 @@ class DesignSpaceDocumentReader(object):
             self.reportProgress("prep", 'load', sourcePath)
             if not os.path.exists(sourcePath):
                 raise MutatorError("Source not found at %s"%sourcePath)
-            sourceObject = self._fontClass(sourcePath)
-
+            sourceObject = self._instantiateFont(sourcePath)
             # read the locations
             sourceLocationObject = None
             sourceLocationObject = self.locationFromElement(sourceElement)
@@ -786,4 +796,19 @@ class DesignSpaceDocumentReader(object):
         # calculate the glyph
         instanceObject.addGlyph(glyphName, unicodeValue, instanceLocation, glyphSources, note=note)
 
-
+    def _instantiateFont(self, path):
+        """
+        Return a instance of a font object
+        with all the given subclasses
+        """
+        return self._fontClass(path,
+            libClass=self._libClass,
+            kerningClass=self._kerningClass,
+            groupsClass=self._groupsClass,
+            infoClass=self._infoClass,
+            featuresClass=self._featuresClass,
+            glyphClass=self._glyphClass,
+            glyphContourClass=self._glyphContourClass,
+            glyphPointClass=self._glyphPointClass,
+            glyphComponentClass=self._glyphComponentClass,
+            glyphAnchorClass=self._glyphAnchorClass)
