@@ -4,7 +4,12 @@ from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
 from mutatorMath.objects.bender import Bender, noBend
 
+from ufoLib import fontInfoAttributesVersion1, fontInfoAttributesVersion2, fontInfoAttributesVersion3
+
+
 import warnings
+
+import fontMath
 
 from fontMath.mathKerning import MathKerning
 from fontMath.mathInfo import MathInfo
@@ -213,52 +218,55 @@ class InstanceWriter(object):
 
     def _copyFontInfo(self, targetInfo, sourceInfo):
         """ Copy the non-calculating fields from the source info.
-            
-            Based on UFO3 info attributes. 
-            http://unifiedfontobject.org/versions/ufo3/fontinfo.html
-
-            Not all of these fields might be present in UFO2 masters.
-            Not all of these fields will export to UFO2 instances. 
         """
-        targetInfo.versionMajor = sourceInfo.versionMajor
-        targetInfo.versionMinor = sourceInfo.versionMinor
-        targetInfo.copyright = sourceInfo.copyright
-        targetInfo.trademark = sourceInfo.trademark
-        targetInfo.note = sourceInfo.note
-        targetInfo.openTypeGaspRangeRecords = sourceInfo.openTypeGaspRangeRecords
-        #targetInfo.rangeMaxPPEM = sourceInfo.rangeMaxPPEM
-        targetInfo.openTypeHeadCreated = sourceInfo.openTypeHeadCreated
-        targetInfo.openTypeHeadFlags = sourceInfo.openTypeHeadFlags
-        targetInfo.openTypeNameDesigner = sourceInfo.openTypeNameDesigner
-        targetInfo.openTypeNameDesignerURL = sourceInfo.openTypeNameDesignerURL
-        targetInfo.openTypeNameManufacturer = sourceInfo.openTypeNameManufacturer
-        targetInfo.openTypeNameManufacturerURL = sourceInfo.openTypeNameManufacturerURL
-        targetInfo.openTypeNameLicense = sourceInfo.openTypeNameLicense
-        targetInfo.openTypeNameLicenseURL = sourceInfo.openTypeNameLicenseURL
-        targetInfo.openTypeNameVersion = sourceInfo.openTypeNameVersion
-        targetInfo.openTypeNameUniqueID = sourceInfo.openTypeNameUniqueID
-        targetInfo.openTypeNameDescription = sourceInfo.openTypeNameDescription
-        #targetInfo.openTypeNamePreferredFamilyName = sourceInfo.openTypeNamePreferredFamilyName
-        #targetInfo.openTypeNamePreferredSubfamilyName = sourceInfo.openTypeNamePreferredSubfamilyName
-        #targetInfo.openTypeNameCompatibleFullName = sourceInfo.openTypeNameCompatibleFullName
-        targetInfo.openTypeNameSampleText = sourceInfo.openTypeNameSampleText
-        targetInfo.openTypeNameWWSFamilyName = sourceInfo.openTypeNameWWSFamilyName
-        targetInfo.openTypeNameWWSSubfamilyName = sourceInfo.openTypeNameWWSSubfamilyName
-        targetInfo.openTypeNameRecords = sourceInfo.openTypeNameRecords
-        targetInfo.openTypeOS2Selection = sourceInfo.openTypeOS2Selection
-        targetInfo.openTypeOS2VendorID = sourceInfo.openTypeOS2VendorID
-        targetInfo.openTypeOS2Panose = sourceInfo.openTypeOS2Panose
-        targetInfo.openTypeOS2FamilyClass = sourceInfo.openTypeOS2FamilyClass
-        targetInfo.openTypeOS2UnicodeRanges = sourceInfo.openTypeOS2UnicodeRanges
-        targetInfo.openTypeOS2CodePageRanges = sourceInfo.openTypeOS2CodePageRanges
-        targetInfo.openTypeOS2Type = sourceInfo.openTypeOS2Type
-        
-        #targetInfo.postscriptFontName = sourceInfo.postscriptFontName
-        #targetInfo.postscriptFullName = sourceInfo.postscriptFullName
-        targetInfo.postscriptIsFixedPitch = sourceInfo.postscriptIsFixedPitch
-        targetInfo.postscriptForceBold = sourceInfo.postscriptForceBold
-        targetInfo.postscriptDefaultCharacter = sourceInfo.postscriptDefaultCharacter
-        targetInfo.postscriptWindowsCharacterSet = sourceInfo.postscriptWindowsCharacterSet
+        infoAttributes = [
+            "versionMajor",
+            "versionMinor",
+            "copyright",
+            "trademark",
+            "note",
+            "openTypeGaspRangeRecords",
+            "openTypeHeadCreated",
+            "openTypeHeadFlags",
+            "openTypeNameDesigner",
+            "openTypeNameDesignerURL",
+            "openTypeNameManufacturer",
+            "openTypeNameManufacturerURL",
+            "openTypeNameLicense",
+            "openTypeNameLicenseURL",
+            "openTypeNameVersion",
+            "openTypeNameUniqueID",
+            "openTypeNameDescription",
+            "#openTypeNamePreferredFamilyName",
+            "#openTypeNamePreferredSubfamilyName",
+            "#openTypeNameCompatibleFullName",
+            "openTypeNameSampleText",
+            "openTypeNameWWSFamilyName",
+            "openTypeNameWWSSubfamilyName",
+            "openTypeNameRecords",
+            "openTypeOS2Selection",
+            "openTypeOS2VendorID",
+            "openTypeOS2Panose",
+            "openTypeOS2FamilyClass",
+            "openTypeOS2UnicodeRanges",
+            "openTypeOS2CodePageRanges",
+            "openTypeOS2Type",
+            "postscriptIsFixedPitch",
+            "postscriptForceBold",
+            "postscriptDefaultCharacter",
+            "postscriptWindowsCharacterSet"
+        ]
+        for infoAttribute in infoAttributes:
+            copy = False
+            if self.ufoVersion == 1 and infoAttribute in fontInfoAttributesVersion1:
+                copy = True
+            elif self.ufoVersion == 2 and infoAttribute in fontInfoAttributesVersion2:
+                copy = True
+            elif self.ufoVersion == 3 and infoAttribute in fontInfoAttributesVersion3:
+                copy = True
+            if copy:
+                value = getattr(sourceInfo, infoAttribute)
+                setattr(targetInfo, infoAttribute, value)
         
     def addKerning(self, instanceLocation=None, sources=None):
         """
