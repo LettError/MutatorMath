@@ -69,6 +69,7 @@ class DesignSpaceDocumentWriter(object):
         self.verbose = verbose
         self.root = ET.Element("designspace")
         self.root.attrib['format'] = "%d"%toolVersion
+        self.root.append(ET.Element("axes"))
         self.root.append(ET.Element("sources"))
         self.root.append(ET.Element("instances"))
         self.currentInstance = None
@@ -326,6 +327,24 @@ class DesignSpaceDocumentWriter(object):
             warpElement.append(axisElement)
         self.root.append(warpElement)
 
+    def addAxis(self, tag, name, minimum, maximum, initial, warpMap=None):
+        """ Write an axis element.
+            This will be added to the <axes> element.
+         """
+        axisElement = ET.Element("axis")
+        axisElement.attrib['name'] = name
+        axisElement.attrib['tag'] = tag
+        axisElement.attrib['minimum'] = str(minimum)
+        axisElement.attrib['maximum'] = str(maximum)
+        axisElement.attrib['initial'] = str(initial)
+        if warpMap is not None:
+            for a, b in warpMap:
+                warpPt = ET.Element("point")
+                warpPt.attrib['input'] = str(a)
+                warpPt.attrib['output'] = str(b)
+                axisElement.append(warpPt)
+        self.root.findall('.axes')[0].append(axisElement)
+
 
 class DesignSpaceDocumentReader(object):
     """ Read a designspace description.
@@ -367,6 +386,9 @@ class DesignSpaceDocumentReader(object):
         self.documentFormatVersion = 0
         self.sources = {}
         self.instances = {}
+        self.axes = {}      # dict with axes info
+        self.axesOrder = [] # order in which the axes were defined
+        self.warpDict = None # let's stop using this one
         self.libSource = None
         self.groupsSource = None
         self.infoSource = None
@@ -383,7 +405,7 @@ class DesignSpaceDocumentReader(object):
         self.root = tree.getroot()
         self.readVersion()
         assert self.documentFormatVersion == 3
-        self.warpDict = None
+        self.readAxes()
         self.readWarp()
         self.readSources()
 
@@ -449,6 +471,24 @@ class DesignSpaceDocumentReader(object):
                 outputValue = float(warpPoint.attrib.get("output"))
                 warpDict[axisName].append((inputValue, outputValue))
         self.warpDict = warpDict
+
+    def readAxes(self):
+        """ Read the axes element.
+        """
+        for axisElement in self.root.findall(".axes/axis"):
+            axis = {}
+            axis['name'] = name = axisElement.attrib.get("name")
+            axis['tag'] = axisElement.attrib.get("tag")
+            axis['minimum'] = float(axisElement.attrib.get("minimum"))
+            axis['maximum'] = float(axisElement.attrib.get("maximum"))
+            axis['initial'] = float(axisElement.attrib.get("initial"))
+            axis['warp'] = []       # name is something else?
+            for warpPoint in axisElement.findall(".point"):
+                inputValue = float(warpPoint.attrib.get("input"))
+                outputValue = float(warpPoint.attrib.get("output"))
+                axis['warp'].append((inputValue, outputValue))
+            self.axes[name] = axis
+            self.axesOrder.append(axis['name'])
 
     def readSources(self):
         """ Read the source elements.
@@ -589,7 +629,7 @@ class DesignSpaceDocumentReader(object):
         instanceObject = self._instanceWriterClass(instancePath,
             ufoVersion=self.ufoVersion,
             roundGeometry=self.roundGeometry,
-            warpDict = self.warpDict,
+            axes = self.axes,
             verbose=self.verbose,
             logger=self.logger
             )

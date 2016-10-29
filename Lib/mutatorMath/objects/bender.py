@@ -37,14 +37,18 @@ class WarpMutator(mutatorMath.objects.mutator.Mutator):
 class Bender(object):
     # object with a dictionary of warpmaps
     # call instance with a location to bend it
-    def __init__(self, warpDict):
+    def __init__(self, axes):
+        # axes dict:
+        #   { <axisname>: {'warp':[], 'minimum':0, 'maximum':1000, 'initial':0, 'tag':'aaaa', 'name':"longname"}}
+        warpDict = {}
+        for axisName, axisAttributes in axes.items():
+            warpDict[axisName] = axisAttributes.get('warp', [])
         self.warps = {}
         self.maps = {}    # not needed?
         for axisName, obj in warpDict.items():
             if type(obj)==list:
                 self._makeWarpFromList(axisName, obj)
             elif hasattr(obj, '__call__'):
-                # self.warps[axisName] = WarpFunctionWrapper(obj)
                 self.warps[axisName] = obj
     
     def getMap(self, axisName):
@@ -96,32 +100,33 @@ class Bender(object):
         return new
 
 if __name__ == "__main__":
-
     # no bender
     assert noBend(Location(a=1234)) == Location(a=1234)
 
     # linear map, single axis
-    w = {'a': [(0, 0), (1000, 1000)]}
+    w = {'aaaa':{'warp': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
     b = Bender(w)
-    assert b(Location(a=0)) == Location(a=0)
-    assert b(Location(a=500)) == Location(a=500)
-    assert b(Location(a=1000)) == Location(a=1000)
+    assert b(Location(aaaa=0)) == Location(aaaa=0)
+    assert b(Location(aaaa=500)) == Location(aaaa=500)
+    assert b(Location(aaaa=1000)) == Location(aaaa=1000)
 
     # linear map, single axis
-    w = {'a': [(0, 100), (1000, 900)]}
+    #w = {'a': [(0, 100), (1000, 900)]}
+    w = {'aaaa':{'warp': [(0, 100), (1000, 900)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
     b = Bender(w)
-    assert b(Location(a=0)) == Location(a=100)
-    assert b(Location(a=500)) == Location(a=500)
-    assert b(Location(a=1000)) == Location(a=900)
+    assert b(Location(aaaa=0)) == Location(aaaa=100)
+    assert b(Location(aaaa=500)) == Location(aaaa=500)
+    assert b(Location(aaaa=1000)) == Location(aaaa=900)
 
     # one split map, single axis
-    w = {'a': [(0, 0), (500, 200), (1000, 1000)]}
+    #w = {'a': [(0, 0), (500, 200), (1000, 1000)]}
+    w = {'aaaa':{'warp': [(0, 0), (500, 200), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
     b = Bender(w)
-    assert b(Location(a=0)) == Location(a=0)
-    assert b(Location(a=250)) == Location(a=100)
-    assert b(Location(a=500)) == Location(a=200)
-    assert b(Location(a=750)) == Location(a=600)
-    assert b(Location(a=1000)) == Location(a=1000)
+    assert b(Location(aaaa=0)) == Location(aaaa=0)
+    assert b(Location(aaaa=250)) == Location(aaaa=100)
+    assert b(Location(aaaa=500)) == Location(aaaa=200)
+    assert b(Location(aaaa=750)) == Location(aaaa=600)
+    assert b(Location(aaaa=1000)) == Location(aaaa=1000)
 
     # now with warp functions
     def warpFunc_1(value):
@@ -131,17 +136,22 @@ if __name__ == "__main__":
     def warpFunc_Error(value):
         return 1/0
 
-    w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
+    w = {   'aaaa':{'warp': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0},
+            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'initital':0},
+            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'initital':0},
+        }
+    # w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
     b = Bender(w)
-    assert b(Location(a=100)) == Location(a=200)
-    assert b(Location(b=100)) == Location(b=10000)
+    assert b(Location(aaaa=100)) == Location(aaaa=200)
+    assert b(Location(bbbb=100)) == Location(bbbb=10000)
 
-    # see if the errors are caught and reported:
+    # # see if the errors are caught and reported:
     try:
         b(Location(c=-1))
     except:
         ex_type, ex, tb = sys.exc_info()
         err = 'A warpfunction "warpFunc_Error" (for axis "c") raised "integer division or modulo by zero" at location c:-1'
+        print err
         assert ex.msg == err
 
 
