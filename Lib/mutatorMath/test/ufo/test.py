@@ -342,9 +342,6 @@ if __name__ == "__main__":
 
         >>> # axis with a warp map
         >>> warpMap = grow(100,0.55,11)
-        >>> warpMap
-        [(0, 100.0), (100, 155.0), (200, 240.0), (300, 372.0), (400, 577.0), (500, 895.0), (600, 1387.0), (700, 2149.0), (800, 3332.0), (900, 5164.0), (1000, 8004.0)]
-
         >>> doc.addAxis("wght", "weight", -1000, 1000, 0, warpMap)
         >>> # axis without a warp map
         >>> doc.addAxis("wdth", "width", 0, 1000, 0)
