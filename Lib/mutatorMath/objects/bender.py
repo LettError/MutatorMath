@@ -151,7 +151,6 @@ if __name__ == "__main__":
     except:
         ex_type, ex, tb = sys.exc_info()
         err = 'A warpfunction "warpFunc_Error" (for axis "c") raised "integer division or modulo by zero" at location c:-1'
-        print err
         assert ex.msg == err
 
 
