@@ -294,7 +294,7 @@ if __name__ == "__main__":
         >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> def grow(base, factor, steps):
-        ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
+        ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
         >>> doc.addAxis("wght", "weight", 0, 1000, 0, grow(100,0.55,11))
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
@@ -338,10 +338,14 @@ if __name__ == "__main__":
         >>> documentPath = os.path.join(testRoot, 'axes_test.designspace')
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> def grow(base, factor, steps):
-        ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
+        ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
 
         >>> # axis with a warp map
-        >>> doc.addAxis("wght", "weight", -1000, 1000, 0, grow(100,0.55,11))
+        >>> warpMap = grow(100,0.55,11)
+        >>> warpMap
+        [(0, 100.0), (100, 155.0), (200, 240.0), (300, 372.0), (400, 577.0), (500, 895.0), (600, 1387.0), (700, 2149.0), (800, 3332.0), (900, 5164.0), (1000, 8004.0)]
+
+        >>> doc.addAxis("wght", "weight", -1000, 1000, 0, warpMap)
         >>> # axis without a warp map
         >>> doc.addAxis("wdth", "width", 0, 1000, 0)
         >>> doc.save()
@@ -355,15 +359,15 @@ if __name__ == "__main__":
                     'tag': 'wght',
                     'warp': [(0.0, 100.0),
                              (100.0, 155.0),
-                             (200.0, 240.25),
-                             (300.0, 372.3875),
-                             (400.0, 577.200625),
-                             (500.0, 894.66096875),
-                             (600.0, 1386.72450156),
-                             (700.0, 2149.42297742),
-                             (800.0, 3331.605615),
-                             (900.0, 5163.98870326),
-                             (1000.0, 8004.18249005)]},
+                             (200.0, 240.0),
+                             (300.0, 372.0),
+                             (400.0, 577.0),
+                             (500.0, 895.0),
+                             (600.0, 1387.0),
+                             (700.0, 2149.0),
+                             (800.0, 3332.0),
+                             (900.0, 5164.0),
+                             (1000.0, 8004.0)]},
          'width': {'initial': 0.0,
                    'maximum': 1000.0,
                    'minimum': 0.0,

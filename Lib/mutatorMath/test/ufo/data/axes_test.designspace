@@ -4,15 +4,15 @@
         <axis initial="0" maximum="1000" minimum="-1000" name="weight" tag="wght">
             <point input="0" output="100.0" />
             <point input="100" output="155.0" />
-            <point input="200" output="240.25" />
-            <point input="300" output="372.3875" />
-            <point input="400" output="577.200625" />
-            <point input="500" output="894.66096875" />
-            <point input="600" output="1386.72450156" />
-            <point input="700" output="2149.42297742" />
-            <point input="800" output="3331.605615" />
-            <point input="900" output="5163.98870326" />
-            <point input="1000" output="8004.18249005" />
+            <point input="200" output="240.0" />
+            <point input="300" output="372.0" />
+            <point input="400" output="577.0" />
+            <point input="500" output="895.0" />
+            <point input="600" output="1387.0" />
+            <point input="700" output="2149.0" />
+            <point input="800" output="3332.0" />
+            <point input="900" output="5164.0" />
+            <point input="1000" output="8004.0" />
         </axis>
         <axis initial="0" maximum="1000" minimum="0" name="width" tag="wdth" />
     </axes>
