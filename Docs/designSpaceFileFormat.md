@@ -59,7 +59,7 @@ Both instance and source elements contain paths to files. These paths are expect
 	<!-- optional: list of axis elements -->
 	<axes>
 		<axis	
-				<!-- required: 4 letter axis tag see [ref] -->
+				<!-- required: 4 letter axis tag see OpenType axis tags -->
 				tag="aaaa"
 				<!-- optional: human readable name -->
 				name="nice name for axis"
