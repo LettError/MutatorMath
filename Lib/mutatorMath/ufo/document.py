@@ -398,8 +398,6 @@ class DesignSpaceDocumentReader(object):
         if logPath is None:
             logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
         self.logger = newLogger(logPath)
-        if self.verbose:
-            self.logger.info("Executing designspace document: %s", documentPath)
         self.results = {}   # dict with instancename / filepaths for post processing.
         tree = ET.parse(self.path)
         self.root = tree.getroot()
@@ -438,7 +436,6 @@ class DesignSpaceDocumentReader(object):
     def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Process the input file and generate the instances. """
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
-        self.logger.info('Done')
         self.reportProgress("done", 'stop')
 
     def readVersion(self):
@@ -466,7 +463,7 @@ class DesignSpaceDocumentReader(object):
         for warpAxisElement in self.root.findall(".warp/axis"):
             axisName = warpAxisElement.attrib.get("name")
             warpDict[axisName] = []
-            for warpPoint in warpAxisElement.findall(".point"):
+            for warpPoint in warpAxisElement.findall(".map"):
                 inputValue = float(warpPoint.attrib.get("input"))
                 outputValue = float(warpPoint.attrib.get("output"))
                 warpDict[axisName].append((inputValue, outputValue))
@@ -478,15 +475,16 @@ class DesignSpaceDocumentReader(object):
         for axisElement in self.root.findall(".axes/axis"):
             axis = {}
             axis['name'] = name = axisElement.attrib.get("name")
+            axis['descriptiveName'] = name = axisElement.attrib.get("descriptivename")
             axis['tag'] = axisElement.attrib.get("tag")
             axis['minimum'] = float(axisElement.attrib.get("minimum"))
             axis['maximum'] = float(axisElement.attrib.get("maximum"))
-            axis['initial'] = float(axisElement.attrib.get("initial"))
-            axis['warp'] = []       # name is something else?
-            for warpPoint in axisElement.findall(".point"):
+            axis['default'] = float(axisElement.attrib.get("default"))
+            axis['map'] = []       # name is something else?
+            for warpPoint in axisElement.findall(".map"):
                 inputValue = float(warpPoint.attrib.get("input"))
                 outputValue = float(warpPoint.attrib.get("output"))
-                axis['warp'].append((inputValue, outputValue))
+                axis['map'].append((inputValue, outputValue))
             self.axes[name] = axis
             self.axesOrder.append(axis['name'])
 
@@ -535,15 +533,11 @@ class DesignSpaceDocumentReader(object):
                     self.infoSource = sourceName
                 if infoElement.attrib.get('mute') == '1':
                     self.muted['info'].append(sourceName)
-                    if self.verbose:
-                        self.logger.info("\tFont info from %s is muted.", sourceName)
 
             # read the features flag
             for featuresElement in sourceElement.findall(".features"):
                 if featuresElement.attrib.get('copy') == '1':
                     if self.featuresSource is not None:
-                        if self.verbose:
-                            self.logger.info("\tError: Features copy source already defined: %s, %s", sourceName, self.featuresSource)
                         self.featuresSource = None
                     else:
                         self.featuresSource = sourceName
@@ -622,9 +616,6 @@ class DesignSpaceDocumentReader(object):
         instancePath = os.path.join(os.path.dirname(self.path), filename)
         self.reportProgress("generate", 'start', instancePath)
         filenameTokenForResults = os.path.basename(filename)
-
-        if self.verbose:
-            self.logger.info("Writing %s to %s", os.path.basename(filename), instancePath)
 
         instanceObject = self._instanceWriterClass(instancePath,
             ufoVersion=self.ufoVersion,
@@ -727,8 +718,6 @@ class DesignSpaceDocumentReader(object):
             missing.sort()
             msg = "%s:\nPossibly missing unicodes for %s glyphs: \n%s"%(filename, len(missing),"\t"+"\n\t".join(missing))
             self.reportProgress('error', 'unicodes', msg)
-            if self.verbose:
-                self.logger.info(msg)
 
         # store
         self.instances[postScriptFontName] = instanceObject

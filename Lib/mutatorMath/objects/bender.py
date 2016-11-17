@@ -138,7 +138,6 @@ if __name__ == "__main__":
 
     w = {   'aaaa':{'warp': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0},
             'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'initital':0},
-            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'initital':0},
         }
     # w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
     b = Bender(w)
