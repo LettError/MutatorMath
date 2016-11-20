@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glyph name="I.0700" format="1">
-  <advance width="209"/>
+  <advance width="326"/>
   <outline>
     <contour>
-      <point x="189" y="0" type="line"/>
-      <point x="189" y="417" type="line"/>
-      <point x="20" y="417" type="line"/>
+      <point x="306" y="0" type="line"/>
+      <point x="306" y="510" type="line"/>
+      <point x="20" y="510" type="line"/>
       <point x="20" y="0" type="line"/>
     </contour>
   </outline>

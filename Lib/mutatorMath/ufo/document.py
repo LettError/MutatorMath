@@ -320,14 +320,14 @@ class DesignSpaceDocumentWriter(object):
             axisElement = ET.Element("axis")
             axisElement.attrib['name'] = name
             for a, b in warpDict[name]:
-                warpPt = ET.Element("point")
+                warpPt = ET.Element("map")
                 warpPt.attrib['input'] = str(a)
                 warpPt.attrib['output'] = str(b)
                 axisElement.append(warpPt)
             warpElement.append(axisElement)
         self.root.append(warpElement)
 
-    def addAxis(self, tag, name, minimum, maximum, initial, warpMap=None):
+    def addAxis(self, tag, name, minimum, maximum, default, warpMap=None):
         """ Write an axis element.
             This will be added to the <axes> element.
          """
@@ -336,10 +336,10 @@ class DesignSpaceDocumentWriter(object):
         axisElement.attrib['tag'] = tag
         axisElement.attrib['minimum'] = str(minimum)
         axisElement.attrib['maximum'] = str(maximum)
-        axisElement.attrib['initial'] = str(initial)
+        axisElement.attrib['default'] = str(default)
         if warpMap is not None:
             for a, b in warpMap:
-                warpPt = ET.Element("point")
+                warpPt = ET.Element("map")
                 warpPt.attrib['input'] = str(a)
                 warpPt.attrib['output'] = str(b)
                 axisElement.append(warpPt)
@@ -452,9 +452,9 @@ class DesignSpaceDocumentReader(object):
         ::
             <warp>
                 <axis name="weight">
-                    <point input="0" output="0" />
-                    <point input="500" output="200" />
-                    <point input="1000" output="1000" />
+                    <map input="0" output="0" />
+                    <map input="500" output="200" />
+                    <map input="1000" output="1000" />
                 </axis>
             </warp>
 
@@ -475,16 +475,18 @@ class DesignSpaceDocumentReader(object):
         for axisElement in self.root.findall(".axes/axis"):
             axis = {}
             axis['name'] = name = axisElement.attrib.get("name")
-            axis['descriptiveName'] = name = axisElement.attrib.get("descriptivename")
             axis['tag'] = axisElement.attrib.get("tag")
             axis['minimum'] = float(axisElement.attrib.get("minimum"))
             axis['maximum'] = float(axisElement.attrib.get("maximum"))
             axis['default'] = float(axisElement.attrib.get("default"))
-            axis['map'] = []       # name is something else?
+            # we're not using the map for anything.
+            axis['map'] = []
             for warpPoint in axisElement.findall(".map"):
                 inputValue = float(warpPoint.attrib.get("input"))
                 outputValue = float(warpPoint.attrib.get("output"))
                 axis['map'].append((inputValue, outputValue))
+            # there are labelnames in the element
+            # but we don't need them for building the fonts.
             self.axes[name] = axis
             self.axesOrder.append(axis['name'])
 

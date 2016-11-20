@@ -39,7 +39,7 @@ class Bender(object):
     # call instance with a location to bend it
     def __init__(self, axes):
         # axes dict:
-        #   { <axisname>: {'warp':[], 'minimum':0, 'maximum':1000, 'initial':0, 'tag':'aaaa', 'name':"longname"}}
+        #   { <axisname>: {'warp':[], 'minimum':0, 'maximum':1000, 'default':0, 'tag':'aaaa', 'name':"longname"}}
         warpDict = {}
         for axisName, axisAttributes in axes.items():
             warpDict[axisName] = axisAttributes.get('warp', [])
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     assert noBend(Location(a=1234)) == Location(a=1234)
 
     # linear map, single axis
-    w = {'aaaa':{'warp': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
+    w = {'aaaa':{'warp': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=0)
     assert b(Location(aaaa=500)) == Location(aaaa=500)
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
     # linear map, single axis
     #w = {'a': [(0, 100), (1000, 900)]}
-    w = {'aaaa':{'warp': [(0, 100), (1000, 900)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
+    w = {'aaaa':{'warp': [(0, 100), (1000, 900)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=100)
     assert b(Location(aaaa=500)) == Location(aaaa=500)
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     # one split map, single axis
     #w = {'a': [(0, 0), (500, 200), (1000, 1000)]}
-    w = {'aaaa':{'warp': [(0, 0), (500, 200), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0}}
+    w = {'aaaa':{'warp': [(0, 0), (500, 200), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=0)
     assert b(Location(aaaa=250)) == Location(aaaa=100)
@@ -136,8 +136,8 @@ if __name__ == "__main__":
     def warpFunc_Error(value):
         return 1/0
 
-    w = {   'aaaa':{'warp': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'initital':0},
-            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'initital':0},
+    w = {   'aaaa':{'warp': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0},
+            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'default':0},
         }
     # w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
     b = Bender(w)

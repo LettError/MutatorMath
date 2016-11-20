@@ -68,10 +68,10 @@ Both instance and source elements contain paths to files. These paths are expect
 				<!-- required: maximum value for axis -->
 				maximum="1000"
 				<!-- optional: default value for axis -->
-				initialvalue="96"
+				default="96"
 		/>
-			<!-- optional child element: avar table values, "warpmap"
-            <point input="<number>" output="<number>" />
+			<!-- optional child element: avar table values, "map"
+            <map input="<number>" output="<number>" />
         </axis>
 	</axes>
 

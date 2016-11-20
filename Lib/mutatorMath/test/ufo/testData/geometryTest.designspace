@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <designspace format="3">
+    <axes />
     <sources>
         <source filename="geometryMaster1.ufo" name="master_1">
             <lib copy="1" />
