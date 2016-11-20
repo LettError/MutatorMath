@@ -35,17 +35,17 @@ class InstanceWriter(object):
     
     def __init__(self, path, ufoVersion=1,
             roundGeometry=False,
-            warpDict=None,
+            axes=None,
             verbose=False,
             logger=None):
         self.path = path
         self.font = self._fontClass()
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
-        if warpDict is not None:
-            self.warpDict = warpDict
+        if axes is not None:
+            self.axes = axes
         else:
-            self.warpDict = {}
+            self.axes = {}
         self.sources = {} 
         self.muted = dict(kerning=[], info=[], glyphs={})   # muted data in the masters
         self.mutedGlyphsNames = []                          # muted glyphs in the instance
@@ -195,7 +195,7 @@ class InstanceWriter(object):
                 continue
             items.append((sourceLocation, MathInfo(source.info)))
         try:
-            bias, m = buildMutator(items, warpDict=self.warpDict)
+            bias, m = buildMutator(items, axes=self.axes)
         except:
             self.logger.exception("Error processing font info. %s", items)
             return
@@ -296,7 +296,7 @@ class InstanceWriter(object):
         if items:
             m = None
             try:
-                bias, m = buildMutator(items, warpDict=self.warpDict)
+                bias, m = buildMutator(items, axes=self.axes)
             except:
                 self.logger.exception("Error processing kerning data. %s", items)
                 return
@@ -365,7 +365,7 @@ class InstanceWriter(object):
                 continue
             glyphObject = MathGlyph(fontObject[glyphName])
             items.append((locationObject, glyphObject))
-        bias, m = buildMutator(items, warpDict=self.warpDict)
+        bias, m = buildMutator(items, axes=self.axes)
         instanceObject = m.makeInstance(instanceLocationObject)
         if self.roundGeometry:
             try:

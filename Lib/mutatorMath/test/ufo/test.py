@@ -290,14 +290,12 @@ if __name__ == "__main__":
         >>> ufoRelPath
         'data/instances/A/testOutput_glyphs.ufo'
 
-
-
-        # test the warp elements
+        # test the axes elements
         >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
         >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> def grow(base, factor, steps):
-        ...     return [(i*100, base*(1+factor)**i) for i in range(steps)]
-        >>> doc.writeWarp({'weight':grow(100,0.55,11)})
+        ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
+        >>> doc.addAxis("wght", "weight", 0, 1000, 0, grow(100,0.55,11))
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
         ...        name="master_1", 
@@ -335,6 +333,46 @@ if __name__ == "__main__":
         >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
+        # test the axes element
+        >>> from pprint import pprint
+        >>> documentPath = os.path.join(testRoot, 'axes_test.designspace')
+        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
+        >>> def grow(base, factor, steps):
+        ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
+
+        >>> # axis with a warp map
+        >>> warpMap = grow(100,0.55,11)
+        >>> doc.addAxis("wght", "weight", -1000, 1000, 0, warpMap)
+        >>> # axis without a warp map
+        >>> doc.addAxis("wdth", "width", 0, 1000, 0)
+        >>> doc.save()
+
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> pprint(doc.axes)
+        {'weight': {'default': 0.0,
+                    'map': [(0.0, 100.0),
+                            (100.0, 155.0),
+                            (200.0, 240.0),
+                            (300.0, 372.0),
+                            (400.0, 577.0),
+                            (500.0, 895.0),
+                            (600.0, 1387.0),
+                            (700.0, 2149.0),
+                            (800.0, 3332.0),
+                            (900.0, 5164.0),
+                            (1000.0, 8004.0)],
+                    'maximum': 1000.0,
+                    'minimum': -1000.0,
+                    'name': 'weight',
+                    'tag': 'wght'},
+         'width': {'default': 0.0,
+                   'map': [],
+                   'maximum': 1000.0,
+                   'minimum': 0.0,
+                   'name': 'width',
+                   'tag': 'wdth'}}
+
+        >>> doc.process(makeGlyphs=False, makeKerning=False, makeInfo=False)
         """
 
     sys.exit(doctest.testmod().failed)

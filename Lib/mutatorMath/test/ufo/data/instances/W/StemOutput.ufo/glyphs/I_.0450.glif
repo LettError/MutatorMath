@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glyph name="I.0450" format="1">
-  <advance width="104"/>
+  <advance width="231"/>
   <outline>
     <contour>
-      <point x="84" y="0" type="line"/>
-      <point x="84" y="335" type="line"/>
-      <point x="20" y="335" type="line"/>
+      <point x="211" y="0" type="line"/>
+      <point x="211" y="435" type="line"/>
+      <point x="20" y="435" type="line"/>
       <point x="20" y="0" type="line"/>
     </contour>
   </outline>

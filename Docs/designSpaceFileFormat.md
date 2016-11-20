@@ -56,7 +56,24 @@ Both instance and source elements contain paths to files. These paths are expect
 <?xml version="1.0" ?>
 <designspace format="3">
 
-
+	<!-- optional: list of axis elements -->
+	<axes>
+		<axis	
+				<!-- required: 4 letter axis tag see OpenType axis tags -->
+				tag="aaaa"
+				<!-- optional: human readable name -->
+				name="nice name for axis"
+				<!-- required: minimum value for axis -->
+				minimum="72"
+				<!-- required: maximum value for axis -->
+				maximum="1000"
+				<!-- optional: default value for axis -->
+				default="96"
+		/>
+			<!-- optional child element: avar table values, "map"
+            <map input="<number>" output="<number>" />
+        </axis>
+	</axes>
 
 	<!-- required: one sources element -->
 	<sources>
@@ -160,6 +177,9 @@ Both instance and source elements contain paths to files. These paths are expect
 
 </designspace>
 ```
+
+## The axis element
+
 
 ## The source element
 

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ascender</key>
+	<integer>750</integer>
+	<key>capHeight</key>
+	<integer>750</integer>
+	<key>descender</key>
+	<integer>-250</integer>
 	<key>familyName</key>
 	<string>TestFamily</string>
 	<key>postscriptBlueValues</key>
@@ -24,5 +30,9 @@
 	</array>
 	<key>styleName</key>
 	<string>TestStyleName</string>
+	<key>unitsPerEm</key>
+	<integer>1000</integer>
+	<key>xHeight</key>
+	<integer>500</integer>
 </dict>
 </plist>
