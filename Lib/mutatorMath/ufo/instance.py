@@ -155,7 +155,7 @@ class InstanceWriter(object):
         for name, u in values.items():
             if len(u) > 1:
                 msg = u", ".join([str(v) for v in u.keys()])
-                if self.verbose:
+                if self.verbose and self.logger:
                     self.logger.info("\tMultiple unicode values for glyph %s: %s"%(name, msg))
                 continue
             if len(u) == 0:
@@ -197,7 +197,8 @@ class InstanceWriter(object):
         try:
             bias, m = buildMutator(items, axes=self.axes)
         except:
-            self.logger.exception("Error processing font info. %s", items)
+            if self.logger:
+                self.logger.exception("Error processing font info. %s", items)
             return
         instanceObject = m.makeInstance(instanceLocation)
         if self.roundGeometry:
@@ -298,7 +299,8 @@ class InstanceWriter(object):
             try:
                 bias, m = buildMutator(items, axes=self.axes)
             except:
-                self.logger.exception("Error processing kerning data. %s", items)
+                if self.logger:
+                    self.logger.exception("Error processing kerning data. %s", items)
                 return
             instanceObject = m.makeInstance(instanceLocation)
             if self.roundGeometry:
@@ -371,11 +373,13 @@ class InstanceWriter(object):
             try:
                 instanceObject = instanceObject.round()
             except AttributeError:
-                self.logger.info("MathGlyph object missing round() method.")
+                if self.logger:
+                    self.logger.info("MathGlyph object missing round() method.")
         try:
             instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
         except TypeError:
-            self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
+            if self.logger:
+                self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
             instanceObject.extractGlyph(targetGlyphObject)
     
     def save(self):

@@ -85,12 +85,6 @@ def testOuroborosKerning(rootPath, cleanUp=True):
     # that works, let's do it via MutatorMath
     path1, path2, path3 = makeTestFonts(rootPath)
     documentPath = os.path.join(rootPath, 'kerningTest.designspace')
-    logPath = os.path.join(rootPath,"kerningTest.log")
-    try:
-        testLogFile = open(logPath, 'w')
-        testLogFile.close()
-    except:
-        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(
@@ -121,16 +115,8 @@ def testOuroborosKerning(rootPath, cleanUp=True):
     doc.save()
 
     # execute the designspace. Kerning errors should be tripped by the 
-    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, logPath=logPath, progressFunc=testingProgressFunc)
+    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, progressFunc=testingProgressFunc)
     doc.process(makeGlyphs=True, makeKerning=True, makeInfo=True)
-
-    # did we log the error?
-    report = u"""invalidInstance.ufo:\nThese kerning pairs failed validation and have been removed:\nglyphOne, public.kern2.@MMK_R_two (-400) conflicts with public.kern1.@MMK_L_one, glyphThree (-250)\npublic.kern1.@MMK_L_one, glyphThree (-250) conflicts with glyphOne, public.kern2.@MMK_R_two (-400)"""
-    log = open(logPath, 'r')
-    logText = log.read()
-    log.close()
-    #print logText
-    #assert report in logText
 
     if cleanUp:
         # remove the mess

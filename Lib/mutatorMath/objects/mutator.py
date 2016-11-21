@@ -623,8 +623,8 @@ if __name__ == "__main__":
         ...    (Location(pop=0), 0),
         ...    (Location(pop=10), 10),
         ... ]
-        >>> warpdict = {'pop': [(0,0), (5, 2), (7, 7), (10,10)]}
-        >>> bias, mb = buildMutator(items, warpdict)
+        >>> axisdict = dict(pop = dict(name='pop', minimum=0, maximum=1000, default=0, map=[(0,0), (5, 2), (7, 7), (10,10)]))
+        >>> bias, mb = buildMutator(items, axisdict)
         >>> bias
         <Location pop:0 >
         >>> mb
@@ -661,8 +661,8 @@ if __name__ == "__main__":
         ...    #(Location(pop=7), 5),
         ...    (Location(pop=10), 10),
         ... ]
-        >>> warpdict = {'pop': [(0,0), (5, 2), (10,10)]}
-        >>> bias, mb = buildMutator(items, warpdict)
+        >>> axisdict = dict(pop = dict(name='pop', minimum=0, maximum=1000, default=0, map=[(0,0), (5, 2), (10,10)]))
+        >>> bias, mb = buildMutator(items, axisdict)
         >>> bias
         <Location pop:0 >
         >>> mb

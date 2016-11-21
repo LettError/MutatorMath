@@ -39,25 +39,29 @@ class Bender(object):
     # call instance with a location to bend it
     def __init__(self, axes):
         # axes dict:
-        #   { <axisname>: {'warp':[], 'minimum':0, 'maximum':1000, 'default':0, 'tag':'aaaa', 'name':"longname"}}
+        #   { <axisname>: {'map':[], 'minimum':0, 'maximum':1000, 'default':0, 'tag':'aaaa', 'name':"longname"}}
         warpDict = {}
-        for axisName, axisAttributes in axes.items():
-            warpDict[axisName] = axisAttributes.get('warp', [])
-        self.warps = {}
         self.maps = {}    # not needed?
-        for axisName, obj in warpDict.items():
-            if type(obj)==list:
-                self._makeWarpFromList(axisName, obj)
-            elif hasattr(obj, '__call__'):
-                self.warps[axisName] = obj
+        self.warps = {}
+        for axisName, axisAttributes in axes.items():
+            mapData = axisAttributes.get('map', [])
+            if type(mapData)==list:
+                self._makeWarpFromList(axisName, mapData, axisAttributes['minimum'], axisAttributes['maximum'])
+            elif hasattr(mapData, '__call__'):
+                self.warps[axisName] = mapData
     
     def getMap(self, axisName):
         return self.maps.get(axisName, [])
             
-    def _makeWarpFromList(self, axisName, warpMap):
+    def _makeWarpFromList(self, axisName, warpMap, minimum, maximum):
         if not warpMap:
-            warpMap = [(0,0), (1000,1000)]
-        self.maps[axisName] = warpMap
+            warpMap = [(minimum,minimum), (maximum,maximum)]
+        self.warps[axisName] = warpMap
+        # check for the extremes, add if necessary
+        if not sum([a==minimum for a, b in warpMap]):
+            warpMap = [(minimum,minimum)] + warpMap
+        if not sum([a==maximum for a, b in warpMap]):
+            warpMap.append((maximum,maximum))
         items = []
         for x, y in warpMap:
             items.append((Location(w=x), y))
@@ -104,7 +108,7 @@ if __name__ == "__main__":
     assert noBend(Location(a=1234)) == Location(a=1234)
 
     # linear map, single axis
-    w = {'aaaa':{'warp': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
+    w = {'aaaa':{'map': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=0)
     assert b(Location(aaaa=500)) == Location(aaaa=500)
@@ -112,21 +116,42 @@ if __name__ == "__main__":
 
     # linear map, single axis
     #w = {'a': [(0, 100), (1000, 900)]}
-    w = {'aaaa':{'warp': [(0, 100), (1000, 900)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
+    w = {'aaaa':{'map': [(0, 100), (1000, 900)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=100)
     assert b(Location(aaaa=500)) == Location(aaaa=500)
     assert b(Location(aaaa=1000)) == Location(aaaa=900)
 
+    # linear map, single axis, not mapped to 1000
+    #w = {'a': [(0, 100), (1000, 900)]}
+    w = {'aaaa':{'map': [(-1, 2), (0,0), (1, 2)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':-1, 'maximum':1, 'default':0}}
+    b = Bender(w)
+    assert b(Location(aaaa=-1)) == Location(aaaa=2)
+    assert b(Location(aaaa=-0.5)) == Location(aaaa=1)
+    assert b(Location(aaaa=0)) == Location(aaaa=0)
+    assert b(Location(aaaa=0.5)) == Location(aaaa=1)
+    assert b(Location(aaaa=1)) == Location(aaaa=2)
+
     # one split map, single axis
-    #w = {'a': [(0, 0), (500, 200), (1000, 1000)]}
-    w = {'aaaa':{'warp': [(0, 0), (500, 200), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
+    #w = {'a': [(0, 0), (500, 200), (600, 600)]}
+    w = {'aaaa':{'map': [(0, 100), (500, 200), (600, 600)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':600, 'default':0}}
+    b = Bender(w)
+    assert b(Location(aaaa=0)) == Location(aaaa=100)
+    assert b(Location(aaaa=250)) == Location(aaaa=150)
+    assert b(Location(aaaa=500)) == Location(aaaa=200)
+    assert b(Location(aaaa=600)) == Location(aaaa=600)
+    assert b(Location(aaaa=750)) == Location(aaaa=1200)
+    assert b(Location(aaaa=1000)) == Location(aaaa=2200)
+
+    # implicit extremes
+    w = {'aaaa':{'map': [(500, 200)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':600, 'default':0}}
     b = Bender(w)
     assert b(Location(aaaa=0)) == Location(aaaa=0)
     assert b(Location(aaaa=250)) == Location(aaaa=100)
     assert b(Location(aaaa=500)) == Location(aaaa=200)
-    assert b(Location(aaaa=750)) == Location(aaaa=600)
-    assert b(Location(aaaa=1000)) == Location(aaaa=1000)
+    assert b(Location(aaaa=600)) == Location(aaaa=600)
+    assert b(Location(aaaa=750)) == Location(aaaa=1200)
+    assert b(Location(aaaa=1000)) == Location(aaaa=2200)
 
     # now with warp functions
     def warpFunc_1(value):
@@ -136,8 +161,8 @@ if __name__ == "__main__":
     def warpFunc_Error(value):
         return 1/0
 
-    w = {   'aaaa':{'warp': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0},
-            'bbbb':{'warp': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'default':0},
+    w = {   'aaaa':{'map': warpFunc_1, 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0},
+            'bbbb':{'map': warpFunc_2, 'name':'bbbbAxis', 'tag':'bbbb', 'minimum':0, 'maximum':1000, 'default':0},
         }
     # w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
     b = Bender(w)
