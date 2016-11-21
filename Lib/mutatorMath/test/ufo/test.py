@@ -318,7 +318,7 @@ if __name__ == "__main__":
         >>> doc.startInstance(
         ...        fileName=testOutputFileName,
         ...        familyName="TestFamily",
-        ...        styleName="TestStyleName",
+        ...        styleName="Warped",
         ...        location=testLocation)
         >>> doc.writeInfo()
         >>> doc.writeKerning()
@@ -358,7 +358,7 @@ if __name__ == "__main__":
         >>> doc.startInstance(
         ...        fileName=testOutputFileName,
         ...        familyName="TestFamily",
-        ...        styleName="TestStyleName",
+        ...        styleName="NotWarped",
         ...        location=testLocation)
         >>> doc.writeInfo()
         >>> doc.writeKerning()
