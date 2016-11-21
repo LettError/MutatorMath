@@ -15,3 +15,5 @@ Lib/support/mutatorMath-performance.py
 .coverage
 .coverage.*
 layerinfo.plist
+Lib/mutatorMath/test/ufo/data/instances
+Lib/mutatorMath/test/ufo/testData
