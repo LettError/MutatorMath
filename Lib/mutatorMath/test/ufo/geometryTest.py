@@ -68,12 +68,6 @@ def testGeometry(rootPath, cleanUp=True):
     # that works, let's do it via MutatorMath
     path1, path2, path3, path4, path5 = makeTestFonts(rootPath)
     documentPath = os.path.join(rootPath, 'geometryTest.designspace')
-    logPath = os.path.join(rootPath,"geometryTest.log")
-    try:
-        testLogFile = open(logPath, 'w')
-        testLogFile.close()
-    except:
-        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(
@@ -115,7 +109,7 @@ def testGeometry(rootPath, cleanUp=True):
     doc.save()
 
     # execute the designspace.
-    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, logPath=logPath, progressFunc=testingProgressFunc)
+    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, progressFunc=testingProgressFunc)
     doc.process(makeGlyphs=True, makeKerning=False, makeInfo=True)
 
     r1 = Font(path3)

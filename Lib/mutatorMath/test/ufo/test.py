@@ -35,7 +35,6 @@ if __name__ == "__main__":
         >>> sourcePath = os.path.join(testRoot, 'sources')
         >>> instancePath = os.path.join(testRoot, 'instances')
         >>> master1Path = os.path.join(testRoot, )
-        >>> logPath = os.path.join(testRoot, "tests.log")
         >>> ufoVersion=2
         >>> roundGeometry=True      # this will trigger some fails if run with a pre-ufo3 fontMath.
 
@@ -73,7 +72,7 @@ if __name__ == "__main__":
         >>> doc.writeGlyph("N", location=dict(width=0.7), masters=glyphMasters)
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
             # check if we found the UFOs
@@ -144,7 +143,7 @@ if __name__ == "__main__":
         >>> doc.writeKerning(location=dict(weight=1))
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> doc.process(makeGlyphs=False, makeKerning=True, makeInfo=False)
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
@@ -179,7 +178,7 @@ if __name__ == "__main__":
         >>> doc.writeKerning()
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=False, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=False, logPath=None)
         >>> paths = doc.getSourcePaths()
         >>> len(paths)
         2
@@ -230,7 +229,7 @@ if __name__ == "__main__":
         >>> doc.writeInfo()
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> doc.process(makeGlyphs=False, makeKerning=False, makeInfo=True)
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
@@ -330,7 +329,7 @@ if __name__ == "__main__":
         >>> doc.endInstance()
         >>> doc.save()
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
         >>> documentPath = os.path.join(testRoot, 'no_warpmap_test.designspace')
@@ -371,7 +370,7 @@ if __name__ == "__main__":
         >>> doc.save()
 
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
         # test the axes element
@@ -388,7 +387,7 @@ if __name__ == "__main__":
         >>> doc.addAxis("wdth", "width", 0, 1000, 0)
         >>> doc.save()
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
         >>> pprint(doc.axes)
         {'weight': {'default': 0.0,
                     'map': [(0.0, 100.0),

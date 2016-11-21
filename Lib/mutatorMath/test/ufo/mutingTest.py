@@ -63,13 +63,6 @@ def testMutingOptions(rootPath, cleanUp=True):
     # path1 and path2 are masters. path3 is the instance
     path1, path2, path3 = makeTestFonts(rootPath)
     documentPath = os.path.join(rootPath, 'mutingTest.designspace')
-    logPath = os.path.join(rootPath,"mutingTest.log")
-
-    try:
-        testLogFile = open(logPath, 'w')
-        testLogFile.close()
-    except:
-        print("Can't make a logfile.")
 
     doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     doc.addSource(
@@ -105,7 +98,7 @@ def testMutingOptions(rootPath, cleanUp=True):
     doc.save()
 
     # execute the designspace. 
-    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, logPath=logPath, progressFunc=testingProgressFunc)
+    doc = DesignSpaceDocumentReader(documentPath, 2, roundGeometry=True, verbose=True, progressFunc=testingProgressFunc)
     doc.process(makeGlyphs=True, makeKerning=True, makeInfo=True)
 
     # look at the results

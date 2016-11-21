@@ -395,9 +395,11 @@ class DesignSpaceDocumentReader(object):
         self.featuresSource = None
         self.progressFunc=progressFunc
         self.muted = dict(kerning=[], info=[], glyphs={})
-        if logPath is None:
+        if logPath is not None:
             logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
-        self.logger = newLogger(logPath)
+            self.logger = newLogger(logPath)
+        else:
+            self.logger = None
         self.results = {}   # dict with instancename / filepaths for post processing.
         tree = ET.parse(self.path)
         self.root = tree.getroot()
@@ -582,7 +584,8 @@ class DesignSpaceDocumentReader(object):
                 xValue = dimensionElement.attrib.get('xvalue')
                 xValue = float(xValue)
             except ValueError:
-                self.logger.info("KeyError in readLocation xValue %3.3f", xValue)
+                if self.logger:
+                    self.logger.info("KeyError in readLocation xValue %3.3f", xValue)
             try:
                 yValue = dimensionElement.attrib.get('yvalue')
                 if yValue is not None:
@@ -663,7 +666,7 @@ class DesignSpaceDocumentReader(object):
                 try:
                     instanceObject.addGlyph(n, unicodeValue)
                 except AssertionError:
-                    if self.verbose:
+                    if self.verbose and self.logger:
                         self.logger.info("Problem making glyph %s, skipping.", n)
             # step 2: generate all the glyphs that have special definitions.
             for glyphElement in instanceElement.findall('.glyphs/glyph'):
@@ -704,7 +707,7 @@ class DesignSpaceDocumentReader(object):
 
         # save the instance. Done.
         success, report = instanceObject.save()
-        if not success:
+        if not success and self.logger:
             # report problems other than validation errors and failed glyphs
             self.logger.info("%s:\nErrors generating: %s", filename, report)
 
@@ -714,7 +717,7 @@ class DesignSpaceDocumentReader(object):
             failed.sort()
             msg = "%s:\nErrors calculating %s glyphs: \n%s"%(filename, len(failed),"\t"+"\n\t".join(failed))
             self.reportProgress('error', 'glyphs', msg)
-            if self.verbose:
+            if self.verbose and self.logger:
                 self.logger.info(msg)
 
         # report missing unicodes
