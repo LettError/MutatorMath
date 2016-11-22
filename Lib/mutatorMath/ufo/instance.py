@@ -375,12 +375,17 @@ class InstanceWriter(object):
             except AttributeError:
                 if self.logger:
                     self.logger.info("MathGlyph object missing round() method.")
+
+
         try:
             instanceObject.extractGlyph(targetGlyphObject, onlyGeometry=True)
         except TypeError:
-            if self.logger:
-                self.logger.info("MathGlyph object extractGlyph() does not support onlyGeometry attribute.")
-            instanceObject.extractGlyph(targetGlyphObject)
+            # this causes ruled glyphs to end up in the wrong glyphname
+            # but defcon2 objects don't support it
+            pPen = targetGlyphObject.getPointPen()
+            targetGlyphObject.clear()
+            instanceObject.drawPoints(pPen)
+            targetGlyphObject.width = instanceObject.width
     
     def save(self):
         """ Save the UFO."""

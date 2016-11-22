@@ -17,3 +17,4 @@ Lib/support/mutatorMath-performance.py
 layerinfo.plist
 Lib/mutatorMath/test/ufo/data/instances
 Lib/mutatorMath/test/ufo/testData
+no_warpmap_test.designspace
