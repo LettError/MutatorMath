@@ -30,11 +30,18 @@ if __name__ == "__main__":
     def test1():
         """
         >>> import time
+        >>> from mutatorMath.ufo.document import initializeLogger
         >>> testRoot = os.path.join(os.path.dirname(__file__), 'data')
         >>> documentPath = os.path.join(testRoot, 'exporttest_basic.designspace')
         >>> sourcePath = os.path.join(testRoot, 'sources')
         >>> instancePath = os.path.join(testRoot, 'instances')
         >>> master1Path = os.path.join(testRoot, )
+        >>> #logPath = None # 
+        >>> logPath = os.path.join(testRoot, "tests.log")
+        >>> if logPath is not None:
+        ...     if os.path.exists(logPath):
+        ...         os.remove(logPath)
+        ...     initializeLogger(logPath)
         >>> ufoVersion=2
         >>> roundGeometry=True      # this will trigger some fails if run with a pre-ufo3 fontMath.
 
@@ -72,7 +79,7 @@ if __name__ == "__main__":
         >>> doc.writeGlyph("N", location=dict(width=0.7), masters=glyphMasters)
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
             # check if we found the UFOs
@@ -143,7 +150,7 @@ if __name__ == "__main__":
         >>> doc.writeKerning(location=dict(weight=1))
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=False, makeKerning=True, makeInfo=False)
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
@@ -153,7 +160,7 @@ if __name__ == "__main__":
 
             # test the effects of muting the kerning
         >>> documentPath = os.path.join(testRoot, 'exporttest_kerning_muted.designspace')
-        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=False)
+        >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
         >>> doc.addSource(
         ...        os.path.join(sourcePath, "light", "LightCondensed.ufo"),
         ...        name="master_1", 
@@ -178,7 +185,7 @@ if __name__ == "__main__":
         >>> doc.writeKerning()
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=False, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> paths = doc.getSourcePaths()
         >>> len(paths)
         2
@@ -229,7 +236,7 @@ if __name__ == "__main__":
         >>> doc.writeInfo()
         >>> doc.endInstance()
         >>> doc.save()
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=False, makeKerning=False, makeInfo=True)
         >>> assert os.path.basename(testOutputFileName) in doc.results
         >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
@@ -243,8 +250,6 @@ if __name__ == "__main__":
         >>> assert instance.info.versionMajor == 1
         >>> assert instance.info.openTypeOS2VendorID == "ADBE"
         >>> assert instance.info.copyright == "Copyright-token-string"
-
-
 
             # test the build script
         >>> documentPath = os.path.join(testRoot, 'exporttest_build.designspace')
@@ -329,7 +334,7 @@ if __name__ == "__main__":
         >>> doc.endInstance()
         >>> doc.save()
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
         >>> documentPath = os.path.join(testRoot, 'no_warpmap_test.designspace')
@@ -370,7 +375,7 @@ if __name__ == "__main__":
         >>> doc.save()
 
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> doc.process(makeGlyphs=True, makeKerning=False, makeInfo=False)
 
         # test the axes element
@@ -387,7 +392,7 @@ if __name__ == "__main__":
         >>> doc.addAxis("wdth", "width", 0, 1000, 0)
         >>> doc.save()
 
-        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=None)
+        >>> doc = DesignSpaceDocumentReader(documentPath, ufoVersion, roundGeometry=roundGeometry, verbose=True, logPath=logPath)
         >>> pprint(doc.axes)
         {'weight': {'default': 0.0,
                     'map': [(0.0, 100.0),

@@ -24,17 +24,9 @@ from mutatorMath.ufo.instance import InstanceWriter
 
 """
 
-def newLogger(proposedLogPath):
-    """ Create a new logging object at this path """
-    logger = logging.getLogger("mutatorMath")
-    handler = logging.FileHandler(proposedLogPath, 'w')
-    formatter = logging.Formatter('%(asctime)s MutatorMath %(message)s')
-    handler.setFormatter(formatter)
-    for h in logger.handlers[:]:
-        logger.removeHandler(h)
-    logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
-    return logger
+import logging
+def initializeLogger(proposedLogPath):
+    logging.basicConfig(filename=proposedLogPath, level=logging.INFO, format='%(asctime)s %(message)s')
 
 def _indent(elem, whitespace="    ", level=0):
     # taken from http://effbot.org/zone/element-lib.htm#prettyprint
@@ -72,6 +64,9 @@ class DesignSpaceDocumentWriter(object):
         self.root.append(ET.Element("axes"))
         self.root.append(ET.Element("sources"))
         self.root.append(ET.Element("instances"))
+        self.logger = None
+        if verbose:
+            self.logger = logging.getLogger("mutatorMath")
         self.currentInstance = None
 
     def save(self, pretty=True):
@@ -81,6 +76,8 @@ class DesignSpaceDocumentWriter(object):
             _indent(self.root, whitespace=self._whiteSpace)
         tree = ET.ElementTree(self.root)
         tree.write(self.path, encoding="utf-8", method='xml', xml_declaration=True)
+        if self.logger:
+            self.logger.info("Writing %s", self.path)
 
     def _makeLocationElement(self, locationObject, name=None):
         """ Convert Location object to an locationElement."""
@@ -382,7 +379,6 @@ class DesignSpaceDocumentReader(object):
         self.path = documentPath
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
-        self.verbose = verbose
         self.documentFormatVersion = 0
         self.sources = {}
         self.instances = {}
@@ -395,16 +391,16 @@ class DesignSpaceDocumentReader(object):
         self.featuresSource = None
         self.progressFunc=progressFunc
         self.muted = dict(kerning=[], info=[], glyphs={})
-        if logPath is not None:
-            logPath = os.path.join(os.path.dirname(documentPath), "mutatorMath.log")
-            self.logger = newLogger(logPath)
-        else:
-            self.logger = None
+        self.verbose = verbose
+        self.logger = None
+        if self.verbose:
+            self.logger = logging.getLogger("mutatorMath")
         self.results = {}   # dict with instancename / filepaths for post processing.
         tree = ET.parse(self.path)
         self.root = tree.getroot()
         self.readVersion()
         assert self.documentFormatVersion == 3
+
         self.readAxes()
         self.readWarp()
         self.readSources()
@@ -437,6 +433,8 @@ class DesignSpaceDocumentReader(object):
 
     def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Process the input file and generate the instances. """
+        if self.logger:
+            self.logger.info("Reading %s", self.path)
         self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
         self.reportProgress("done", 'stop')
 
@@ -620,6 +618,8 @@ class DesignSpaceDocumentReader(object):
 
         instancePath = os.path.join(os.path.dirname(self.path), filename)
         self.reportProgress("generate", 'start', instancePath)
+        if self.verbose and self.logger:
+            self.logger.info("\tGenerating instance %s", os.path.basename(instancePath))
         filenameTokenForResults = os.path.basename(filename)
 
         instanceObject = self._instanceWriterClass(instancePath,

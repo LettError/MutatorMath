@@ -7,7 +7,7 @@ from mutatorMath.objects.bender import Bender, noBend
 from ufoLib import fontInfoAttributesVersion1, fontInfoAttributesVersion2, fontInfoAttributesVersion3
 
 
-import warnings
+import warnings, logging
 
 import fontMath
 
@@ -55,7 +55,10 @@ class InstanceWriter(object):
         self.locationObject = None
         self.unicodeValues = {}
         self.verbose=verbose
-        self.logger=logger
+        self.logger = None
+        if self.verbose:
+            self.logger = logging.getLogger("mutatorMath")
+
         self._failed = []            # list of glyphnames we could not generate
         self._missingUnicodes = []   # list of glyphnames with missing unicode values
             
@@ -85,7 +88,7 @@ class InstanceWriter(object):
                 self.font.groups[name] = checked
         if skipping:
             if self.verbose and self.logger:
-                self.logger.info("Some glyphs were removed from groups: %s", ", ".join(skipping))
+                self.logger.info("\tNote: some glyphnames were removed from groups: %s (unavailable in the font)", ", ".join(skipping))
         if kerningGroupConversionRenameMaps:
             # in case the sources were UFO2, 
             # and defcon upconverted them to UFO3
@@ -289,7 +292,7 @@ class InstanceWriter(object):
             if sourceName in self.muted['kerning']:
                 # kerning in this master was muted, so do not add.
                 if self.verbose and self.logger:
-                    self.logger.info("Muting kerning data for %s", instanceLocation)
+                    self.logger.info("\tMuting kerning data for %s", instanceLocation)
                 continue
             if len(source.kerning.keys())>0:
                 items.append((sourceLocation, MathKerning(source.kerning)))
@@ -300,7 +303,7 @@ class InstanceWriter(object):
                 bias, m = buildMutator(items, axes=self.axes)
             except:
                 if self.logger:
-                    self.logger.exception("Error processing kerning data. %s", items)
+                    self.logger.exception("\tError processing kerning data. %s", items)
                 return
             instanceObject = m.makeInstance(instanceLocation)
             if self.roundGeometry:
@@ -339,8 +342,8 @@ class InstanceWriter(object):
                 glyphMasters.append(d)
         else:
             # use the glyph sources provided
-            if self.verbose and self.logger:
-                self.logger.info("\tGlyph %s has special masters %s", glyphName, sources)
+            # if self.verbose and self.logger:
+            #     self.logger.info("\tGlyph %s has special masters %s", glyphName, sources)
             glyphMasters = sources
         # make the glyphs
         try:
@@ -373,7 +376,7 @@ class InstanceWriter(object):
             try:
                 instanceObject = instanceObject.round()
             except AttributeError:
-                if self.logger:
+                if self.verbose and self.logger:
                     self.logger.info("MathGlyph object missing round() method.")
 
 
