@@ -3,7 +3,7 @@
 from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
 
-import sys
+import sys, warnings
 
 
 __all__ = ['Mutator', 'buildMutator']
@@ -13,7 +13,7 @@ _EPSILON = sys.float_info.epsilon
 
 def noBend(loc): return loc
 
-def buildMutator(items, axes=None):
+def buildMutator(items, axes=None, bias=None):
     """
         Build a mutator with the (location, obj) pairs in items.
         Determine the bias based on the given locations.
@@ -27,7 +27,8 @@ def buildMutator(items, axes=None):
         bender = noBend
     # the order itself does not matter, but we should always build in the same order.
     items = sorted(items)
-    bias = biasFromLocations([bender(loc) for loc, obj in items], True)
+    if not bias:
+        bias = biasFromLocations([bender(loc) for loc, obj in items], True)
     m.setBias(bias)
     n = None
     ofx = []
