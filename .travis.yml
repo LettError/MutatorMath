@@ -12,3 +12,16 @@ script:
 after_success:
   - coverage combine
   - coveralls
+deploy:
+  # deploy to PyPI on tags
+  provider: pypi
+  server: https://upload.pypi.org/legacy/
+  on:
+    repo: LettError/MutatorMath
+    tags: true
+    all_branches: true
+    python: 3.5
+  user: anthrotype
+  password:
+    secure: fezM8kh/iosxrNrBE0IT5GSg9WDINh1TezYsk2U0fJBHnPWSxsbw4+PX4TrUxuij/6Ysl2K/nMbIfFb6y3qbOFCgIEDPXxRWWk4d2hDyWWa6qrGryOGZ9T4nqBncDqY/3eNIdJ4w6renkLsesVcjb35DkF7SCWA0ONlMxWsG5hIXu9mLorCc+tqf47hCQ1R+uNZy3W6GqnwlmEfxkkQR3uFA+ncnLMoRs7VSJkzZneTUa6eQLCi7l9UVLP/zEk5u1m0mui6Q4pdKgVIixG9gu3U8Fe64DNv7CNNdnLyW6PXnketqPbhXZjduheS1uLh9Is9OnuyfrF8seRa0MyrOlHfwYYRisbwfzAdDhv4t9MhLdEKmpDJTt51ud2WF+aQS+m4i1fp9/5HPgL+MZaZi9jLBHz0qnct1BTh6vioMD96+OGd4+1Ig7fqMlfZWF4bHf/xVTI5LiPq2NSkcD4Lo+52o3OcOt3JYStTFaVr0ordWX39NPid+Qv2acZCezr01fnSMEDdEdff4CipfjXH66LIvZFN2+HeDz9jgt4WsqmqG2JWbcO0qYx8TU8EQO3PS+NWxzOPlu36ZUHOlexy37CEC1wbNwgvIrndgk9/ERfqGk19YvH9LHNJ1InOCGw2wzHvOXVMEgFYTlfXG05+sUUeqpteQx9SMjXoxdl4k6UE=
+  distributions: sdist bdist_wheel
