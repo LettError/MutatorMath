@@ -3,7 +3,8 @@ from __future__ import print_function, division
 import math, sys
 import itertools, operator
 
-__version__ = "1.6"
+from mutatorMath import __version__
+
 
 _EPSILON = sys.float_info.epsilon
 
