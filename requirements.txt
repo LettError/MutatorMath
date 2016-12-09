@@ -1,4 +1,4 @@
-git+https://github.com/behdad/fonttools.git#egg=fonttools
-git+https://github.com/unified-font-object/ufoLib.git#egg=ufoLib
-git+https://github.com/typesupply/defcon.git#egg=defcon
-git+https://github.com/typesupply/fontMath.git#egg=fontMath
+fonttools==3.3.0
+ufoLib==2.0.0
+defcon==0.2.0
+fontMath==0.4.1

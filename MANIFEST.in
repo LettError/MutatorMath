@@ -1,0 +1,8 @@
+include README.rst
+include LICENSE
+include requirements.txt
+
+recursive-include Lib/mutatorMath/test *.py
+recursive-include Lib/mutatorMath/test/ufo/data *.designspace *.glif *.plist *.fea
+
+recursive-include Docs *.jpg *.png *.md *.py

@@ -4,6 +4,12 @@ __pycache__/
 *.idea
 *.log
 
+# Distribution / Packaging
+*.egg-info
+*.eggs
+build
+dist
+
 Lib/support/axes.py
 
 Lib/support/mutatorMath-A.py
