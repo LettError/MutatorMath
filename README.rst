@@ -1,4 +1,4 @@
-|Build Status| |Coverage Status|
+|Build Status| |Coverage Status| |PyPI Version|
 
 MutatorMath
 ===========
@@ -234,3 +234,5 @@ Thanks
    :target: https://travis-ci.org/LettError/MutatorMath
 .. |Coverage Status| image:: https://coveralls.io/repos/github/LettError/MutatorMath/badge.svg?branch=master
    :target: https://coveralls.io/github/LettError/MutatorMath?branch=master
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/MutatorMath.svg
+   :target: https://pypi.org/project/MutatorMath/
