@@ -420,4 +420,39 @@ if __name__ == "__main__":
         >>> doc.process(makeGlyphs=False, makeKerning=False, makeInfo=False)
         """
 
+    def bender_and_mutatorTest():
+        """
+        >>> from mutatorMath.objects.bender import Bender
+        >>> from mutatorMath.objects.location import Location
+        >>> from mutatorMath.objects.mutator import buildMutator
+
+        >>> w = {'aaaa':{
+        ...     'map': [(300, 50),
+        ...          (400, 100),
+        ...          (700, 150)],
+        ...     'name':'aaaaAxis',
+        ...     'tag':'aaaa',
+        ...     'minimum':0,
+        ...     'maximum':1000,
+        ...     'default':0}}
+
+        >>> b = Bender(w)
+        >>> assert b(dict(aaaa=300)) == {'aaaa': 50}
+        >>> assert b(dict(aaaa=400)) == {'aaaa': 100}
+        >>> assert b(dict(aaaa=700)) == {'aaaa': 150}
+
+        >>> items = [
+        ...     (Location(aaaa=300), 0),
+        ...     (Location(aaaa=400), 50),
+        ...     (Location(aaaa=700), 100),
+        ... ]
+
+        >>> bias, mut = buildMutator(items, w)
+        >>> assert bias == Location(aaaa=50)
+        >>> assert mut.keys() == [(('aaaa', 100),), (('aaaa', 50),), ()]
+        >>> assert mut.makeInstance(Location(aaaa=300)) == 0
+        >>> assert mut.makeInstance(Location(aaaa=400)) == 50
+        >>> assert mut.makeInstance(Location(aaaa=700)) == 100
+        """
+
     sys.exit(doctest.testmod().failed)

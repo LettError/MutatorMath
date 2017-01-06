@@ -41,7 +41,9 @@ def buildMutator(items, axes=None, bias=None):
     if m.getNeutral() is None:
         raise MutatorError("Did not find a neutral for this system", m)
     for loc, obj in items:
-        lb = loc-bias
+        locbent = bender(loc)
+        #lb = loc-bias
+        lb = locbent-bias
         if lb.isOrigin(): continue
         if lb.isOnAxis():
             onx.append((lb, obj-m.getNeutral()))
@@ -106,7 +108,7 @@ class Mutator(dict):
                 *   True: add the difference with the instance value at that location and the delta
                 *   False: just add the delta.
         """
-        location = self._bender(location)
+        #location = self._bender(location)
         if punch:
             r = self.getInstance(location, axisOnly=axisOnly)
             if r is not None:
@@ -179,8 +181,9 @@ class Mutator(dict):
     #
 
     def getInstance(self, aLocation, axisOnly=False, getFactors=False):
+
         """ Calculate the delta at aLocation.
-            *   aLocation:  a Location object
+            *   aLocation:  a Location object, expected to be in bent space
             *   axisOnly:
                 *   True: calculate an instance only with the on-axis masters.
                 *   False: calculate an instance with on-axis and off-axis masters.
@@ -204,6 +207,7 @@ class Mutator(dict):
     def makeInstance(self, aLocation):
         """
             Calculate an instance with the right bias and add the neutral.
+            aLocation: expected to be in input space
         """
         aLocation = self._bender(aLocation)
         if not aLocation.isAmbivalent():
@@ -576,7 +580,6 @@ if __name__ == "__main__":
         locations = [la, lb]
         test  = Location(pop=t)
         print(getLimits(locations, test))
-
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
