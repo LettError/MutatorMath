@@ -449,10 +449,8 @@ if __name__ == "__main__":
 
         >>> bias, mut = buildMutator(items, w)
         >>> assert bias == Location(aaaa=50)
-        >>> expect = [(('aaaa', 100),), (('aaaa', 50),), ()]
-        >>> expect.sort()
-        >>> got = mut.keys()
-        >>> got.sort()
+        >>> expect = sorted([(('aaaa', 100),), (('aaaa', 50),), ()])
+        >>> got = sorted(mut.keys())
         >>> assert got == expect
         >>> assert mut.makeInstance(Location(aaaa=300)) == 0
         >>> assert mut.makeInstance(Location(aaaa=400)) == 50
