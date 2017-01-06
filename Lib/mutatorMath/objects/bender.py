@@ -50,6 +50,9 @@ class Bender(object):
             elif hasattr(mapData, '__call__'):
                 self.warps[axisName] = mapData
     
+    def __repr__(self):
+        return "<Bender %s>"%(str(self.warps.items()))
+
     def getMap(self, axisName):
         return self.maps.get(axisName, [])
             

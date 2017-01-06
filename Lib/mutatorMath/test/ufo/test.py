@@ -447,10 +447,26 @@ if __name__ == "__main__":
         ...     (Location(aaaa=700), 100),
         ... ]
 
-        >>> bias, mut = buildMutator(items, w)
-        >>> assert bias == Location(aaaa=50)
+        >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=400))
+        >>> bias
+        <Location aaaa:100 >
+
+        >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=700))
+        >>> bias
+        <Location aaaa:150 >
+
+        >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=300))
+        >>> bias
+        <Location aaaa:50 >
+
         >>> expect = sorted([(('aaaa', 100),), (('aaaa', 50),), ()])
+        >>> expect
+        [(), (('aaaa', 50),), (('aaaa', 100),)]
+
         >>> got = sorted(mut.keys())
+        >>> got
+        [(), (('aaaa', 50),), (('aaaa', 100),)]
+
         >>> assert got == expect
         >>> assert mut.makeInstance(Location(aaaa=300)) == 0
         >>> assert mut.makeInstance(Location(aaaa=400)) == 50

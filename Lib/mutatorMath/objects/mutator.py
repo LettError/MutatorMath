@@ -29,6 +29,9 @@ def buildMutator(items, axes=None, bias=None):
     items = sorted(items)
     if not bias:
         bias = biasFromLocations([bender(loc) for loc, obj in items], True)
+    else:
+        # note: this means that the actual bias might be different from the initial value. 
+        bias = bender(bias)
     m.setBias(bias)
     n = None
     ofx = []
