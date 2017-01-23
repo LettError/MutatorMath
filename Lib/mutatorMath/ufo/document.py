@@ -694,10 +694,12 @@ class DesignSpaceDocumentReader(object):
                 # copy the groups from the designated source to the new instance
                 # note: setGroups will filter the group members
                 # only glyphs present in the font will be added to the group.
-                if self.ufoVersion >= 3:
-                    instanceObject.setGroups(groupSourceObject.groups, kerningGroupConversionRenameMaps=groupSourceObject.kerningGroupConversionRenameMaps)
+                # Depending on the ufoversion we might or might not expect the kerningGroupConversionRenameMaps attribute.
+                if hasattr(groupSourceObject, "kerningGroupConversionRenameMaps"):
+                    renameMap = groupSourceObject.kerningGroupConversionRenameMaps
                 else:
-                    instanceObject.setGroups(groupSourceObject.groups)
+                    renameMap = {}
+                instanceObject.setGroups(groupSourceObject.groups, kerningGroupConversionRenameMaps=renameMap)
 
         # lib items
         if self.libSource is not None:
