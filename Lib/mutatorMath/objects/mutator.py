@@ -4,6 +4,7 @@ from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.location import Location, sortLocations, biasFromLocations
 
 import sys, warnings
+from operator import itemgetter
 
 
 __all__ = ['Mutator', 'buildMutator']
@@ -236,8 +237,7 @@ class Mutator(dict):
             if not (factor-_EPSILON < 0 < factor+_EPSILON) or allFactors:
                 # only add non-zero deltas.
                 deltas.append((factor, mathItem, deltaName))
-        deltas.sort()
-        deltas.reverse()
+        deltas = sorted(deltas, key=itemgetter(0, 1), reverse=True)
         return deltas
 
     #
