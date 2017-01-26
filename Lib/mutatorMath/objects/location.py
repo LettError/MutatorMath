@@ -242,8 +242,10 @@ class Location(dict):
         ::
         
             >>> l = Location(pop=1, snap=-100)
-            >>> l.asDict()
-            {'snap': -100, 'pop': 1}
+            >>> l.asDict()['snap']
+            -100
+            >>> l.asDict()['pop']
+            1
         """
         new = {}
         new.update(self)
@@ -254,8 +256,14 @@ class Location(dict):
         ::
 
             >>> l = Location(pop=1, snap=(1,10))
-            >>> l.asSortedStringDict()
-            [{'value': '1', 'axis': 'pop'}, {'value': '(1,10)', 'axis': 'snap'}]
+            >>> l.asSortedStringDict()[0]['value']
+            '1'
+            >>> l.asSortedStringDict()[0]['axis']
+            'pop'
+            >>> l.asSortedStringDict()[1]['axis']
+            'snap'
+            >>> l.asSortedStringDict()[1]['value']
+            '(1,10)'
             
         """
         data = []
@@ -1052,8 +1060,13 @@ if __name__ == "__main__":
         >>> l = [a, b, c, d, e, f]
         >>> test = Location(pop=.5, snap=.5)
         >>> from mutatorMath.objects.mutator import getLimits
-        >>> getLimits(l, test)
-        {'snap': (None, 0.5, None), 'pop': (0.35, None, 1)}
+        >>> limits = getLimits(l, test)
+        >>> 'snap' in limits and 'pop' in limits
+        True
+        >>> limits['snap']
+        (None, 0.5, None)
+        >>> limits['pop']
+        (0.35, None, 1)
 
         # sort a group of locations
         >>> sortLocations(l)

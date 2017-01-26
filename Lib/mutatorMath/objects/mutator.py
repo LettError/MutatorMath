@@ -133,7 +133,7 @@ class Mutator(dict):
         s = {}
         for l, x in self.items():
             s.update(dict.fromkeys([k for k, v in l], None))
-        return list(s.keys())
+        return s.keys()
 
     def _collectAxisPoints(self):
         """
@@ -583,11 +583,12 @@ if __name__ == "__main__":
         locations = [la, lb]
         test  = Location(pop=t)
         print(getLimits(locations, test))
+
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
-        >>> m.getAxisNames()
-        ['snap', 'pop']
+        >>> sorted(list(m.getAxisNames()))
+        ['pop', 'snap']
         """
         m = Mutator()
         neutral = 0
