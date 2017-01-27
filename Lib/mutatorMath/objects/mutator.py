@@ -133,7 +133,7 @@ class Mutator(dict):
         s = {}
         for l, x in self.items():
             s.update(dict.fromkeys([k for k, v in l], None))
-        return s.keys()
+        return sorted(list(s.keys()))
 
     def _collectAxisPoints(self):
         """
@@ -587,7 +587,7 @@ if __name__ == "__main__":
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
-        >>> sorted(list(m.getAxisNames()))
+        >>> m.getAxisNames()
         ['pop', 'snap']
         """
         m = Mutator()
