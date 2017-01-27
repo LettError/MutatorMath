@@ -127,9 +127,6 @@ def testOuroborosKerning(rootPath, cleanUp=True):
     return True
 
 
-if __name__ == "__main__":
-    import sys
-    import doctest
     def test1():
         """
         >>> import time
@@ -137,4 +134,8 @@ if __name__ == "__main__":
         >>> testOuroborosKerning(os.path.join(os.getcwd(), "testData"), cleanUp=True)
         True
         """
-    sys.exit(doctest.testmod().failed)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

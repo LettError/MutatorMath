@@ -2,17 +2,17 @@
 <designspace format="3">
     <axes>
         <axis default="0" maximum="1000" minimum="-1000" name="weight" tag="wght">
-            <map input="0" output="100.0" />
-            <map input="100" output="155.0" />
-            <map input="200" output="240.0" />
-            <map input="300" output="372.0" />
-            <map input="400" output="577.0" />
-            <map input="500" output="895.0" />
-            <map input="600" output="1387.0" />
-            <map input="700" output="2149.0" />
-            <map input="800" output="3332.0" />
-            <map input="900" output="5164.0" />
-            <map input="1000" output="8004.0" />
+            <map input="0" output="100" />
+            <map input="100" output="155" />
+            <map input="200" output="240" />
+            <map input="300" output="372" />
+            <map input="400" output="577" />
+            <map input="500" output="895" />
+            <map input="600" output="1387" />
+            <map input="700" output="2149" />
+            <map input="800" output="3332" />
+            <map input="900" output="5164" />
+            <map input="1000" output="8004" />
         </axis>
         <axis default="0" maximum="1000" minimum="0" name="width" tag="wdth" />
     </axes>
