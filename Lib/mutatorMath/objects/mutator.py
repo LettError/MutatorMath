@@ -128,12 +128,12 @@ class Mutator(dict):
 
     def getAxisNames(self):
         """
-            Collect a list of axis names from all deltas.
+            Collect a set of axis names from all deltas.
         """
         s = {}
         for l, x in self.items():
             s.update(dict.fromkeys([k for k, v in l], None))
-        return list(s.keys())
+        return set(s.keys())
 
     def _collectAxisPoints(self):
         """
@@ -583,11 +583,12 @@ if __name__ == "__main__":
         locations = [la, lb]
         test  = Location(pop=t)
         print(getLimits(locations, test))
+
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
-        >>> m.getAxisNames()
-        ['snap', 'pop']
+        >>> sorted(list(m.getAxisNames()))
+        ['pop', 'snap']
         """
         m = Mutator()
         neutral = 0
