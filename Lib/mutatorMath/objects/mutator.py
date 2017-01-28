@@ -587,7 +587,7 @@ if __name__ == "__main__":
     def test_methods():
         """ Test some of the methods.
         >>> m = test_methods()
-        >>> sorted(list(m.getAxisNames()))
+        >>> sorted(m.getAxisNames())
         ['pop', 'snap']
         """
         m = Mutator()
