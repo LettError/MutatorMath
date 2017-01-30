@@ -1,4 +1,4 @@
-fonttools==3.3.0
+fonttools==3.6.1
 ufoLib==2.0.0
 defcon==0.2.0
 fontMath==0.4.1

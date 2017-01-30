@@ -130,14 +130,15 @@ def testGeometry(rootPath, cleanUp=True):
     return True
 
 
+def test1():
+    """
+    >>> import time
+    >>> import os
+    >>> testGeometry(os.path.join(os.getcwd(), "testData"), cleanUp=False)
+    True
+    """
+
+
 if __name__ == "__main__":
-    import sys
     import doctest
-    def test1():
-        """
-        >>> import time
-        >>> import os
-        >>> testGeometry(os.path.join(os.getcwd(), "testData"), cleanUp=False)
-        True
-        """
-    sys.exit(doctest.testmod().failed)
+    doctest.testmod()

@@ -6,9 +6,8 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
-  - pip install -v .
 script:
-  - coverage run --parallel-mode --source=mutatorMath Lib/mutatorMath/test/ufo/test.py
+  - coverage run --parallel-mode --source=mutatorMath setup.py test
 after_success:
   - coverage combine
   - coveralls

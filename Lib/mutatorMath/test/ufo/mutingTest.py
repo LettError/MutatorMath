@@ -128,14 +128,15 @@ def testMutingOptions(rootPath, cleanUp=True):
 
     return True
 
+
+def test1():
+    """
+    >>> import time
+    >>> import os
+    >>> testMutingOptions(os.path.join(os.getcwd(), "testData"), cleanUp=False)
+    True
+    """
+
 if __name__ == "__main__":
-    import sys
     import doctest
-    def test1():
-        """
-        >>> import time
-        >>> import os
-        >>> testMutingOptions(os.path.join(os.getcwd(), "testData"), cleanUp=False)
-        True
-        """
-    sys.exit(doctest.testmod().failed)
+    doctest.testmod()

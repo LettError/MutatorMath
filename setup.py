@@ -224,4 +224,5 @@ setup(
         "Topic :: Multimedia :: Graphics :: Editors :: Vector-Based",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
+    test_suite="mutatorMath.test.run",
 )
