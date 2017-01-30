@@ -37,19 +37,15 @@ lot of testing, these UFO3 branches have only recently become the main
 branches of development. UFOlib has moved to the unified-font-object
 repository.
 
-+---------+----------------------+-------+----------------------------------------+
-| Library | Author               | Branc | URL                                    |
-|         |                      | h     |                                        |
-+=========+======================+=======+========================================+
-| Defcon  | TypeSupply.com       | maste | https://github.com/typesupply/defcon   |
-|         |                      | r     |                                        |
-+---------+----------------------+-------+----------------------------------------+
-| FontMat | TypeSupply.com       | maste | https://github.com/typesupply/fontMath |
-| h       |                      | r     |                                        |
-+---------+----------------------+-------+----------------------------------------+
-| ufoLib  | UnifiedFontObject.or | maste | https://github.com/unified-font-object |
-|         | g                    | r     | /ufoLib                                |
-+---------+----------------------+-------+----------------------------------------+
++----------+-----------------------+--------+-----------------------------------------------+
+| Library  | Author                | Branch | URL                                           |
++==========+=======================+========+===============================================+
+| Defcon   | TypeSupply.com        | master | https://github.com/typesupply/defcon          |
++----------+-----------------------+--------+-----------------------------------------------+
+| FontMath | TypeSupply.com        | master | https://github.com/typesupply/fontMath        |
++----------+-----------------------+--------+-----------------------------------------------+
+| ufoLib   | UnifiedFontObject.org | master | https://github.com/unified-font-object/ufoLib |
++----------+-----------------------+--------+-----------------------------------------------+
 
 MutatorMath terminology
 -----------------------
