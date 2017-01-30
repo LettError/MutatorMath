@@ -237,7 +237,7 @@ class Mutator(dict):
             if not (factor-_EPSILON < 0 < factor+_EPSILON) or allFactors:
                 # only add non-zero deltas.
                 deltas.append((factor, mathItem, deltaName))
-        deltas = sorted(deltas, key=itemgetter(0, 1), reverse=True)
+        deltas = sorted(deltas, key=itemgetter(0), reverse=True)
         return deltas
 
     #
