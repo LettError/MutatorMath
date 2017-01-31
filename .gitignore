@@ -10,6 +10,12 @@ __pycache__/
 build
 dist
 
+# Unit test / coverage files
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+
 Lib/support/axes.py
 
 Lib/support/mutatorMath-A.py

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-from setuptools import setup, Command
+from setuptools import setup, Command, find_packages
 from distutils import log
 import contextlib
 
@@ -189,11 +189,7 @@ setup(
     author_email="erik@letterror.com",
     url="https://github.com/LettError/MutatorMath",
     license="BSD 3 Clause",
-    packages=[
-        "mutatorMath",
-        "mutatorMath.objects",
-        "mutatorMath.ufo",
-    ],
+    packages=find_packages("Lib", exclude=['*.test', '*.test.*']),
     package_dir={"": "Lib"},
     setup_requires=[
         'bumpversion',

@@ -141,4 +141,4 @@ def test1():
 
 if __name__ == "__main__":
     import doctest
-    doctest.testmod()
+    sys.exit(doctest.testmod().failed)
