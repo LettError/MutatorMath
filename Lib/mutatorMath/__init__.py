@@ -33,7 +33,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
 
-__version__ = "2.0.2.dev0"
+__version__ = "2.0.2"
 
 from mutatorMath.objects.location import Location
 from mutatorMath.objects.mutator import Mutator
