@@ -193,8 +193,8 @@ def test_builderBender_1():
     >>> bias, mb = buildMutator(items, axisdict)
     >>> bias
     <Location pop:0 >
-    >>> mb
-    {(): (0, 'origin'), (('pop', 10),): (10, None)}
+    >>> sorted(mb.items())
+    [((), (0, 'origin')), ((('pop', 10),), (10, None))]
     >>> mb.makeInstance(Location(pop=0))
     0
     >>> mb.makeInstance(Location(pop=1))
@@ -232,8 +232,8 @@ def test_builderBender_2():
     >>> bias, mb = buildMutator(items, axisdict)
     >>> bias
     <Location pop:0 >
-    >>> mb
-    {(): (0, 'origin'), (('pop', 10),): (10, None)}
+    >>> sorted(mb.items())
+    [((), (0, 'origin')), ((('pop', 10),), (10, None))]
     >>> mb.makeInstance(Location(pop=0))
     0
     >>> r = []
