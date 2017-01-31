@@ -29,5 +29,4 @@ def load_tests(loader, tests, ignore):
 
 
 if __name__ == '__main__':
-    unittest.main()
-
+    sys.exit(unittest.main())

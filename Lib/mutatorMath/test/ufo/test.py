@@ -471,5 +471,6 @@ def bender_and_mutatorTest():
     """
 
 if __name__ == '__main__':
+    import sys
     import doctest
-    doctest.testmod()
+    sys.exit(doctest.testmod().failed)
