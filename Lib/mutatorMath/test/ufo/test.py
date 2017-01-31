@@ -295,7 +295,7 @@ def test1():
     >>> documentPath = os.path.join(testRoot, 'warpmap_test.designspace')
     >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     >>> def grow(base, factor, steps):
-    ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
+    ...     return [(i*100, int(round(base*(1+factor)**i))) for i in range(steps)]
     >>> doc.addAxis("wght", "weight", 0, 1000, 0, grow(100,0.55,11))
     >>> doc.addSource(
     ...        os.path.join(sourcePath, "stems", "StemThin.ufo"),
@@ -380,7 +380,7 @@ def test1():
     >>> documentPath = os.path.join(testRoot, 'axes_test.designspace')
     >>> doc = DesignSpaceDocumentWriter(documentPath, verbose=True)
     >>> def grow(base, factor, steps):
-    ...     return [(i*100, round(base*(1+factor)**i)) for i in range(steps)]
+    ...     return [(i*100, int(round(base*(1+factor)**i))) for i in range(steps)]
 
     >>> # axis with a warp map
     >>> warpMap = grow(100,0.55,11)
