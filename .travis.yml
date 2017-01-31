@@ -1,16 +1,27 @@
-language: python
 sudo: false
-python:
-  - "2.7"
-  - "3.5"
+
+language: python
+
+matrix:
+  include:
+    - python: 2.7
+      env: TOXENV=py27-cov
+    - python: 3.5
+      env: TOXENV=py35-cov
+    - python: 3.6
+      env: TOXENV=py36-cov
+
 install:
-  - pip install -r requirements.txt
+  - pip install tox
   - pip install coveralls
+
 script:
-  - coverage run --parallel-mode --source=mutatorMath setup.py test
+  - tox
+
 after_success:
   - coverage combine
   - coveralls
+
 deploy:
   # deploy to PyPI on tags
   provider: pypi
