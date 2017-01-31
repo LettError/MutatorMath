@@ -123,9 +123,12 @@ def testGeometry(rootPath, cleanUp=True):
 
     if cleanUp:
         # remove the mess
+        os.remove(documentPath)
         shutil.rmtree(path1)
         shutil.rmtree(path2)
         shutil.rmtree(path3)
+        shutil.rmtree(path4)
+        shutil.rmtree(path5)
 
     return True
 
@@ -134,7 +137,8 @@ def test1():
     """
     >>> import time
     >>> import os
-    >>> testGeometry(os.path.join(os.getcwd(), "testData"), cleanUp=False)
+    >>> testData = os.path.join(os.path.dirname(__file__), "testData")
+    >>> testGeometry(testData, cleanUp=False)
     True
     """
 

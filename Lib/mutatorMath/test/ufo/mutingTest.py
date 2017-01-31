@@ -120,6 +120,7 @@ def testMutingOptions(rootPath, cleanUp=True):
     if cleanUp:
         # remove the mess
         try:
+            os.remove(documentPath)
             shutil.rmtree(path1)
             shutil.rmtree(path2)
             shutil.rmtree(path3)
@@ -133,7 +134,8 @@ def test1():
     """
     >>> import time
     >>> import os
-    >>> testMutingOptions(os.path.join(os.getcwd(), "testData"), cleanUp=False)
+    >>> testData = os.path.join(os.path.dirname(__file__), "testData")
+    >>> testMutingOptions(testData, cleanUp=False)
     True
     """
 
