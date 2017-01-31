@@ -3,7 +3,7 @@
 MutatorMath
 ===========
 
-.. figure:: Docs/mutatorMath_colorField.jpg
+.. figure:: https://raw.githubusercontent.com/LettError/MutatorMath/master/Docs/mutatorMath_colorField.jpg
    :alt: A MutatorMath Colorfield
 
    A MutatorMath Colorfield
