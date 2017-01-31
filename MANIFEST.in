@@ -1,6 +1,7 @@
 include README.rst
 include LICENSE
 include requirements.txt
+include tox.ini
 
 recursive-include Lib/mutatorMath/test *.py
 recursive-include Lib/mutatorMath/test/ufo/data *.designspace *.glif *.plist *.fea
