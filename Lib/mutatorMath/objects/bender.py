@@ -8,6 +8,9 @@ def noBend(loc): return loc
 
 class WarpMutator(mutatorMath.objects.mutator.Mutator):
     def __call__(self, value):
+        if type(value) == tuple:
+            # handle split location
+            return self.makeInstance(Location(w=value[0])), self.makeInstance(Location(w=value[1]))
         return self.makeInstance(Location(w=value))
 
 """
@@ -46,7 +49,11 @@ class Bender(object):
         for axisName, axisAttributes in axes.items():
             mapData = axisAttributes.get('map', [])
             if type(mapData)==list:
-                self._makeWarpFromList(axisName, mapData, axisAttributes['minimum'], axisAttributes['maximum'])
+                if len(mapData)==0:
+                    # this axis has no bender
+                    self.warps[axisName] = None
+                else:
+                    self._makeWarpFromList(axisName, mapData, axisAttributes['minimum'], axisAttributes['maximum'])
             elif hasattr(mapData, '__call__'):
                 self.warps[axisName] = mapData
     
@@ -98,17 +105,21 @@ class Bender(object):
         # bend a location according to the defined warps
         new = loc.copy()
         for dim, warp in self.warps.items():
+            if warp is None:
+                new[dim] = loc[dim]
+                continue
             if not dim in loc: continue
             try:
                 new[dim] = warp(loc.get(dim))
             except:
                 ex_type, ex, tb = sys.exc_info()
-                raise MutatorError("A warpfunction \"%s\" (for axis \"%s\") raised \"%s\" at location %s"%(warp.__name__, dim, ex, loc.asString()), loc)
+                raise MutatorError("A warpfunction \"%s\" (for axis \"%s\") raised \"%s\" at location %s"%(str(warp), dim, ex, loc.asString()), loc)
         return new
 
 if __name__ == "__main__":
     # no bender
     assert noBend(Location(a=1234)) == Location(a=1234)
+    assert noBend(Location(a=(12,34))) == Location(a=(12,34))
 
     # linear map, single axis
     w = {'aaaa':{'map': [(0, 0), (1000, 1000)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':1000, 'default':0}}
@@ -129,6 +140,7 @@ if __name__ == "__main__":
     #w = {'a': [(0, 100), (1000, 900)]}
     w = {'aaaa':{'map': [(-1, 2), (0,0), (1, 2)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':-1, 'maximum':1, 'default':0}}
     b = Bender(w)
+    assert b(Location(aaaa=(-1, 1))) == Location(aaaa=(2,2))
     assert b(Location(aaaa=-1)) == Location(aaaa=2)
     assert b(Location(aaaa=-0.5)) == Location(aaaa=1)
     assert b(Location(aaaa=0)) == Location(aaaa=0)
@@ -139,6 +151,7 @@ if __name__ == "__main__":
     #w = {'a': [(0, 0), (500, 200), (600, 600)]}
     w = {'aaaa':{'map': [(0, 100), (500, 200), (600, 600)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':600, 'default':0}}
     b = Bender(w)
+    assert b(Location(aaaa=(100, 200))) == Location(aaaa=(120,140))
     assert b(Location(aaaa=0)) == Location(aaaa=100)
     assert b(Location(aaaa=250)) == Location(aaaa=150)
     assert b(Location(aaaa=500)) == Location(aaaa=200)
@@ -149,6 +162,7 @@ if __name__ == "__main__":
     # implicit extremes
     w = {'aaaa':{'map': [(500, 200)], 'name':'aaaaAxis', 'tag':'aaaa', 'minimum':0, 'maximum':600, 'default':0}}
     b = Bender(w)
+    assert b(Location(aaaa=(250, 100))) == Location(aaaa=(100, 40))
     assert b(Location(aaaa=0)) == Location(aaaa=0)
     assert b(Location(aaaa=250)) == Location(aaaa=100)
     assert b(Location(aaaa=500)) == Location(aaaa=200)
@@ -157,9 +171,14 @@ if __name__ == "__main__":
     assert b(Location(aaaa=1000)) == Location(aaaa=2200)
 
     # now with warp functions
+    # warp functions must be able to handle split tuples
     def warpFunc_1(value):
+        if type(value)==tuple:
+            return value[0]*2, value[1]*2
         return value * 2
     def warpFunc_2(value):
+        if type(value)==tuple:
+            return value[0] ** 2, value[1] ** 2
         return value ** 2
     def warpFunc_Error(value):
         return 1/0
@@ -169,6 +188,7 @@ if __name__ == "__main__":
         }
     # w = {'a': warpFunc_1, 'b': warpFunc_2, 'c': warpFunc_Error}
     b = Bender(w)
+    assert b(Location(aaaa=(100, -100))) == Location(aaaa=(200.000,-200.000))
     assert b(Location(aaaa=100)) == Location(aaaa=200)
     assert b(Location(bbbb=100)) == Location(bbbb=10000)
 
