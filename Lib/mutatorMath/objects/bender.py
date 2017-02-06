@@ -34,8 +34,7 @@ class WarpMutator(mutatorMath.objects.mutator.Mutator):
     for its masters as well as its instances.
     Great care has to be taken not to mix up transformed / untransformed.
     So the changes in Mutator are small.
-
-    
+   
 """
 class Bender(object):
     # object with a dictionary of warpmaps
