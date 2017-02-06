@@ -8,7 +8,7 @@ def noBend(loc): return loc
 
 class WarpMutator(mutatorMath.objects.mutator.Mutator):
     def __call__(self, value):
-        if type(value) == tuple:
+        if isinstance(value, tuple):
             # handle split location
             return self.makeInstance(Location(w=value[0])), self.makeInstance(Location(w=value[1]))
         return self.makeInstance(Location(w=value))
@@ -49,7 +49,7 @@ class Bender(object):
         for axisName, axisAttributes in axes.items():
             mapData = axisAttributes.get('map', [])
             if type(mapData)==list:
-                if len(mapData)==0:
+                if mapData==0:
                     # this axis has no bender
                     self.warps[axisName] = None
                 else:
@@ -173,11 +173,11 @@ if __name__ == "__main__":
     # now with warp functions
     # warp functions must be able to handle split tuples
     def warpFunc_1(value):
-        if type(value)==tuple:
+        if isinstance(value, tuple):
             return value[0]*2, value[1]*2
         return value * 2
     def warpFunc_2(value):
-        if type(value)==tuple:
+        if isinstance(value, tuple):
             return value[0] ** 2, value[1] ** 2
         return value ** 2
     def warpFunc_Error(value):
