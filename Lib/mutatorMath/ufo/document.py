@@ -502,12 +502,17 @@ class DesignSpaceDocumentReader(object):
             </source>
 
         """
-        for sourceElement in self.root.findall(".sources/source"):
+        for sourceCount, sourceElement in enumerate(self.root.findall(".sources/source")):
             # shall we just read the UFO here?
             filename = sourceElement.attrib.get('filename')
             # filename is a path relaive to the documentpath. resolve first.
             sourcePath = os.path.abspath(os.path.join(os.path.dirname(self.path), filename))
             sourceName = sourceElement.attrib.get('name')
+            if sourceName is None:
+                # if the source element has no name attribute
+                # (some authoring tools do not need them)
+                # then we should make a temporary one. We still need it for reference.
+                sourceName = "temp_master.%d"%(sourceCount)
             self.reportProgress("prep", 'load', sourcePath)
             if not os.path.exists(sourcePath):
                 raise MutatorError("Source not found at %s"%sourcePath)
