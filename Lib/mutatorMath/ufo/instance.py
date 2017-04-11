@@ -271,7 +271,7 @@ class InstanceWriter(object):
             if copy:
                 value = getattr(sourceInfo, infoAttribute)
                 setattr(targetInfo, infoAttribute, value)
-        
+
     def addKerning(self, instanceLocation=None, sources=None):
         """
         Calculate the kerning data for this location and add it to this instance.
@@ -295,8 +295,7 @@ class InstanceWriter(object):
                     self.logger.info("\tMuting kerning data for %s", instanceLocation)
                 continue
             if len(source.kerning.keys())>0:
-                items.append((sourceLocation, MathKerning(source.kerning)))
-        # items.sort()
+                items.append((sourceLocation, MathKerning(source.kerning, source.groups)))
         if items:
             m = None
             try:
