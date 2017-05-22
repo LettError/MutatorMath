@@ -156,18 +156,13 @@ class InstanceWriter(object):
                 for u in glyph.unicodes:
                     values[glyph.name][u] = 1
         for name, u in values.items():
-            if len(u) > 1:
-                msg = u", ".join([str(v) for v in u.keys()])
-                if self.verbose and self.logger:
-                    self.logger.info("\tMultiple unicode values for glyph %s: %s"%(name, msg))
-                continue
             if len(u) == 0:
                 # only report missing unicodes if the name has no extension
                 if "." not in name:
                     self._missingUnicodes.append(name)
                 continue
             k = list(u.keys())
-            self.unicodeValues[name] = k[0]
+            self.unicodeValues[name] = k
         return self.unicodeValues
                 
     def getAvailableGlyphnames(self):
@@ -309,12 +304,12 @@ class InstanceWriter(object):
                 instanceObject.round()
             instanceObject.extractKerning(self.font)
         
-    def addGlyph(self, glyphName, unicodeValue=None, instanceLocation=None, sources=None, note=None):
+    def addGlyph(self, glyphName, unicodes=None, instanceLocation=None, sources=None, note=None):
         """
         Calculate a new glyph and add it to this instance.
         
         *   glyphName:   The name of the glyph
-        *   unicodeValue:   The unicode value for this glyph (optional)
+        *   unicodes:   The unicode values for this glyph (optional)
         *   instanceLocation:   Location for this glyph
         *   sources:    List of sources for this glyph.
         *   note:   Note for this glyph.
@@ -324,8 +319,8 @@ class InstanceWriter(object):
         if note is not None:
             glyphObject.note = note
             # why does this not save?
-        if unicodeValue is not None:
-            glyphObject.unicode = unicodeValue
+        if unicodes is not None:
+            glyphObject.unicodes = unicodes
         if instanceLocation is None:
             instanceLocation = self.locationObject
         glyphMasters = []
