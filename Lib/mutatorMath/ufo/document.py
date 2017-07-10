@@ -236,7 +236,7 @@ class DesignSpaceDocumentWriter(object):
 
     def writeGlyph(self,
             name,
-            unicodeValue=None,
+            unicodes=None,
             location=None,
             masters=None,
             note=None,
@@ -244,7 +244,7 @@ class DesignSpaceDocumentWriter(object):
             ):
         """ Add a new glyph to the current instance.
             * name: the glyph name. Required.
-            * unicodeValue: unicode value for this glyph if it needs to be different from the unicode value associated with this glyph name in the masters.
+            * unicodes: unicode values for this glyph if it needs to be different from the unicode values associated with this glyph name in the masters.
             * location: a design space location for this glyph if it needs to be different from the instance location.
             * masters: a list of masters and locations for this glyph if they need to be different from the masters specified for this instance.
             * note: a note for this glyph
@@ -255,8 +255,8 @@ class DesignSpaceDocumentWriter(object):
         glyphElement = ET.Element('glyph')
         if mute:
             glyphElement.attrib['mute'] = "1"
-        if unicodeValue is not None:
-            glyphElement.attrib['unicode'] = hex(unicodeValue)
+        if unicodes is not None:
+            glyphElement.attrib['unicode'] = " ".join([hex(u) for u in unicodes])
         if location is not None:
             locationElement = self._makeLocationElement(location)
             glyphElement.append(locationElement)
@@ -667,9 +667,9 @@ class DesignSpaceDocumentReader(object):
             # step 1: generate all glyphs we have mutators for.
             names = instanceObject.getAvailableGlyphnames()
             for n in names:
-                unicodeValue = self.unicodeMap.get(n, None)
+                unicodes = self.unicodeMap.get(n, None)
                 try:
-                    instanceObject.addGlyph(n, unicodeValue)
+                    instanceObject.addGlyph(n, unicodes)
                 except AssertionError:
                     if self.verbose and self.logger:
                         self.logger.info("Problem making glyph %s, skipping.", n)
@@ -798,14 +798,14 @@ class DesignSpaceDocumentReader(object):
             return
 
         # unicode
-        unicodeValue = glyphElement.attrib.get('unicode')
-        if unicodeValue == None:
-            unicodeValue = self.unicodeMap.get(glyphName, None)
+        unicodes = glyphElement.attrib.get('unicode')
+        if unicodes == None:
+            unicodes = self.unicodeMap.get(glyphName, None)
         else:
             try:
-                unicodeValue = int(unicodeValue, 16)
+                unicodes = [int(u, 16) for u in unicodes.split(" ")]
             except ValueError:
-                raise MutatorError("unicode value %s is not integer"%unicodeValue)
+                raise MutatorError("unicode values %s are not integers" % unicodes)
 
         # note
         note = None
@@ -838,7 +838,7 @@ class DesignSpaceDocumentReader(object):
                 glyphSources = []
             glyphSources.append(d)
         # calculate the glyph
-        instanceObject.addGlyph(glyphName, unicodeValue, instanceLocation, glyphSources, note=note)
+        instanceObject.addGlyph(glyphName, unicodes, instanceLocation, glyphSources, note=note)
 
     def _instantiateFont(self, path):
         """

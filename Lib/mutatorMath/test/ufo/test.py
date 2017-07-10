@@ -71,7 +71,7 @@ def test1():
     ...       familyName="TestFamily",
     ...       styleName="TestStyleName",
     ...       location=dict(width=(0.2, 0.8)))
-    >>> doc.writeGlyph("M", unicodeValue=0xff, location=dict(width=0.9), masters=None, note="testnote123")
+    >>> doc.writeGlyph("M", unicodes=[0xff], location=dict(width=0.9), masters=None, note="testnote123")
     >>> doc.writeGlyph("N", location=dict(width=0.7), masters=glyphMasters)
     >>> doc.endInstance()
     >>> doc.save()
@@ -106,7 +106,7 @@ def test1():
         # note: the next assertion will fail if the calculations were made with the
         # pre-ufo3 fontMath.
 
-    >>> assert instance['M'].unicode == 0xff
+    >>> assert instance['M'].unicodes == [0xff]
 
         # check the groups
     >>> list(instance.groups.items())

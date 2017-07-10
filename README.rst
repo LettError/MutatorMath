@@ -176,12 +176,12 @@ designspace.
       field. Optional.
 
 -  **endInstance**\ () Finishes the current instance.
--  **writeGlyph**\ (name, unicodeValue, location, masters) Add a new
+-  **writeGlyph**\ (name, unicodes, location, masters) Add a new
    glyph to the current instance.
 
    -  **name**: the glyph name. Required.
-   -  **unicodeValue**: unicode value for this glyph if it needs to be
-      different from the unicode value associated with this glyph name
+   -  **unicodes**: unicode values for this glyph if it needs to be
+      different from the unicode values associated with this glyph name
       in the masters.
    -  **location**: a design space location for this glyph if it needs
       to be different from the instance location.
