@@ -197,7 +197,7 @@ setup(
     install_requires=[
         "ufoLib>=2.0.0",
         "defcon>=0.2.0",
-        "fontMath>=0.4.1",
+        "fontMath>=0.4.4",
     ],
     cmdclass={
         "release": release,
