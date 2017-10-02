@@ -196,7 +196,7 @@ setup(
     ] if {'release', 'bump_version'}.intersection(sys.argv) else [],
     install_requires=[
         "ufoLib>=2.0.0",
-        "defcon>=0.2.0",
+        "defcon>=0.3.5",
         "fontMath>=0.4.4",
     ],
     cmdclass={
