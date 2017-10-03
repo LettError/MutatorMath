@@ -3,6 +3,7 @@
 from __future__ import print_function
 import logging
 import os
+import posixpath
 import xml.etree.ElementTree as ET
 
 import defcon
@@ -96,6 +97,10 @@ class DesignSpaceDocumentWriter(object):
            locElement.append(dimElement)
         return locElement
 
+    def _posixPathRelativeToDocument(self, otherPath):
+        relative = os.path.relpath(otherPath, os.path.dirname(self.path))
+        return posixpath.join(*relative.split(os.path.sep))
+
     def addSource(self,
             path,
             name,
@@ -127,8 +132,7 @@ class DesignSpaceDocumentWriter(object):
         Note: no separate flag for mute font: the source is just not added.
         """
         sourceElement = ET.Element("source")
-        pathRelativeToDocument = os.path.relpath(path, os.path.dirname(self.path))
-        sourceElement.attrib['filename'] = pathRelativeToDocument
+        sourceElement.attrib['filename'] = self._posixPathRelativeToDocument(path)
         sourceElement.attrib['name'] = name
         if copyLib:
             libElement = ET.Element('lib')
@@ -214,8 +218,7 @@ class DesignSpaceDocumentWriter(object):
         if styleName is not None:
             instanceElement.attrib['stylename'] = styleName
         if fileName is not None:
-            pathRelativeToDocument = os.path.relpath(fileName, os.path.dirname(self.path))
-            instanceElement.attrib['filename'] = pathRelativeToDocument
+            instanceElement.attrib['filename'] = self._posixPathRelativeToDocument(fileName)
         if postScriptFontName is not None:
             instanceElement.attrib['postscriptfontname'] = postScriptFontName
         if styleMapFamilyName is not None:
