@@ -284,11 +284,13 @@ def test1():
         # test build function -- single designspace file
     >>> from mutatorMath.ufo import build
     >>> import os
+    >>> import posixpath
     >>> here = os.path.join(os.path.dirname(__file__), 'data', 'exporttest_basic.designspace')
     >>> results = build(here, outputUFOFormatVersion=2)
     >>> ufoFullPath = results[0]['testOutput_glyphs.ufo']
     >>> ufoRelPath = os.path.relpath(ufoFullPath, os.path.dirname(__file__))
-    >>> ufoRelPath
+    >>> posixRelPath = posixpath.join(*ufoRelPath.split(os.path.sep))
+    >>> posixRelPath
     'data/instances/A/testOutput_glyphs.ufo'
 
     # test the axes elements
