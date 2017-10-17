@@ -274,6 +274,8 @@
 				<string>fl</string>
 				<string>a_b_c</string>
 				<string>.notdef</string>
+				<string>colon.copy_2</string>
+				<string>colon.copy_1</string>
 			</array>
 			<key>type</key>
 			<string>glyphList</string>
@@ -795,8 +797,6 @@
 		<string>fl</string>
 		<string>a_b_c</string>
 		<string>.notdef</string>
-		<string>colon.copy_2</string>
-		<string>colon.copy_1</string>
 	</array>
 	<key>testLibItemKey</key>
 	<array>
