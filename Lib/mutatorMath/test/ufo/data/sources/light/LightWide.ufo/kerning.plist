@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>A</key>
+	<key>@MMK_L_A</key>
 	<dict>
 		<key>J</key>
 		<integer>-35</integer>
@@ -17,7 +17,7 @@
 	</dict>
 	<key>B</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-25</integer>
 		<key>H</key>
 		<integer>-40</integer>
@@ -36,7 +36,7 @@
 	</dict>
 	<key>C</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-40</integer>
 		<key>J</key>
 		<integer>-75</integer>
@@ -54,7 +54,7 @@
 	</dict>
 	<key>F</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-125</integer>
 		<key>H</key>
 		<integer>-35</integer>
@@ -69,7 +69,7 @@
 	</dict>
 	<key>G</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-40</integer>
 		<key>J</key>
 		<integer>-60</integer>
@@ -93,7 +93,7 @@
 	</dict>
 	<key>J</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-70</integer>
 		<key>J</key>
 		<integer>-135</integer>
@@ -115,7 +115,7 @@
 	</dict>
 	<key>O</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-30</integer>
 		<key>J</key>
 		<integer>-120</integer>
@@ -128,7 +128,7 @@
 	</dict>
 	<key>P</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-95</integer>
 		<key>J</key>
 		<integer>-200</integer>
@@ -137,7 +137,7 @@
 	</dict>
 	<key>R</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-80</integer>
 		<key>H</key>
 		<integer>-45</integer>
@@ -156,7 +156,7 @@
 	</dict>
 	<key>S</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-45</integer>
 		<key>H</key>
 		<integer>-5</integer>
@@ -175,7 +175,7 @@
 	</dict>
 	<key>T</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-215</integer>
 		<key>H</key>
 		<integer>-15</integer>
@@ -188,14 +188,14 @@
 	</dict>
 	<key>U</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-75</integer>
 		<key>J</key>
 		<integer>-140</integer>
 	</dict>
 	<key>V</key>
 	<dict>
-		<key>A</key>
+		<key>@MMK_R_A</key>
 		<integer>-210</integer>
 		<key>H</key>
 		<integer>-20</integer>
