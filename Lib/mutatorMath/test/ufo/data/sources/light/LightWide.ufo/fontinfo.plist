@@ -7,11 +7,11 @@
 	<key>capHeight</key>
 	<integer>700</integer>
 	<key>copyright</key>
-	<string>Copyright (c) 1993, 1994, 1999 Adobe Systems Incorporated.  All Rights Reserved.</string>
+	<string>Copyright-token-string</string>
 	<key>descender</key>
 	<integer>-200</integer>
 	<key>familyName</key>
-	<string>AdobeSans</string>
+	<string>MutatorMathTest</string>
 	<key>italicAngle</key>
 	<integer>0</integer>
 	<key>macintoshFONDFamilyID</key>
@@ -51,7 +51,7 @@
 	<key>postscriptWindowsCharacterSet</key>
 	<integer>1</integer>
 	<key>styleMapFamilyName</key>
-	<string>AdobeSans</string>
+	<string></string>
 	<key>styleMapStyleName</key>
 	<string>regular</string>
 	<key>styleName</key>
