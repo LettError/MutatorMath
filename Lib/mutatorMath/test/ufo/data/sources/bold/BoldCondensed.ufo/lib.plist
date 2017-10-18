@@ -146,6 +146,8 @@
 				<string>Ccedilla</string>
 				<string>Agrave</string>
 				<string>Aacute</string>
+				<string>quotedblright</string>
+				<string>quotedblleft</string>
 			</array>
 			<key>type</key>
 			<string>glyphList</string>

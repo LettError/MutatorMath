@@ -7,19 +7,17 @@
 	<key>capHeight</key>
 	<integer>800</integer>
 	<key>copyright</key>
-	<string>Copyright-token-string</string>
+	<string>License same as MutatorMath. BSD 3-clause. [test-token: B]</string>
 	<key>descender</key>
 	<integer>-200</integer>
 	<key>familyName</key>
 	<string>MutatorMathTest</string>
 	<key>italicAngle</key>
 	<integer>0</integer>
-	<key>macintoshFONDFamilyID</key>
-	<integer>6649</integer>
-	<key>macintoshFONDName</key>
-	<string>AdobeSans</string>
+	<key>openTypeNameLicense</key>
+	<string>License same as MutatorMath. BSD 3-clause. [test-token: B]</string>
 	<key>openTypeOS2VendorID</key>
-	<string>ADBE</string>
+	<string>LTTR</string>
 	<key>postscriptBlueValues</key>
 	<array>
 	</array>
@@ -32,9 +30,9 @@
 	<array>
 	</array>
 	<key>postscriptFontName</key>
-	<string>AdobeSans-BoldWide</string>
+	<string>MutatorMathTest-BoldWide</string>
 	<key>postscriptFullName</key>
-	<string>AdobeSans BoldWide</string>
+	<string>MutatorMathTest BoldWide</string>
 	<key>postscriptOtherBlues</key>
 	<array>
 	</array>
@@ -46,8 +44,6 @@
 	<key>postscriptStemSnapV</key>
 	<array>
 	</array>
-	<key>postscriptUniqueID</key>
-	<integer>44281</integer>
 	<key>postscriptWindowsCharacterSet</key>
 	<integer>1</integer>
 	<key>styleMapFamilyName</key>
