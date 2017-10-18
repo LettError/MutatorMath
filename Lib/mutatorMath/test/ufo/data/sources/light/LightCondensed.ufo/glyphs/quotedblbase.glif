@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glyph name="quotedblbase" format="1">
-  <advance width="261"/>
+  <advance width="301"/>
   <unicode hex="201E"/>
   <outline>
     <component base="comma"/>

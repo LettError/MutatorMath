@@ -30,7 +30,7 @@ for f in AllFonts():
             'short': dict(cond=20, wide=20),
             },
         'light': {
-            'straight': dict(cond=40, wide=120),
+            'straight': dict(cond=60, wide=120),
             'angled':  dict(cond=20, wide=40),
             'round': dict(cond=45, wide=80),
             'short': dict(cond=40, wide=40),
