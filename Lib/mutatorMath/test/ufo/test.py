@@ -245,8 +245,8 @@ def test1():
 
         # example copied values
     >>> assert instance.info.versionMajor == 1
-    >>> assert instance.info.openTypeOS2VendorID == "ADBE"
-    >>> assert instance.info.copyright == "Copyright-token-string"
+    >>> assert instance.info.openTypeOS2VendorID == "LTTR"
+    >>> assert instance.info.copyright == "License same as MutatorMath. BSD 3-clause. [test-token: C]"
 
         # test the build script
     >>> documentPath = os.path.join(testRoot, 'exporttest_build.designspace')
