@@ -32,8 +32,8 @@ for f in AllFonts():
         'light': {
             'straight': dict(cond=60, wide=120),
             'angled':  dict(cond=20, wide=40),
-            'round': dict(cond=45, wide=80),
-            'short': dict(cond=40, wide=40),
+            'round': dict(cond=50, wide=80),
+            'short': dict(cond=30, wide=40),
             },
     }
     

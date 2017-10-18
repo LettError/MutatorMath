@@ -22,6 +22,21 @@ import mutatorMath.objects.error
 from mutatorMath.ufo.document import DesignSpaceDocumentWriter, DesignSpaceDocumentReader
 from mutatorMath.objects.location import Location
 
+def stripPrefix(d):
+    # strip the "public.kern" prefixes from d
+    new = []
+    for pair, value in d:
+        a, b = pair
+        if "public.kern" in a:
+            a = a[13:]
+        if "public.kern" in b:
+            b = b[13:]
+        new.append(((a,b), value))
+    return sorted(new)
+
+#t = [(('V', 'public.kern2.@MMK_R_A'), -100), (('public.kern1.@MMK_L_A', 'V'), -100)]
+#stripPrefix(t)
+
 
 def test1():
     """
@@ -109,8 +124,8 @@ def test1():
     >>> assert instance['M'].unicodes == [0xff]
 
         # check the groups
-    >>> list(instance.groups.items())
-    [('testGroup', ['E', 'F', 'H'])]
+    >>> ('testGroup', ['E', 'F', 'H']) in list(instance.groups.items())
+    True
 
         # check the lib
     >>> assert "testLibItemKey" in instance.lib.keys()
@@ -151,7 +166,7 @@ def test1():
     >>> #assert os.path.basename(testOutputFileName) in doc.results
     >>> #resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
     >>> #instance = defcon.objects.font.Font(resultUFOPath)
-    >>> #assert sorted(instance.kerning.items()) == [(('@MMK_L_A', 'V'), 100), (('V', '@MMK_R_A'), 100)]
+    >>> #assert sorted(instance.kerning.items()) == stripPrefix([(('@MMK_L_A', 'V'), 100), (('V', '@MMK_R_A'), 100)])
 
 
         # test the effects of muting the kerning
@@ -191,9 +206,8 @@ def test1():
     >>> resultUFOPath = doc.results[os.path.basename(testOutputFileName)]
     >>> instance = defcon.objects.font.Font(resultUFOPath)
 
-        # the bold condensed kerning master has been muted, we expect the light condensed data in the instance
-    >>> assert sorted(instance.kerning.items()) == [(('@MMK_L_A', 'V'), -100), (('V', '@MMK_R_A'), -100)]
-
+        # the bold condensed kerning master has been muted, we expect the light condensed data in the instance    
+    >>> assert [(('@MMK_L_A', 'V'), -100), (('V', '@MMK_R_A'), -100)] == stripPrefix(sorted(instance.kerning.items()))
 
         # info data
         #   calculating fields
