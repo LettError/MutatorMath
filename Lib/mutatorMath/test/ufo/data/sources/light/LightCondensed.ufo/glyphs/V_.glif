@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <glyph name="V" format="1">
-  <advance width="420"/>
+  <advance width="400"/>
   <unicode hex="0056"/>
   <outline>
     <contour>
-      <point x="390" y="700" type="line"/>
-      <point x="345" y="700" type="line"/>
-      <point x="215" y="0" type="line"/>
-      <point x="255" y="0" type="line"/>
-    </contour>
-    <contour>
-      <point x="75" y="700" type="line"/>
-      <point x="30" y="700" type="line"/>
-      <point x="165" y="0" type="line"/>
+      <point x="380" y="700" type="line"/>
+      <point x="335" y="700" type="line"/>
       <point x="205" y="0" type="line"/>
+      <point x="245" y="0" type="line"/>
     </contour>
     <contour>
-      <point x="245" y="39" type="line"/>
-      <point x="175" y="39" type="line"/>
-      <point x="175" y="0" type="line"/>
-      <point x="245" y="0" type="line"/>
+      <point x="65" y="700" type="line"/>
+      <point x="20" y="700" type="line"/>
+      <point x="155" y="0" type="line"/>
+      <point x="195" y="0" type="line"/>
+    </contour>
+    <contour>
+      <point x="235" y="39" type="line"/>
+      <point x="165" y="39" type="line"/>
+      <point x="165" y="0" type="line"/>
+      <point x="235" y="0" type="line"/>
     </contour>
   </outline>
 </glyph>
