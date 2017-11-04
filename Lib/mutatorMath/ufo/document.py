@@ -604,6 +604,23 @@ class DesignSpaceDocumentReader(object):
                 loc[dimName] = xValue
         return loc
 
+    def readInstance(self, key, makeGlyphs=True, makeKerning=True, makeInfo=True):
+        """ Read a single instance element.
+
+            key: an (attribute, value) tuple used to find the requested instance.
+
+        ::
+
+            <instance familyname="SuperFamily" filename="OutputNameInstance1.ufo" location="location-token-aaa" stylename="Regular">
+
+        """
+        attrib, value = key
+        for instanceElement in self.root.findall('.instances/instance'):
+            if instanceElement.attrib.get(attrib) == value:
+                self._readSingleInstanceElement(instanceElement, makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
+                return
+        raise MutatorError("No instance found with key: (%s, %s)." % key)
+
     def readInstances(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
         """ Read all instance elements.
 
@@ -612,7 +629,6 @@ class DesignSpaceDocumentReader(object):
             <instance familyname="SuperFamily" filename="OutputNameInstance1.ufo" location="location-token-aaa" stylename="Regular">
 
         """
-        instanceElements = self.root.findall('.instances/instance')
         for instanceElement in self.root.findall('.instances/instance'):
             self._readSingleInstanceElement(instanceElement, makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
 
