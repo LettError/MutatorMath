@@ -30,3 +30,4 @@ Lib/mutatorMath/test/ufo/testData
 Lib/mutatorMath/test/ufo/data/instances
 Lib/mutatorMath/test/ufo/data/no_warpmap_test.designspace
 Lib/mutatorMath/test/ufo/data/warpmap_test.designspace
+.pytest_cache
