@@ -402,7 +402,7 @@ class DesignSpaceDocumentReader(object):
         tree = ET.parse(self.path)
         self.root = tree.getroot()
         self.readVersion()
-        assert self.documentFormatVersion == 3
+        assert self.documentFormatVersion >= 3
 
         self.readAxes()
         self.readWarp()
@@ -447,7 +447,12 @@ class DesignSpaceDocumentReader(object):
             <designspace format="3">
         """
         ds = self.root.findall("[@format]")[0]
-        self.documentFormatVersion = int(ds.attrib['format'])
+        raw_format = ds.attrib['format']
+        try:
+            self.documentFormatVersion = int(raw_format)
+        except ValueError:
+            # as of fontTools >= 3.27 'format' is formatted as a float "4.0"
+            self.documentFormatVersion = float(raw_format)
 
     def readWarp(self):
         """ Read the warp element
