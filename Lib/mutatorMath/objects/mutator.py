@@ -29,6 +29,7 @@ def buildMutator(items, axes=None, bias=None):
         bender = noBend
     # the order itself does not matter, but we should always build in the same order.
     items = sorted(items)
+    #items = sorted(items)
     if not bias:
         bias = biasFromLocations([bender(Location(loc)) for loc, obj in items], True)
     else:
@@ -209,12 +210,13 @@ class Mutator(dict):
             return total, factors
         return total
 
-    def makeInstance(self, aLocation):
+    def makeInstance(self, aLocation, bend=True):
         """
             Calculate an instance with the right bias and add the neutral.
             aLocation: expected to be in input space
         """
-        aLocation = self._bender(Location(aLocation))
+        if bend:
+            aLocation = self._bender(Location(aLocation))
         if not aLocation.isAmbivalent():
             instanceObject = self.getInstance(aLocation-self._bias)
         else:
