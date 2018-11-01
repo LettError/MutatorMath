@@ -181,7 +181,7 @@ with open('README.rst', 'r') as f:
 
 setup(
     name="MutatorMath",
-    version="2.1.2.dev0",
+    version="2.1.2",
     description=("Python for piecewise linear interpolation in multiple "
                  "dimensions with multiple, arbitrarily placed, masters."),
     long_description=long_description,
