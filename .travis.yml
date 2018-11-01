@@ -1,5 +1,10 @@
 language: python
 
+env:
+  global:
+    - TWINE_USERNAME="anthrotype"
+    - secure: CMCLOo9Y8eKK8BfYZeHfclvwx5uJX7078/nLVFF8qZJssopTA34kuJvIOG3UIGpN0Q/iy+GwKVcEHOA59aOuS+lLUjX9U6O/p9Byxg4hNrYQkqEGUS+2eUvGII9ko03ZzWpX4uGSvhRx6013cCNM3iCGtcoCQhMYsIkxAipVXBEdeo78km9lN4FEvdLy4P9KcRP8rEFWvIOg+zrvQr8i5M8UMLloL5E+AY0q+W+qVCGx6k2hxt5UGqEiffoC99Y36iXlge932ftAxOS3Yf5seh8lN5RlTnJ3fB6cqkXV28ZNi390R1kGLRQSos1bqvk3KPk3ItfSjqVJtzkKemtWbZcu0KfUzdbvjugNudfxSHYxs5rpj3ncPFC8C4Os94ICgr+HrgTODj8PBfwfm1bgKU7RboHzPa0pCPboaO1Hxac/c2BNzQPvtO8xbOw/ehIPSNTzZf/zszhcULB17nx6OUoWZKhwXw217ZUlSCd9Vo/nxx7IYktkmaydAKUbBoMBUXq6b+DgMHGpt4fRtQ/6CqU35HIvdcyiuSfFck/17Wep26GQ35JJunE/w3KNES6bcWlUShyJyk/meZwyCOEqg3n9OCax9GedO28DsQML7WK1L36JFDXk2FWq+noz/gts99u4RgBOekQ/ggRIsMFKeW0XzqYuYTqorHmbLVfYPLE=
+
 matrix:
   include:
     - python: 2.7
@@ -7,7 +12,9 @@ matrix:
     - python: 3.6
       env: TOXENV=py36-cov
     - python: 3.7
-      env: TOXENV=py37-cov
+      env:
+        - TOXENV=py37-cov
+        - BUILD_DIST=true
       dist: xenial
 
 install:
@@ -20,17 +27,11 @@ script:
 after_success:
   - coverage combine
   - coveralls
-
-deploy:
-  # deploy to PyPI on tags
-  provider: pypi
-  server: https://upload.pypi.org/legacy/
-  on:
-    repo: LettError/MutatorMath
-    tags: true
-    all_branches: true
-    python: 3.5
-  user: anthrotype
-  password:
-    secure: fezM8kh/iosxrNrBE0IT5GSg9WDINh1TezYsk2U0fJBHnPWSxsbw4+PX4TrUxuij/6Ysl2K/nMbIfFb6y3qbOFCgIEDPXxRWWk4d2hDyWWa6qrGryOGZ9T4nqBncDqY/3eNIdJ4w6renkLsesVcjb35DkF7SCWA0ONlMxWsG5hIXu9mLorCc+tqf47hCQ1R+uNZy3W6GqnwlmEfxkkQR3uFA+ncnLMoRs7VSJkzZneTUa6eQLCi7l9UVLP/zEk5u1m0mui6Q4pdKgVIixG9gu3U8Fe64DNv7CNNdnLyW6PXnketqPbhXZjduheS1uLh9Is9OnuyfrF8seRa0MyrOlHfwYYRisbwfzAdDhv4t9MhLdEKmpDJTt51ud2WF+aQS+m4i1fp9/5HPgL+MZaZi9jLBHz0qnct1BTh6vioMD96+OGd4+1Ig7fqMlfZWF4bHf/xVTI5LiPq2NSkcD4Lo+52o3OcOt3JYStTFaVr0ordWX39NPid+Qv2acZCezr01fnSMEDdEdff4CipfjXH66LIvZFN2+HeDz9jgt4WsqmqG2JWbcO0qYx8TU8EQO3PS+NWxzOPlu36ZUHOlexy37CEC1wbNwgvIrndgk9/ERfqGk19YvH9LHNJ1InOCGw2wzHvOXVMEgFYTlfXG05+sUUeqpteQx9SMjXoxdl4k6UE=
-  distributions: sdist bdist_wheel
+  # if it's a tagged commit, upload distribution packages to pypi
+  - |
+    if [ -n "$TRAVIS_TAG" ] && [ "$TRAVIS_REPO_SLUG" == "LettError/MutatorMath" ] && [ "$BUILD_DIST" == true ]; then
+        pip install --upgrade twine pip setuptools wheel
+        python setup.py sdist
+        pip wheel --no-deps --wheel-dir dist .
+        twine upload dist/*.whl dist/*.zip
+    fi
