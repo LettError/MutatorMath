@@ -4,8 +4,11 @@ from mutatorMath.objects.error import MutatorError
 from mutatorMath.objects.mutator import Mutator, buildMutator
 from mutatorMath.objects.bender import Bender, noBend
 
-from ufoLib import fontInfoAttributesVersion1, fontInfoAttributesVersion2, fontInfoAttributesVersion3
-
+from fontTools.ufoLib import (
+    fontInfoAttributesVersion1,
+    fontInfoAttributesVersion2,
+    fontInfoAttributesVersion3,
+)
 
 import warnings, logging
 
