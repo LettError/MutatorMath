@@ -138,6 +138,10 @@ def test1():
     >>> import time
     >>> import os
     >>> testData = os.path.join(os.path.dirname(__file__), "testData")
+    >>> try:
+    ...     os.mkdir(testData)
+    ... except OSError:
+    ...     pass
     >>> testGeometry(testData, cleanUp=False)
     True
     """
