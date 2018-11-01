@@ -399,6 +399,16 @@ class InstanceWriter(object):
             # XXX housekeeping:
             # remove glyph from groups / kerning as well?
             # remove components referencing this glyph?
+
+        # fontTools.ufoLib no longer calls os.makedirs for us if the
+        # parent directories of the Font we are saving do not exist.
+        # We want to keep backward compatibility with the previous
+        # MutatorMath behavior, so we create the instance' parent
+        # directories if they do not exist. We assume that the users
+        # knows what they are doing...
+        directory = os.path.dirname(os.path.normpath(self.path))
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory)
         try:
             self.font.save(os.path.abspath(self.path), self.ufoVersion)
         except defcon.DefconError as error:
