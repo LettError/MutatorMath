@@ -27,8 +27,6 @@ def buildMutator(items, axes=None, bias=None):
         m.setBender(bender)
     else:
         bender = noBend
-    # the order itself does not matter, but we should always build in the same order.
-    items = sorted(items)
     if not bias:
         bias = biasFromLocations([bender(Location(loc)) for loc, obj in items], True)
     else:
