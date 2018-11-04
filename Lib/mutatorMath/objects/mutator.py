@@ -21,6 +21,7 @@ def buildMutator(items, axes=None, bias=None):
         Determine the bias based on the given locations.
     """
     from mutatorMath.objects.bender import Bender
+    items = [(Location(loc),obj) for loc, obj in items]
     m = Mutator()
     if axes is not None:
         bender = Bender(axes)
@@ -30,7 +31,7 @@ def buildMutator(items, axes=None, bias=None):
     # the order itself does not matter, but we should always build in the same order.
     items = sorted(items)
     if not bias:
-        bias = biasFromLocations([bender(Location(loc)) for loc, obj in items], True)
+        bias = biasFromLocations([bender(loc) for loc, obj in items], True)
     else:
         # note: this means that the actual bias might be different from the initial value. 
         bias = bender(bias)
@@ -39,15 +40,14 @@ def buildMutator(items, axes=None, bias=None):
     ofx = []
     onx = []
     for loc, obj in items:
-        loc = bender(Location(loc))
+        loc = bender(loc)
         if (loc-bias).isOrigin():
             m.setNeutral(obj)
             break
     if m.getNeutral() is None:
         raise MutatorError("Did not find a neutral for this system", m)
     for loc, obj in items:
-        locbent = bender(Location(loc))
-        #lb = loc-bias
+        locbent = bender(loc)
         lb = locbent-bias
         if lb.isOrigin(): continue
         if lb.isOnAxis():
