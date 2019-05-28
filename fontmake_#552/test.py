@@ -28,10 +28,8 @@ _, mut = buildMutator(masters, axes)
 # instance locations are also specified in internal design coordinates (at least varLib assumes they are)
 instance_location = Location(Width=79)
 
-instance = mut.makeInstance(Location(Width=79), bend=False)
 # the result is 27.642276422764223, but it should have been 30.0
-print(instance)
-
-instance = mut.makeInstance(Location(Width=75), bend=True)
-# the result is 27.642276422764223, but it should have been 30.0
-print(instance)
+print(mut.makeInstance(Location(Width=79), bend=False))
+print(mut.makeInstance(Location(Width=75), bend=True))
+print(mut.makeInstance(Location(Width=62.5), bend=True))
+print(mut.makeInstance(Location(Width=100), bend=True))
