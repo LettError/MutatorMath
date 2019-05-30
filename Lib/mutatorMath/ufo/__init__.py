@@ -29,6 +29,7 @@ def build(
 		verbose=True,
 		logPath=None,
 		progressFunc=None,
+		bendLocations=False,
 		):
 	"""
 
@@ -47,13 +48,13 @@ def build(
 	for path in todo:
 		reader = DesignSpaceDocumentReader(
 				path,
-		        ufoVersion=outputUFOFormatVersion,
-		        roundGeometry=roundGeometry,
-		        verbose=verbose,
-		        logPath=logPath,
-				progressFunc=progressFunc
+				ufoVersion=outputUFOFormatVersion,
+				roundGeometry=roundGeometry,
+				verbose=verbose,
+				logPath=logPath,
+				progressFunc=progressFunc,
 		        )
-		reader.process()
+		reader.process(bendLocations=bendLocations)
 		results.append(reader.results)
 	reader = None
 	return results
