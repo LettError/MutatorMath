@@ -234,13 +234,39 @@ def test_builderBender_2():
     <Location pop:0 >
     >>> sorted(mb.items())
     [((), (0, 'origin')), ((('pop', 10),), (10, None))]
-    >>> mb.makeInstance(Location(pop=0))
+    >>> mb.makeInstance(Location(pop=0), bend=True)
     0
     >>> r = []
     >>> for p in range(0, 11):
-    ...     r.append(mb.makeInstance(Location(pop=p)))
+    ...     r.append(mb.makeInstance(Location(pop=p), bend=True))
     >>> r
     [0, 0.4, 0.8, 1.2, 1.6, 2.0, 3.5999999999999996, 5.2, 6.799999999999999, 8.4, 10]
+    """
+
+
+def test_builderBender_3():
+    """
+    Test case from
+    https://github.com/googlefonts/fontmake/pull/552#issuecomment-493617252
+    >>> masters = [
+    ...     (Location(Width=70), 0),
+    ...     (Location(Width=100), 100),
+    ... ]
+    >>> axes = {
+    ...     'Width': {
+    ...         'tag': 'wdth',
+    ...         'name': 'Width',
+    ...         'minimum': 62.5,
+    ...         'default': 100.0,
+    ...         'maximum': 100.0,
+    ...         'map': [(62.5, 70.0), (75.0, 79.0), (87.5, 89.0), (100.0, 100.0)],
+    ...     }
+    ... }
+    >>> _, mut = buildMutator(masters, axes)
+    >>> mut.makeInstance(Location(Width=79), bend=False)
+    30.0
+    >>> mut.makeInstance(Location(Width=75), bend=True)
+    30.0
     """
 
 
