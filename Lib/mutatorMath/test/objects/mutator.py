@@ -195,27 +195,27 @@ def test_builderBender_1():
     <Location pop:0 >
     >>> sorted(mb.items())
     [((), (0, 'origin')), ((('pop', 10),), (10, None))]
-    >>> mb.makeInstance(Location(pop=0))
+    >>> mb.makeInstance(Location(pop=0), bend=True)
     0
-    >>> mb.makeInstance(Location(pop=1))
+    >>> mb.makeInstance(Location(pop=1), bend=True)
     0.4
-    >>> mb.makeInstance(Location(pop=2))
+    >>> mb.makeInstance(Location(pop=2), bend=True)
     0.8
-    >>> mb.makeInstance(Location(pop=3))
+    >>> mb.makeInstance(Location(pop=3), bend=True)
     1.2
-    >>> mb.makeInstance(Location(pop=4))
+    >>> mb.makeInstance(Location(pop=4), bend=True)
     1.6
-    >>> mb.makeInstance(Location(pop=5))
+    >>> mb.makeInstance(Location(pop=5), bend=True)
     2.0
-    >>> mb.makeInstance(Location(pop=6))
+    >>> mb.makeInstance(Location(pop=6), bend=True)
     4.5
-    >>> mb.makeInstance(Location(pop=7))
+    >>> mb.makeInstance(Location(pop=7), bend=True)
     7.0
-    >>> mb.makeInstance(Location(pop=8))
+    >>> mb.makeInstance(Location(pop=8), bend=True)
     7.999999999999999
-    >>> mb.makeInstance(Location(pop=9))
+    >>> mb.makeInstance(Location(pop=9), bend=True)
     9.0
-    >>> mb.makeInstance(Location(pop=10))
+    >>> mb.makeInstance(Location(pop=10), bend=True)
     10
     """
 

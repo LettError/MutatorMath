@@ -205,7 +205,7 @@ class Mutator(dict):
             return total, factors
         return total
 
-    def makeInstance(self, aLocation, bend=True):
+    def makeInstance(self, aLocation, bend=False):
         """
             Calculate an instance with the right bias and add the neutral.
             aLocation: expected to be in input space
