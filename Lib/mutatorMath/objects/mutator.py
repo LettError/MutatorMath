@@ -24,6 +24,8 @@ def buildMutator(items, axes=None, bias=None):
     items = [(Location(loc),obj) for loc, obj in items]
     m = Mutator()
     if axes is not None:
+        # make a Bender object
+        # but do not transform the locations from the items
         bender = Bender(axes)
         m.setBender(bender)
     else:
@@ -31,24 +33,19 @@ def buildMutator(items, axes=None, bias=None):
     # the order itself does not matter, but we should always build in the same order.
     items = sorted(items)
     if not bias:
-        bias = biasFromLocations([bender(loc) for loc, obj in items], True)
-    else:
-        # note: this means that the actual bias might be different from the initial value. 
-        bias = bender(bias)
+        bias = biasFromLocations([loc for loc, obj in items], True)
     m.setBias(bias)
     n = None
     ofx = []
     onx = []
     for loc, obj in items:
-        loc = bender(loc)
         if (loc-bias).isOrigin():
             m.setNeutral(obj)
             break
     if m.getNeutral() is None:
         raise MutatorError("Did not find a neutral for this system", m)
     for loc, obj in items:
-        locbent = bender(loc)
-        lb = locbent-bias
+        lb = loc-bias
         if lb.isOrigin(): continue
         if lb.isOnAxis():
             onx.append((lb, obj-m.getNeutral()))
@@ -113,7 +110,6 @@ class Mutator(dict):
                 *   True: add the difference with the instance value at that location and the delta
                 *   False: just add the delta.
         """
-        #location = self._bender(location)
         if punch:
             r = self.getInstance(location, axisOnly=axisOnly)
             if r is not None:
@@ -209,7 +205,7 @@ class Mutator(dict):
             return total, factors
         return total
 
-    def makeInstance(self, aLocation, bend=True):
+    def makeInstance(self, aLocation, bend=False):
         """
             Calculate an instance with the right bias and add the neutral.
             aLocation: expected to be in input space

@@ -454,21 +454,24 @@ def bender_and_mutatorTest():
     >>> assert b(dict(aaaa=400)) == {'aaaa': 100}
     >>> assert b(dict(aaaa=700)) == {'aaaa': 150}
 
+    master locations are always in internal design coordinates, thus they are
+    considered to be already mapped or bent.
+
     >>> items = [
-    ...     (Location(aaaa=300), 0),
-    ...     (Location(aaaa=400), 50),
-    ...     (Location(aaaa=700), 100),
+    ...     (Location(aaaa=50), 0),
+    ...     (Location(aaaa=100), 50),
+    ...     (Location(aaaa=150), 100),
     ... ]
 
-    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=400))
+    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=100))
     >>> bias
     <Location aaaa:100 >
 
-    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=700))
+    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=150))
     >>> bias
     <Location aaaa:150 >
 
-    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=300))
+    >>> bias, mut = buildMutator(items, w, bias=Location(aaaa=50))
     >>> bias
     <Location aaaa:50 >
 
@@ -481,9 +484,17 @@ def bender_and_mutatorTest():
     [(), (('aaaa', 50),), (('aaaa', 100),)]
 
     >>> assert got == expect
-    >>> assert mut.makeInstance(Location(aaaa=300)) == 0
-    >>> assert mut.makeInstance(Location(aaaa=400)) == 50
-    >>> assert mut.makeInstance(Location(aaaa=700)) == 100
+
+    Instance location are not bent by default, i.e. are interpreted as internal
+    design coordinates:
+    >>> assert mut.makeInstance(Location(aaaa=50)) == 0
+    >>> assert mut.makeInstance(Location(aaaa=100)) == 50
+    >>> assert mut.makeInstance(Location(aaaa=150)) == 100
+
+    If bend=True, instance locations are interpreted as user-space coordinates
+    >>> assert mut.makeInstance(Location(aaaa=300), bend=True) == 0
+    >>> assert mut.makeInstance(Location(aaaa=400), bend=True) == 50
+    >>> assert mut.makeInstance(Location(aaaa=700), bend=True) == 100
     """
 
 if __name__ == '__main__':

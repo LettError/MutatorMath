@@ -434,11 +434,22 @@ class DesignSpaceDocumentReader(object):
             paths.append(self.sources[name][0].path)
         return paths
 
-    def process(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
+    def process(
+        self,
+        makeGlyphs=True,
+        makeKerning=True,
+        makeInfo=True,
+        bendLocations=False,
+    ):
         """ Process the input file and generate the instances. """
         if self.logger:
             self.logger.info("Reading %s", self.path)
-        self.readInstances(makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
+        self.readInstances(
+            makeGlyphs=makeGlyphs,
+            makeKerning=makeKerning,
+            makeInfo=makeInfo,
+            bendLocations=bendLocations,
+        )
         self.reportProgress("done", 'stop')
 
     def readVersion(self):
@@ -609,7 +620,14 @@ class DesignSpaceDocumentReader(object):
                 loc[dimName] = xValue
         return loc
 
-    def readInstance(self, key, makeGlyphs=True, makeKerning=True, makeInfo=True):
+    def readInstance(
+        self,
+        key,
+        makeGlyphs=True,
+        makeKerning=True,
+        makeInfo=True,
+        bendLocations=False,
+    ):
         """ Read a single instance element.
 
             key: an (attribute, value) tuple used to find the requested instance.
@@ -622,11 +640,23 @@ class DesignSpaceDocumentReader(object):
         attrib, value = key
         for instanceElement in self.root.findall('.instances/instance'):
             if instanceElement.attrib.get(attrib) == value:
-                self._readSingleInstanceElement(instanceElement, makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
+                self._readSingleInstanceElement(
+                    instanceElement,
+                    makeGlyphs=makeGlyphs,
+                    makeKerning=makeKerning,
+                    makeInfo=makeInfo,
+                    bendLocations=bendLocations,
+                )
                 return
         raise MutatorError("No instance found with key: (%s, %s)." % key)
 
-    def readInstances(self, makeGlyphs=True, makeKerning=True, makeInfo=True):
+    def readInstances(
+        self,
+        makeGlyphs=True,
+        makeKerning=True,
+        makeInfo=True,
+        bendLocations=False,
+    ):
         """ Read all instance elements.
 
         ::
@@ -635,9 +665,22 @@ class DesignSpaceDocumentReader(object):
 
         """
         for instanceElement in self.root.findall('.instances/instance'):
-            self._readSingleInstanceElement(instanceElement, makeGlyphs=makeGlyphs, makeKerning=makeKerning, makeInfo=makeInfo)
+            self._readSingleInstanceElement(
+                instanceElement,
+                makeGlyphs=makeGlyphs,
+                makeKerning=makeKerning,
+                makeInfo=makeInfo,
+                bendLocations=bendLocations,
+            )
 
-    def _readSingleInstanceElement(self, instanceElement, makeGlyphs=True, makeKerning=True, makeInfo=True):
+    def _readSingleInstanceElement(
+        self,
+        instanceElement,
+        makeGlyphs=True,
+        makeKerning=True,
+        makeInfo=True,
+        bendLocations=False,
+    ):
         """ Read a single instance element.
             If we have glyph specifications, only make those.
             Otherwise make all available glyphs.
@@ -651,13 +694,15 @@ class DesignSpaceDocumentReader(object):
             self.logger.info("\tGenerating instance %s", os.path.basename(instancePath))
         filenameTokenForResults = os.path.basename(filename)
 
-        instanceObject = self._instanceWriterClass(instancePath,
+        instanceObject = self._instanceWriterClass(
+            instancePath,
             ufoVersion=self.ufoVersion,
             roundGeometry=self.roundGeometry,
             axes = self.axes,
             verbose=self.verbose,
-            logger=self.logger
-            )
+            logger=self.logger,
+            bendLocations=bendLocations,
+        )
         self.results[filenameTokenForResults] = instancePath
 
         # set the masters

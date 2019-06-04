@@ -40,11 +40,14 @@ class InstanceWriter(object):
             roundGeometry=False,
             axes=None,
             verbose=False,
-            logger=None):
+            logger=None,
+            bendLocations=False,
+        ):
         self.path = path
         self.font = self._fontClass()
         self.ufoVersion = ufoVersion
         self.roundGeometry = roundGeometry
+        self.bendLocations = bendLocations
         if axes is not None:
             self.axes = axes
         else:
@@ -201,7 +204,7 @@ class InstanceWriter(object):
             if self.logger:
                 self.logger.exception("Error processing font info. %s", items)
             return
-        instanceObject = m.makeInstance(instanceLocation)
+        instanceObject = m.makeInstance(instanceLocation, bend=self.bendLocations)
         if self.roundGeometry:
             try:
                 instanceObject = instanceObject.round()
@@ -302,7 +305,7 @@ class InstanceWriter(object):
                 if self.logger:
                     self.logger.exception("\tError processing kerning data. %s", items)
                 return
-            instanceObject = m.makeInstance(instanceLocation)
+            instanceObject = m.makeInstance(instanceLocation, bend=self.bendLocations)
             if self.roundGeometry:
                 instanceObject.round()
             instanceObject.extractKerning(self.font)
@@ -368,7 +371,7 @@ class InstanceWriter(object):
             glyphObject = MathGlyph(fontObject[glyphName])
             items.append((locationObject, glyphObject))
         bias, m = buildMutator(items, axes=self.axes)
-        instanceObject = m.makeInstance(instanceLocationObject)
+        instanceObject = m.makeInstance(instanceLocationObject, bend=self.bendLocations)
         if self.roundGeometry:
             try:
                 instanceObject = instanceObject.round()
