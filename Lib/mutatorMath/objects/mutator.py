@@ -22,6 +22,10 @@ def buildMutator(items, axes=None, bias=None):
     """
     from mutatorMath.objects.bender import Bender
     items = [(Location(loc),obj) for loc, obj in items]
+    if bias is None:
+        bias = Location()
+    else:
+        bias = Location(bias)
     m = Mutator()
     if axes is not None:
         # make a Bender object
@@ -39,11 +43,12 @@ def buildMutator(items, axes=None, bias=None):
     ofx = []
     onx = []
     for loc, obj in items:
-        if (loc-bias).isOrigin():
+        nn = (loc-bias)
+        if nn.isOrigin():
             m.setNeutral(obj)
             break
     if m.getNeutral() is None:
-        raise MutatorError("Did not find a neutral for this system", m)
+        raise MutatorError("Did not find a neutral for this system", items)
     for loc, obj in items:
         lb = loc-bias
         if lb.isOrigin(): continue
@@ -205,13 +210,19 @@ class Mutator(dict):
             return total, factors
         return total
 
+    def makeLocation(self, aLocation):
+        if isinstance(aLocation, Location):
+            return aLocation
+        return Location(aLocation)
+
     def makeInstance(self, aLocation, bend=False):
         """
             Calculate an instance with the right bias and add the neutral.
             aLocation: expected to be in input space
         """
+        aLocation = self.makeLocation(aLocation)
         if bend:
-            aLocation = self._bender(Location(aLocation))
+            aLocation = self._bender(aLocation)
         if not aLocation.isAmbivalent():
             instanceObject = self.getInstance(aLocation-self._bias)
         else:
