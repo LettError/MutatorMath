@@ -133,6 +133,8 @@ format <Docs/designSpaceFileFormat.md>`__
 Writing a designspace
 ~~~~~~~~~~~~~~~~~~~~~
 
+    ⚠️ WARNING: the ``DesignSpaceDocumentWriter`` and ``DesignSpaceDocumentReader`` are quite old, head to `ufoProcessor <https://github.com/LettError/ufoProcessor>`_ if you need to process and generate UFO instances.
+
 **DesignSpaceDocumentWriter** object writes an XML representation of a
 designspace.
 
