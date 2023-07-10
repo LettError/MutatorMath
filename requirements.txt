@@ -1,2 +1,2 @@
 defcon==0.10.2
-fontMath==0.4.8
+fontMath==0.9.3
