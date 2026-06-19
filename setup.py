@@ -150,11 +150,11 @@ class release(bump_version):
         fd, tmp = mkstemp(prefix='bumpversion-')
         try:
             os.close(fd)
-            with open(tmp, 'w') as f:
+            with open(tmp, 'w', encoding='utf-8') as f:
                 f.write("\n\n# Write release notes.\n"
                         "# Lines starting with '#' will be ignored.")
             subprocess.check_call(text_editor + [tmp])
-            with open(tmp, 'r') as f:
+            with open(tmp, 'r', encoding='utf-8') as f:
                 changes = "".join(
                     l for l in f.readlines() if not l.startswith('#'))
         finally:
@@ -175,7 +175,7 @@ class release(bump_version):
             "release", tag=True,  message=self.message, allow_dirty=dirty)
 
 
-with open('README.rst', 'r') as f:
+with open('README.rst', 'r', encoding='utf-8') as f:
     long_description = f.read()
 
 
